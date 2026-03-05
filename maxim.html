@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>МЕССЕНДЖЕР МАКСИМ — СВЯЗЬ ОТЕЧЕСТВА</title>
+    <style>
+        :root {
+            --ru-white: #ffffff;
+            --ru-blue: #0039a6;
+            --ru-red: #d52b1e;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Шапка в стиле Флага РФ */
+        header {
+            background: linear-gradient(to bottom, var(--ru-white) 33.3%, var(--ru-blue) 33.3%, var(--ru-blue) 66.6%, var(--ru-red) 66.6%);
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 3px solid #000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        header h1 {
+            color: #fff;
+            text-shadow: 2px 2px #000;
+            letter-spacing: 2px;
+            font-size: 24px;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Боковая панель: Поиск и Лента */
+        .sidebar {
+            width: 300px;
+            background: #fff;
+            border-right: 2px solid var(--ru-blue);
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+        }
+
+        .search-box {
+            padding: 10px;
+            border: 2px solid var(--ru-red);
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .news-feed {
+            flex: 1;
+            overflow-y: auto;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+
+        .post {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        /* Окно чата */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: url('https://www.transparenttextures.com/patterns/cubes.png');
+        }
+
+        #messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .msg {
+            max-width: 70%;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .msg.sent { align-self: flex-end; background: var(--ru-blue); color: white; }
+        .msg.received { align-self: flex-start; background: #e4e6eb; color: black; }
+
+        /* Панель ввода */
+        .input-panel {
+            padding: 20px;
+            background: #fff;
+            display: flex;
+            gap: 10px;
+            border-top: 2px solid var(--ru-red);
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+        }
+
+        .btn-send { background: var(--ru-red); }
+        .btn-voice { background: #444; }
+
+        .username-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login" class="username-overlay">
+        <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+            <h2>Введите ваш позывной (Юзернейм):</h2>
+            <input type="text" id="my-name" placeholder="Максим_777">
+            <button class="btn btn-send" onclick="startApp()">Войти в сеть</button>
+        </div>
+    </div>
+
+    <header>
+        <h1>🇷🇺 МАКСИМ МЕССЕНДЖЕР 🇷🇺</h1>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <input type="text" class="search-box" placeholder="Поиск соратников...">
+            <h3>Лента Друзей</h3>
+            <div class="news-feed" id="feed">
+                <div class="post"><b>Иван:</b> Смотрите, какой закат в Москве! 📸</div>
+                <div class="post"><b>Дима:</b> Кто завтра на футбол? ⚽</div>
+            </div>
+            <button class="btn btn-voice" onclick="addPost()">📢 Создать пост</button>
+        </aside>
+
+        <main class="chat-area">
+            <div id="messages">
+                <div class="msg received"><b>Система:</b> Добро пожаловать в защищенный канал.</div>
+            </div>
+
+            <div class="input-panel">
+                <button class="btn btn-voice" onclick="alert('Голосовое записывается... (нужен сервер)')">🎤</button>
+                <input type="text" id="msg-input" placeholder="Написать сообщение...">
+                <button class="btn btn-send" onclick="sendMessage()">ОТПРАВИТЬ</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentUser = "";
+
+        function startApp() {
+            const name = document.getElementById('my-name').value;
+            if (name) {
+                currentUser = name;
+                document.getElementById('login').style.display = 'none';
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('msg-input');
+            if (input.value.trim() === "") return;
+
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'msg sent';
+            msgDiv.innerHTML = `<b>${currentUser}:</b> ${input.value}`;
+            
+            document.getElementById('messages').appendChild(msgDiv);
+            input.value = "";
+            
+            // Авто-прокрутка вниз
+            const chat = document.getElementById('messages');
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addPost() {
+            const text = prompt("О чем думаете?");
+            if (text) {
+                const feed = document.getElementById('feed');
+                const post = document.createElement('div');
+                post.className = 'post';
+                post.innerHTML = `<b>${currentUser}:</b> ${text}`;
+                feed.prepend(post);
+            }
+        }
+    </script>
+</body>
+</html>
