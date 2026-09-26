@@ -1,0 +1,3320 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/district.gd" id="1_scrip"]
+[ext_resource type="Script" path="res://scripts/weather/lighting_controller.gd" id="2_scrip"]
+[ext_resource type="Script" path="res://scripts/world/lowpoly_block.gd" id="3_scrip"]
+[ext_resource type="Script" path="res://scripts/world/lowpoly_prop.gd" id="4_scrip"]
+[ext_resource type="Script" path="res://scripts/world/location_zone.gd" id="5_scrip"]
+[ext_resource type="Script" path="res://scripts/survival/indoor_zone.gd" id="6_scrip"]
+[ext_resource type="Script" path="res://scripts/survival/heat_zone.gd" id="7_scrip"]
+[ext_resource type="Script" path="res://scripts/interaction/level_door.gd" id="8_scrip"]
+[ext_resource type="Script" path="res://scripts/interaction/examine.gd" id="9_scrip"]
+[ext_resource type="Script" path="res://scripts/interaction/loot_container.gd" id="10_scrip"]
+[ext_resource type="Script" path="res://scripts/interaction/hiding_spot.gd" id="11_scrip"]
+[ext_resource type="Script" path="res://scripts/interaction/info_pickup.gd" id="12_scrip"]
+[ext_resource type="Script" path="res://scripts/interaction/item_pickup.gd" id="13_scrip"]
+[ext_resource type="Script" path="res://scripts/interaction/station.gd" id="14_scrip"]
+[ext_resource type="Script" path="res://scripts/combat/enemy_spawner.gd" id="15_scrip"]
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 1
+background_color = Color(0.1, 0.1, 0.16, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.12, 0.13, 0.2, 1)
+ambient_light_energy = 1
+tonemap_mode = 2
+ssao_enabled = true
+ssao_radius = 1.5
+ssao_intensity = 1.4
+glow_enabled = true
+glow_intensity = 0.55
+glow_bloom = 0.05
+fog_enabled = true
+fog_light_color = Color(0.1, 0.1, 0.16, 1)
+fog_density = 0.025
+fog_sky_affect = 1
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.006
+volumetric_fog_albedo = Color(0.9, 0.92, 1, 1)
+volumetric_fog_length = 48
+adjustment_enabled = true
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_2"]
+geometry_parsed_geometry_type = 1
+cell_size = 0.25
+cell_height = 0.25
+agent_height = 2
+agent_radius = 0.45
+agent_max_climb = 0.3
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3"]
+size = Vector3(2, 6, 130)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4"]
+size = Vector3(170, 6, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5"]
+size = Vector3(26, 4, 12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6"]
+size = Vector3(150, 4, 14)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7"]
+size = Vector3(9, 4, 7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8"]
+size = Vector3(7, 4, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_9"]
+size = Vector3(40, 4, 28)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_10"]
+size = Vector3(16, 4, 16)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_11"]
+size = Vector3(18, 4, 16)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_12"]
+size = Vector3(16, 4, 12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_13"]
+size = Vector3(6, 4, 38)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_14"]
+size = Vector3(22, 4, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_15"]
+size = Vector3(12, 4, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_16"]
+size = Vector3(15.2, 3, 11.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_17"]
+size = Vector3(17.2, 3, 15.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_18"]
+size = Vector3(11.4, 3, 15.2)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_19"]
+radius = 3.4
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_20"]
+radius = 2.2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_21"]
+size = Vector3(2.4, 2.4, 1.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_22"]
+size = Vector3(2.2, 2.4, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_23"]
+size = Vector3(1.6, 1.6, 1.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_24"]
+size = Vector3(1.6, 2, 1.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_25"]
+size = Vector3(1.4, 2, 1.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_26"]
+size = Vector3(2.6, 2, 1.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_27"]
+size = Vector3(1.2, 2, 2.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_28"]
+size = Vector3(3, 2, 1.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_29"]
+size = Vector3(2.4, 2, 1.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_30"]
+size = Vector3(1.4, 2, 2.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_31"]
+size = Vector3(1.4, 2.2, 2.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_32"]
+size = Vector3(1.6, 2, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_33"]
+size = Vector3(3.4, 2, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_34"]
+size = Vector3(2.2, 2, 1.2)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_35"]
+radius = 0.7
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_36"]
+size = Vector3(1.2, 2, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_37"]
+size = Vector3(1.4, 2, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_38"]
+size = Vector3(2, 2, 1.4)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_39"]
+radius = 1.1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_40"]
+size = Vector3(1.2, 2.4, 1.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_41"]
+size = Vector3(2.4, 2, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_42"]
+size = Vector3(3, 2, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_43"]
+size = Vector3(9, 2, 1.8)
+
+[node name="District" type="Node3D"]
+level_id = "district"
+display_name = "Квартал 9"
+is_interior = false
+bounds = Rect2(-80, -66, 160, 122)
+default_spawn = "shelter_door"
+ambient_profile = "outdoor"
+script = ExtResource("1_scrip")
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.81915, -0.45198, 0.35313, 0, 0.61566, 0.78801, -0.57358, -0.6455, 0.50432, 0, 30, 0)
+light_color = Color(0.6, 0.7, 1, 1)
+light_energy = 0.2
+shadow_enabled = true
+directional_shadow_max_distance = 70
+
+[node name="Lighting" type="Node" parent="."]
+environment_path = NodePath("../Environment")
+sun_path = NodePath("../Sun")
+outdoor = true
+script = ExtResource("2_scrip")
+
+[node name="NavRegion" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_2")
+
+[node name="Ground" type="Node3D" parent="NavRegion"]
+
+[node name="Roads" type="Node3D" parent="NavRegion"]
+
+[node name="Buildings" type="Node3D" parent="NavRegion"]
+
+[node name="Props" type="Node3D" parent="NavRegion"]
+
+[node name="Snow" type="StaticBody3D" parent="NavRegion/Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, -5)
+size = Vector3(260, 0.2, 230)
+color = Color(0.8, 0.83, 0.88, 1)
+fadeable = false
+cast_shadows = false
+script = ExtResource("3_scrip")
+
+[node name="MainStreet" type="StaticBody3D" parent="NavRegion/Roads"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+size = Vector3(170, 0.03, 10)
+color = Color(0.2, 0.21, 0.23, 1)
+snow_mask = 0.55
+has_collision = false
+fadeable = false
+cast_shadows = false
+script = ExtResource("3_scrip")
+
+[node name="SidewalkN" type="StaticBody3D" parent="NavRegion/Roads"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.5)
+size = Vector3(170, 0.045, 3)
+color = Color(0.42, 0.43, 0.46, 1)
+snow_mask = 0.8
+has_collision = false
+fadeable = false
+cast_shadows = false
+script = ExtResource("3_scrip")
+
+[node name="SidewalkS" type="StaticBody3D" parent="NavRegion/Roads"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.5)
+size = Vector3(170, 0.045, 3)
+color = Color(0.42, 0.43, 0.46, 1)
+snow_mask = 0.8
+has_collision = false
+fadeable = false
+cast_shadows = false
+script = ExtResource("3_scrip")
+
+[node name="NarrowStreet" type="StaticBody3D" parent="NavRegion/Roads"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
+size = Vector3(7, 0.03, 20)
+color = Color(0.2, 0.21, 0.23, 1)
+snow_mask = 0.6
+has_collision = false
+fadeable = false
+cast_shadows = false
+script = ExtResource("3_scrip")
+
+[node name="Square" type="StaticBody3D" parent="NavRegion/Roads"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -44)
+size = Vector3(40, 0.035, 28)
+color = Color(0.4, 0.4, 0.43, 1)
+snow_mask = 0.75
+has_collision = false
+fadeable = false
+cast_shadows = false
+script = ExtResource("3_scrip")
+
+[node name="NorthRoad" type="StaticBody3D" parent="NavRegion/Roads"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -63)
+size = Vector3(8, 0.03, 8)
+color = Color(0.2, 0.21, 0.23, 1)
+snow_mask = 0.7
+has_collision = false
+fadeable = false
+cast_shadows = false
+script = ExtResource("3_scrip")
+
+[node name="Alley" type="StaticBody3D" parent="NavRegion/Roads"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0, 27)
+size = Vector3(6, 0.03, 38)
+color = Color(0.3, 0.3, 0.32, 1)
+snow_mask = 0.65
+has_collision = false
+fadeable = false
+cast_shadows = false
+script = ExtResource("3_scrip")
+
+[node name="PharmacyPath" type="StaticBody3D" parent="NavRegion/Roads"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0, -46)
+size = Vector3(6, 0.035, 4)
+color = Color(0.42, 0.43, 0.46, 1)
+snow_mask = 0.8
+has_collision = false
+fadeable = false
+cast_shadows = false
+script = ExtResource("3_scrip")
+
+[node name="SubstationYard" type="StaticBody3D" parent="NavRegion/Roads"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29, 0, 11.5)
+size = Vector3(22, 0.035, 3)
+color = Color(0.42, 0.43, 0.46, 1)
+snow_mask = 0.8
+has_collision = false
+fadeable = false
+cast_shadows = false
+script = ExtResource("3_scrip")
+
+[node name="Shelter" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.5, 0, 18)
+size = Vector3(21, 11, 18)
+color = Color(0.42, 0.27, 0.22, 1)
+show_on_map = true
+map_label = "Дом 12"
+script = ExtResource("3_scrip")
+
+[node name="ShelterRoof" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -51.5, 11, 18)
+size = Vector3(18, 2.2, 21)
+color = Color(0.24, 0.2, 0.2, 1)
+shape = "gable"
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="Window" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59, 2.6, 8.94)
+kind = "window"
+lit = false
+light_color = Color(1, 0.72, 0.4, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window2" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.5, 2.6, 8.94)
+kind = "window"
+lit = true
+light_color = Color(1, 0.72, 0.4, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window3" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.5, 2.6, 8.94)
+kind = "window"
+lit = false
+light_color = Color(1, 0.72, 0.4, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window4" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 2.6, 8.94)
+kind = "window"
+lit = false
+light_color = Color(1, 0.72, 0.4, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window5" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59, 5.6, 8.94)
+kind = "window"
+lit = false
+light_color = Color(1, 0.72, 0.4, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window6" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.5, 5.6, 8.94)
+kind = "window"
+lit = false
+light_color = Color(1, 0.72, 0.4, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window7" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.5, 5.6, 8.94)
+kind = "window"
+lit = false
+light_color = Color(1, 0.72, 0.4, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window8" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 5.6, 8.94)
+kind = "window"
+lit = false
+light_color = Color(1, 0.72, 0.4, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window9" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59, 8.6, 8.94)
+kind = "window"
+lit = false
+light_color = Color(1, 0.72, 0.4, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window10" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.5, 8.6, 8.94)
+kind = "window"
+lit = false
+light_color = Color(1, 0.72, 0.4, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window11" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.5, 8.6, 8.94)
+kind = "window"
+lit = false
+light_color = Color(1, 0.72, 0.4, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window12" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 8.6, 8.94)
+kind = "window"
+lit = true
+light_color = Color(1, 0.72, 0.4, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window13" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40.96, 2.6, 13)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window14" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40.96, 5.6, 13)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window15" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40.96, 2.6, 18)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window16" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40.96, 5.6, 18)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window17" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40.96, 2.6, 23)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window18" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40.96, 5.6, 23)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="DoorFrame" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.5, 0, 8.93)
+kind = "door_frame"
+color = Color(0.3, 0.22, 0.16, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Lamp" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -47, 0, 7)
+kind = "lamp"
+lit = true
+flicker = true
+light_color = Color(1, 0.7, 0.4, 1)
+light_energy = 1.6
+light_range = 9
+light_shadows = true
+script = ExtResource("4_scrip")
+
+[node name="Shop" type="Node3D" parent="NavRegion/Buildings"]
+
+[node name="Floor" type="StaticBody3D" parent="NavRegion/Buildings/Shop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 16)
+size = Vector3(16, 0.06, 12)
+color = Color(0.35, 0.33, 0.3, 1)
+snow_mask = 0
+has_collision = false
+fadeable = false
+show_on_map = true
+map_label = "Магазин"
+script = ExtResource("3_scrip")
+
+[node name="Wall" type="StaticBody3D" parent="NavRegion/Buildings/Shop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.85, 0, 10.15)
+size = Vector3(6.3, 3.6, 0.3)
+color = Color(0.55, 0.5, 0.4, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Wall2" type="StaticBody3D" parent="NavRegion/Buildings/Shop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.65, 0, 10.15)
+size = Vector3(7.3, 3.6, 0.3)
+color = Color(0.55, 0.5, 0.4, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Lintel" type="StaticBody3D" parent="NavRegion/Buildings/Shop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.5, 2.4, 10.15)
+size = Vector3(2.4, 1.2, 0.3)
+color = Color(0.55, 0.5, 0.4, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Wall3" type="StaticBody3D" parent="NavRegion/Buildings/Shop" groups=["cutaway:shop"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 21.85)
+size = Vector3(16, 3.6, 0.3)
+color = Color(0.55, 0.5, 0.4, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Wall4" type="StaticBody3D" parent="NavRegion/Buildings/Shop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.85, 0, 16)
+size = Vector3(0.3, 3.6, 12)
+color = Color(0.55, 0.5, 0.4, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Wall5" type="StaticBody3D" parent="NavRegion/Buildings/Shop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.15, 0, 16)
+size = Vector3(0.3, 3.6, 12)
+color = Color(0.55, 0.5, 0.4, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Roof" type="StaticBody3D" parent="NavRegion/Buildings/Shop" groups=["cutaway:shop"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 3.6, 16)
+size = Vector3(16.6, 0.35, 12.6)
+color = Color(0.25, 0.25, 0.27, 1)
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="Sign" type="StaticBody3D" parent="NavRegion/Buildings/Shop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.5, 2.7, 9.8)
+size = Vector3(5, 0.7, 0.15)
+color = Color(0.2, 0.4, 0.75, 1)
+emission = 0.4
+snow_mask = 0
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="Shelf" type="StaticBody3D" parent="NavRegion/Buildings/Shop"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -32.6, 0, 13.5)
+kind = "shelf"
+script = ExtResource("4_scrip")
+
+[node name="Shelf2" type="StaticBody3D" parent="NavRegion/Buildings/Shop"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -32.6, 0, 18)
+kind = "shelf"
+script = ExtResource("4_scrip")
+
+[node name="Shelf3" type="StaticBody3D" parent="NavRegion/Buildings/Shop"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -24, 0, 21.4)
+kind = "shelf"
+size = Vector3(1.4, 1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Counter" type="StaticBody3D" parent="NavRegion/Buildings/Shop"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -20.8, 0, 13.4)
+kind = "counter"
+script = ExtResource("4_scrip")
+
+[node name="Crate" type="StaticBody3D" parent="NavRegion/Buildings/Shop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.5, 0, 20.5)
+kind = "crate"
+size = Vector3(1.2, 1.2, 1.2)
+script = ExtResource("4_scrip")
+
+[node name="Substation" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29, 0, 20.5)
+size = Vector3(18, 7, 15)
+color = Color(0.52, 0.52, 0.54, 1)
+show_on_map = true
+map_label = "Подстанция №9"
+script = ExtResource("3_scrip")
+
+[node name="SubstationRoof" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29, 7, 20.5)
+size = Vector3(18.4, 0.5, 15.4)
+color = Color(0.3, 0.3, 0.32, 1)
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="DoorFrame2" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29, 0, 12.93)
+kind = "door_frame"
+color = Color(0.2, 0.22, 0.25, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Symbol" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.5, 0, 12.92)
+kind = "symbol"
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Fence" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5, 0, 10)
+kind = "fence"
+size = Vector3(2.25, 1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Fence2" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.5, 0, 10)
+kind = "fence"
+size = Vector3(2.25, 1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Crate" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.2, 0, 11.6)
+kind = "crate"
+color = Color(0.3, 0.35, 0.3, 1)
+size = Vector3(1.2, 1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Crate2" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 12)
+kind = "crate"
+color = Color(0.35, 0.35, 0.38, 1)
+size = Vector3(2.2, 1.6, 1.4)
+script = ExtResource("4_scrip")
+
+[node name="Garage" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, 38)
+size = Vector3(12, 3.5, 8)
+color = Color(0.4, 0.42, 0.45, 1)
+show_on_map = true
+script = ExtResource("3_scrip")
+
+[node name="House14" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.5, 0, 20)
+size = Vector3(27, 12, 20)
+color = Color(0.36, 0.4, 0.46, 1)
+show_on_map = true
+map_label = "Дом 14"
+script = ExtResource("3_scrip")
+
+[node name="House14Roof" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 58.5, 12, 20)
+size = Vector3(20, 2.4, 27)
+color = Color(0.22, 0.22, 0.26, 1)
+shape = "gable"
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="Window19" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 2.6, 9.94)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window20" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53, 2.6, 9.94)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window21" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58, 2.6, 9.94)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window22" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 2.6, 9.94)
+kind = "window"
+lit = true
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window23" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68, 2.6, 9.94)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window24" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 5.6, 9.94)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window25" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53, 5.6, 9.94)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window26" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58, 5.6, 9.94)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window27" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 5.6, 9.94)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window28" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68, 5.6, 9.94)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window29" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 8.6, 9.94)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window30" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53, 8.6, 9.94)
+kind = "window"
+lit = true
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window31" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58, 8.6, 9.94)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window32" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 8.6, 9.94)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window33" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68, 8.6, 9.94)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="House7" type="Node3D" parent="NavRegion/Buildings"]
+
+[node name="Floor" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51, 0, -18)
+size = Vector3(18, 0.06, 16)
+color = Color(0.4, 0.3, 0.22, 1)
+snow_mask = 0
+has_collision = false
+fadeable = false
+show_on_map = true
+map_label = "Дом №7"
+script = ExtResource("3_scrip")
+
+[node name="Wall" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51, 0, -25.85)
+size = Vector3(18, 3.6, 0.3)
+color = Color(0.6, 0.55, 0.48, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Wall2" type="StaticBody3D" parent="NavRegion/Buildings/House7" groups=["cutaway:house"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56.1, 0, -10.15)
+size = Vector3(7.8, 3.6, 0.3)
+color = Color(0.6, 0.55, 0.48, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Wall3" type="StaticBody3D" parent="NavRegion/Buildings/House7" groups=["cutaway:house"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.9, 0, -10.15)
+size = Vector3(7.8, 3.6, 0.3)
+color = Color(0.6, 0.55, 0.48, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Lintel" type="StaticBody3D" parent="NavRegion/Buildings/House7" groups=["cutaway:house"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51, 2.4, -10.15)
+size = Vector3(2.4, 1.2, 0.3)
+color = Color(0.6, 0.55, 0.48, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Wall4" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.85, 0, -18)
+size = Vector3(0.3, 3.6, 16)
+color = Color(0.6, 0.55, 0.48, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Wall5" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.15, 0, -18)
+size = Vector3(0.3, 3.6, 16)
+color = Color(0.6, 0.55, 0.48, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="InnerWallW" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56.5, 0, -18)
+size = Vector3(7, 3.2, 0.25)
+color = Color(0.55, 0.5, 0.44, 1)
+snow_mask = 0
+script = ExtResource("3_scrip")
+
+[node name="InnerWallE" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, 0, -18)
+size = Vector3(7, 3.2, 0.25)
+color = Color(0.55, 0.5, 0.44, 1)
+snow_mask = 0
+script = ExtResource("3_scrip")
+
+[node name="Upper" type="StaticBody3D" parent="NavRegion/Buildings/House7" groups=["cutaway:house"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51, 3.6, -18)
+size = Vector3(18, 3.4, 16)
+color = Color(0.58, 0.52, 0.45, 1)
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="Roof" type="StaticBody3D" parent="NavRegion/Buildings/House7" groups=["cutaway:house"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51, 7, -18)
+size = Vector3(16.4, 2.2, 18.4)
+color = Color(0.3, 0.2, 0.18, 1)
+shape = "gable"
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="Window" type="StaticBody3D" parent="NavRegion/Buildings/House7" groups=["cutaway:house"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57, 5, -9.95)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window2" type="StaticBody3D" parent="NavRegion/Buildings/House7" groups=["cutaway:house"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, 5, -9.95)
+kind = "window"
+lit = true
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Counter" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -58.9, 0, -12.5)
+kind = "counter"
+script = ExtResource("4_scrip")
+
+[node name="Table" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47, 0, -13.5)
+kind = "table"
+script = ExtResource("4_scrip")
+
+[node name="Chair" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -47, 0, -12.6)
+kind = "chair"
+script = ExtResource("4_scrip")
+
+[node name="Crate" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.4, 0, -16.8)
+kind = "crate"
+size = Vector3(0.8, 0.6, 0.6)
+color = Color(0.6, 0.15, 0.12, 1)
+script = ExtResource("4_scrip")
+
+[node name="Bed" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58.3, 0, -23.8)
+kind = "bed"
+script = ExtResource("4_scrip")
+
+[node name="Wardrobe" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.5, 0, -25.3)
+kind = "wardrobe"
+script = ExtResource("4_scrip")
+
+[node name="Table2" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.5, 0, -25)
+kind = "table"
+size = Vector3(1.2, 1, 1)
+script = ExtResource("4_scrip")
+
+[node name="RadioSet" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.5, 0, -25.2)
+kind = "radio_set"
+lit = false
+script = ExtResource("4_scrip")
+
+[node name="Chair2" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56, 0, -20.3)
+kind = "chair"
+script = ExtResource("4_scrip")
+
+[node name="Candle" type="StaticBody3D" parent="NavRegion/Buildings/House7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.5, 0.82, -25)
+kind = "candle"
+light_energy = 0.8
+light_range = 5
+script = ExtResource("4_scrip")
+
+[node name="BuildingA" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.75, 0, -18.5)
+size = Vector3(18.5, 9, 19)
+color = Color(0.35, 0.38, 0.44, 1)
+show_on_map = true
+script = ExtResource("3_scrip")
+
+[node name="BuildingARoof" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.75, 9, -18.5)
+size = Vector3(18.5, 2, 19)
+color = Color(0.22, 0.22, 0.26, 1)
+shape = "gable"
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="BuildingB" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.75, 0, -18.5)
+size = Vector3(18.5, 8, 19)
+color = Color(0.46, 0.36, 0.3, 1)
+show_on_map = true
+script = ExtResource("3_scrip")
+
+[node name="BuildingBRoof" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.75, 8, -18.5)
+size = Vector3(18.5, 2, 19)
+color = Color(0.26, 0.2, 0.18, 1)
+shape = "gable"
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="Window34" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.46, 2.6, -25)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window35" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.46, 2.6, -25)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window36" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.46, 5.6, -25)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window37" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.46, 5.6, -25)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window38" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.46, 2.6, -19)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window39" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.46, 2.6, -19)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window40" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.46, 5.6, -19)
+kind = "window"
+lit = true
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window41" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.46, 5.6, -19)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window42" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.46, 2.6, -13)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window43" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.46, 2.6, -13)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window44" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.46, 5.6, -13)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window45" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.46, 5.6, -13)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window46" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 2.6, -8.96)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window47" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2.6, -8.96)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window48" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2.6, -8.96)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window49" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2.6, -8.96)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window50" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 2.6, -8.96)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window51" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 2.6, -8.96)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="House3" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, 0, -44.5)
+size = Vector3(22, 10, 23)
+color = Color(0.4, 0.42, 0.38, 1)
+show_on_map = true
+map_label = "Дом 3"
+script = ExtResource("3_scrip")
+
+[node name="House3Roof" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, 10, -44.5)
+size = Vector3(22, 2.2, 23)
+color = Color(0.24, 0.24, 0.22, 1)
+shape = "gable"
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="Window52" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 2.6, -52)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window53" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 5.6, -52)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window54" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 8.6, -52)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window55" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 2.6, -46)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window56" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 5.6, -46)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window57" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 8.6, -46)
+kind = "window"
+lit = true
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window58" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 2.6, -40)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window59" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 5.6, -40)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Window60" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 8.6, -40)
+kind = "window"
+lit = false
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="East1" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58, 0, -24)
+size = Vector3(24, 9, 18)
+color = Color(0.44, 0.44, 0.48, 1)
+show_on_map = true
+script = ExtResource("3_scrip")
+
+[node name="East1Roof" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58, 9, -24)
+size = Vector3(24, 2, 18)
+color = Color(0.24, 0.24, 0.28, 1)
+shape = "gable"
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="Pharmacy" type="Node3D" parent="NavRegion/Buildings"]
+
+[node name="Floor" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, -46)
+size = Vector3(16, 0.06, 16)
+color = Color(0.6, 0.62, 0.6, 1)
+snow_mask = 0
+has_collision = false
+fadeable = false
+show_on_map = true
+map_label = "Аптека"
+script = ExtResource("3_scrip")
+
+[node name="Wall" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, -53.85)
+size = Vector3(16, 3.6, 0.3)
+color = Color(0.75, 0.78, 0.8, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Wall2" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy" groups=["cutaway:pharmacy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, -38.15)
+size = Vector3(16, 3.6, 0.3)
+color = Color(0.75, 0.78, 0.8, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Wall3" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.15, 0, -50.6)
+size = Vector3(0.3, 3.6, 6.8)
+color = Color(0.75, 0.78, 0.8, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Wall4" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.15, 0, -41.4)
+size = Vector3(0.3, 3.6, 6.8)
+color = Color(0.75, 0.78, 0.8, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Lintel" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.15, 2.4, -46)
+size = Vector3(0.3, 1.2, 2.4)
+color = Color(0.75, 0.78, 0.8, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="Wall5" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.85, 0, -46)
+size = Vector3(0.3, 3.6, 16)
+color = Color(0.75, 0.78, 0.8, 1)
+snow_mask = 0.6
+script = ExtResource("3_scrip")
+
+[node name="BackWall" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, -46)
+size = Vector3(0.3, 3.4, 16)
+color = Color(0.7, 0.72, 0.74, 1)
+snow_mask = 0
+script = ExtResource("3_scrip")
+
+[node name="Roof" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy" groups=["cutaway:pharmacy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 3.6, -46)
+size = Vector3(16.6, 0.35, 16.6)
+color = Color(0.3, 0.32, 0.34, 1)
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="Cross" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.8, 2.3, -49)
+size = Vector3(0.12, 0.9, 0.3)
+color = Color(0.2, 1, 0.45, 1)
+emission = 2
+snow_mask = 0
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="Cross2" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.8, 2.6, -49)
+size = Vector3(0.12, 0.3, 0.9)
+color = Color(0.2, 1, 0.45, 1)
+emission = 2
+snow_mask = 0
+has_collision = false
+script = ExtResource("3_scrip")
+
+[node name="Counter" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 28, 0, -46)
+kind = "counter"
+size = Vector3(1.4, 1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Shelf" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -53.4)
+kind = "shelf"
+script = ExtResource("4_scrip")
+
+[node name="Shelf2" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.5, 0, -53.4)
+kind = "shelf"
+script = ExtResource("4_scrip")
+
+[node name="DoorFrame" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 35.83, 0, -46)
+kind = "door_frame"
+color = Color(0.35, 0.3, 0.25, 1)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Table" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, -40.5)
+kind = "table"
+script = ExtResource("4_scrip")
+
+[node name="CeilingLamp" type="StaticBody3D" parent="NavRegion/Buildings/Pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, -46)
+kind = "ceiling_lamp"
+lit = true
+flicker = true
+light_color = Color(0.8, 0.95, 1, 1)
+light_energy = 0.8
+light_range = 8
+script = ExtResource("4_scrip")
+
+[node name="BarrelFire" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -44)
+kind = "barrel_fire"
+lit = true
+light_energy = 1.6
+light_range = 9
+script = ExtResource("4_scrip")
+
+[node name="Bench" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.6, 0, -44)
+kind = "bench"
+script = ExtResource("4_scrip")
+
+[node name="Bench2" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 3.6, 0, -44)
+kind = "bench"
+script = ExtResource("4_scrip")
+
+[node name="Bench3" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -47.6)
+kind = "bench"
+script = ExtResource("4_scrip")
+
+[node name="NoticeBoard" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -32.2)
+kind = "notice_board"
+script = ExtResource("4_scrip")
+
+[node name="Pallet" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, -53)
+kind = "pallet"
+script = ExtResource("4_scrip")
+
+[node name="Pine" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 0, -57)
+kind = "pine"
+script = ExtResource("4_scrip")
+
+[node name="Pine2" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 0, -33)
+kind = "pine"
+size = Vector3(1, 0.8, 1)
+script = ExtResource("4_scrip")
+
+[node name="Kiosk" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -53)
+kind = "kiosk"
+lit = true
+script = ExtResource("4_scrip")
+
+[node name="Antenna" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, -56)
+kind = "antenna"
+size = Vector3(1, 1.3, 1)
+script = ExtResource("4_scrip")
+
+[node name="Crate3" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.3, 0, -51.9)
+kind = "crate"
+color = Color(0.3, 0.33, 0.4, 1)
+size = Vector3(0.8, 1.2, 0.8)
+script = ExtResource("4_scrip")
+
+[node name="Lamp2" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, -31)
+kind = "lamp"
+lit = true
+light_color = Color(0.75, 0.85, 1, 1)
+light_energy = 1.2
+light_range = 10
+script = ExtResource("4_scrip")
+
+[node name="Bin" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -18.4, 0, -41)
+kind = "bin"
+script = ExtResource("4_scrip")
+
+[node name="Bin2" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -2.5, 0, -13.5)
+kind = "bin"
+script = ExtResource("4_scrip")
+
+[node name="Crate4" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -26)
+kind = "crate"
+script = ExtResource("4_scrip")
+
+[node name="Rubble" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0, -15)
+kind = "rubble"
+script = ExtResource("4_scrip")
+
+[node name="Hydrant" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9, 0, -24)
+kind = "hydrant"
+script = ExtResource("4_scrip")
+
+[node name="Car" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0.99027, 0, 0.13917, 0, 1, 0, -0.13917, 0, 0.99027, -10, 0, 1.2)
+kind = "car"
+color = Color(0.42, 0.18, 0.16, 1)
+script = ExtResource("4_scrip")
+
+[node name="Car2" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0.97815, 0, -0.20791, 0, 1, 0, 0.20791, 0, 0.97815, 34, 0, -2.4)
+kind = "car"
+color = Color(0.25, 0.35, 0.5, 1)
+script = ExtResource("4_scrip")
+
+[node name="Bus" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0.17365, 0, 0.98481, 0, 1, 0, -0.98481, 0, 0.17365, 73, 0, 0)
+kind = "bus"
+script = ExtResource("4_scrip")
+
+[node name="Lamp3" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 0, -7)
+kind = "lamp"
+lit = false
+script = ExtResource("4_scrip")
+
+[node name="Lamp4" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, -7)
+kind = "lamp"
+lit = false
+script = ExtResource("4_scrip")
+
+[node name="Lamp5" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -7)
+kind = "lamp"
+lit = false
+script = ExtResource("4_scrip")
+
+[node name="Lamp6" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 0, -7)
+kind = "lamp"
+lit = false
+script = ExtResource("4_scrip")
+
+[node name="Lamp7" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -22, 0, 7)
+kind = "lamp"
+lit = false
+script = ExtResource("4_scrip")
+
+[node name="Lamp8" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 22, 0, 7)
+kind = "lamp"
+lit = false
+script = ExtResource("4_scrip")
+
+[node name="Lamp9" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 56, 0, 7)
+kind = "lamp"
+lit = false
+script = ExtResource("4_scrip")
+
+[node name="Bin3" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 7.4)
+kind = "bin"
+script = ExtResource("4_scrip")
+
+[node name="Bin4" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -39.9, 0, 16)
+kind = "bin"
+script = ExtResource("4_scrip")
+
+[node name="Bin5" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -36.1, 0, 31)
+kind = "bin"
+script = ExtResource("4_scrip")
+
+[node name="Pallet2" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.7, 0, 23.5)
+kind = "pallet"
+script = ExtResource("4_scrip")
+
+[node name="Crate5" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.2, 0, 37.5)
+kind = "crate"
+script = ExtResource("4_scrip")
+
+[node name="Fence3" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0, 46)
+kind = "fence"
+size = Vector3(1.6, 1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Device" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0, 43)
+kind = "device"
+lit = true
+script = ExtResource("4_scrip")
+
+[node name="Symbol2" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40.94, 0, 36)
+kind = "symbol"
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="AlleyWall" type="StaticBody3D" parent="NavRegion/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.8, 0, 32)
+size = Vector3(0.4, 3, 20)
+color = Color(0.36, 0.34, 0.33, 1)
+snow_mask = 0.8
+script = ExtResource("3_scrip")
+
+[node name="Barricade" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -60.5)
+kind = "barricade"
+size = Vector3(1.6, 1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Drift" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -64)
+kind = "drift"
+size = Vector3(4, 2.2, 3)
+script = ExtResource("4_scrip")
+
+[node name="Drift2" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -63.5)
+kind = "drift"
+size = Vector3(4.5, 2.5, 3)
+script = ExtResource("4_scrip")
+
+[node name="Drift3" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -66.5)
+kind = "drift"
+size = Vector3(6, 3, 3)
+script = ExtResource("4_scrip")
+
+[node name="Drift4" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, -61)
+kind = "drift"
+size = Vector3(3, 1.6, 3)
+script = ExtResource("4_scrip")
+
+[node name="Drift5" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, -61)
+kind = "drift"
+size = Vector3(3, 1.8, 3)
+script = ExtResource("4_scrip")
+
+[node name="Pine3" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 40)
+kind = "pine"
+size = Vector3(1, 1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Pine4" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 50)
+kind = "pine"
+size = Vector3(1, 1.2, 1)
+script = ExtResource("4_scrip")
+
+[node name="Pine5" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 45)
+kind = "pine"
+size = Vector3(1, 0.9, 1)
+script = ExtResource("4_scrip")
+
+[node name="Pine6" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 38)
+kind = "pine"
+size = Vector3(1, 1.1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Pine7" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, 45)
+kind = "pine"
+size = Vector3(1, 1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Pine8" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62, 0, 42)
+kind = "pine"
+size = Vector3(1, 1.2, 1)
+script = ExtResource("4_scrip")
+
+[node name="Pine9" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66, 0, 40)
+kind = "pine"
+size = Vector3(1, 1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Pine10" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -70, 0, -30)
+kind = "pine"
+size = Vector3(1, 1.1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Pine11" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 0, -45)
+kind = "pine"
+size = Vector3(1, 1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Pine12" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 52)
+kind = "pine"
+size = Vector3(1, 0.8, 1)
+script = ExtResource("4_scrip")
+
+[node name="Bench4" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 8, 0, 34)
+kind = "bench"
+script = ExtResource("4_scrip")
+
+[node name="Fence4" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 30)
+kind = "fence"
+size = Vector3(4, 1, 1)
+script = ExtResource("4_scrip")
+
+[node name="Drift6" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.62288, 0, 25.79904)
+kind = "drift"
+size = Vector3(2.17665, 0.97098, 2.40705)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift7" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.22835, 0, 46.80236)
+kind = "drift"
+size = Vector3(1.83883, 1.35697, 2.92691)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift8" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.76682, 0, 16.57926)
+kind = "drift"
+size = Vector3(2.51254, 1.33906, 2.38564)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift9" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.67984, 0, 26.26492)
+kind = "drift"
+size = Vector3(3.33791, 0.76397, 1.83645)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift10" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.53534, 0, 49.03092)
+kind = "drift"
+size = Vector3(2.29309, 0.87333, 1.56479)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift11" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.73771, 0, 39.8685)
+kind = "drift"
+size = Vector3(3.19161, 0.71131, 1.8551)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift12" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.90751, 0, 47.28292)
+kind = "drift"
+size = Vector3(1.74246, 1.06296, 2.84296)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift13" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12212, 0, 34.78402)
+kind = "drift"
+size = Vector3(2.34021, 0.91851, 2.45808)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift14" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -61.80049, 0, 35.09101)
+kind = "drift"
+size = Vector3(1.60835, 1.04405, 2.40957)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift15" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.55699, 0, 40.74607)
+kind = "drift"
+size = Vector3(1.82348, 1.00393, 2.60399)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift16" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.5412, 0, 32.49265)
+kind = "drift"
+size = Vector3(3.23474, 0.68797, 2.82256)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift17" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.4336, 0, 18.45138)
+kind = "drift"
+size = Vector3(2.25789, 1.0862, 1.50092)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift18" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.31266, 0, 21.81991)
+kind = "drift"
+size = Vector3(1.55078, 1.22458, 2.71132)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift19" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.40575, 0, 40.92516)
+kind = "drift"
+size = Vector3(2.35001, 0.78476, 2.94611)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift20" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.06259, 0, 50.63764)
+kind = "drift"
+size = Vector3(1.77827, 0.83224, 2.53897)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift21" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57.07858, 0, 10.32184)
+kind = "drift"
+size = Vector3(2.02592, 0.73137, 1.68039)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift22" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53.45546, 0, -48.68511)
+kind = "drift"
+size = Vector3(2.08848, 0.61184, 2.69803)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift23" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.67842, 0, 30.64125)
+kind = "drift"
+size = Vector3(2.995, 0.83681, 1.6769)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift24" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.17105, 0, 43.48621)
+kind = "drift"
+size = Vector3(2.67635, 1.2422, 2.49478)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift25" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift26" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -70, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift27" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift28" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -54, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift29" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift30" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift31" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift32" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift33" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift34" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift35" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift36" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift37" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift38" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift39" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift40" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift41" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift42" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift43" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 66, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift44" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74, 0, 55)
+kind = "drift"
+size = Vector3(5, 2.5, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift45" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, -60)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift46" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, -60)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift47" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, -52)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift48" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, -52)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift49" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, -44)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift50" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, -44)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift51" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, -36)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift52" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, -36)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift53" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, -28)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift54" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, -28)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift55" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, -20)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift56" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, -20)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift57" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, -12)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift58" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, -12)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift59" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, -4)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift60" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, -4)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift61" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, 4)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift62" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, 4)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift63" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, 12)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift64" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, 12)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift65" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, 20)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift66" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, 20)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift67" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, 28)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift68" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, 28)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift69" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, 36)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift70" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, 36)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift71" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, 44)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift72" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, 44)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift73" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 0, 52)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift74" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79, 0, 52)
+kind = "drift"
+size = Vector3(3, 2.5, 5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift75" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift76" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -70, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift77" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift78" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -54, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift79" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift80" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift81" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift82" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift83" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift84" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift85" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift86" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift87" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift88" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift89" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift90" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift91" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Drift92" type="StaticBody3D" parent="NavRegion/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 78, 0, -65)
+kind = "drift"
+size = Vector3(5, 2.8, 3)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="Bounds" type="Node3D" parent="."]
+
+[node name="West" type="StaticBody3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81, 3, -5)
+
+[node name="Shape" type="CollisionShape3D" parent="Bounds/West"]
+shape = SubResource("BoxShape3D_3")
+
+[node name="East" type="StaticBody3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81, 3, -5)
+
+[node name="Shape" type="CollisionShape3D" parent="Bounds/East"]
+shape = SubResource("BoxShape3D_3")
+
+[node name="North" type="StaticBody3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -67.5)
+
+[node name="Shape" type="CollisionShape3D" parent="Bounds/North"]
+shape = SubResource("BoxShape3D_4")
+
+[node name="South" type="StaticBody3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 57)
+
+[node name="Shape" type="CollisionShape3D" parent="Bounds/South"]
+shape = SubResource("BoxShape3D_4")
+
+[node name="Skyline" type="Node3D" parent="."]
+
+[node name="Tower" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 135.76648, 0, -10.52294)
+size = Vector3(15.48871, 29.38657, 19.38551)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="LitWindow" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 135.76648, 17.63194, -0.32294)
+size = Vector3(1.2, 1.4, 0.2)
+color = Color(1, 0.75, 0.45, 1)
+emission = 2.5
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0
+script = ExtResource("3_scrip")
+
+[node name="Tower2" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 140.94806, 0, 16.42575)
+size = Vector3(13.62225, 34.04837, 18.31719)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower3" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 119.93231, 0, 43.70667)
+size = Vector3(17.45506, 29.01351, 12.66557)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower4" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91.40932, 0, 70.65537)
+size = Vector3(18.51064, 17.46483, 16.64813)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower5" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 72.79377, 0, 87.3471)
+size = Vector3(18.41616, 27.59381, 18.36896)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower6" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.58625, 0, 120.59932)
+size = Vector3(14.24292, 17.41503, 13.09962)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="LitWindow2" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.58625, 10.44902, 130.79932)
+size = Vector3(1.2, 1.4, 0.2)
+color = Color(1, 0.75, 0.45, 1)
+emission = 2.5
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0
+script = ExtResource("3_scrip")
+
+[node name="Tower7" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.31545, 0, 99.61369)
+size = Vector3(19.27501, 35.55572, 17.43034)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="LitWindow3" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.31545, 21.33343, 109.81369)
+size = Vector3(1.2, 1.4, 0.2)
+color = Color(1, 0.75, 0.45, 1)
+emission = 2.5
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0
+script = ExtResource("3_scrip")
+
+[node name="Tower8" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.10198, 0, 112.66241)
+size = Vector3(21.62527, 24.16707, 16.58539)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower9" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.86516, 0, 112.19938)
+size = Vector3(12.46911, 17.8619, 15.2781)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower10" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.75821, 0, 85.7395)
+size = Vector3(12.84413, 32.55834, 12.2389)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower11" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -99.32306, 0, 72.71652)
+size = Vector3(12.75314, 31.47798, 12.6768)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower12" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -115.30018, 0, 50.43384)
+size = Vector3(15.8609, 19.26876, 15.82587)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="LitWindow4" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -115.30018, 11.56125, 60.63384)
+size = Vector3(1.2, 1.4, 0.2)
+color = Color(1, 0.75, 0.45, 1)
+emission = 2.5
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0
+script = ExtResource("3_scrip")
+
+[node name="Tower13" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -136.65285, 0, 15.25279)
+size = Vector3(13.29396, 25.93263, 19.74947)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="LitWindow5" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -136.65285, 15.55958, 25.45279)
+size = Vector3(1.2, 1.4, 0.2)
+color = Color(1, 0.75, 0.45, 1)
+emission = 2.5
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0
+script = ExtResource("3_scrip")
+
+[node name="Tower14" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -117.14095, 0, 4.46592)
+size = Vector3(12.82551, 30.19703, 12.82896)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="LitWindow6" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -117.14095, 18.11822, 14.66592)
+size = Vector3(1.2, 1.4, 0.2)
+color = Color(1, 0.75, 0.45, 1)
+emission = 2.5
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0
+script = ExtResource("3_scrip")
+
+[node name="Tower15" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -117.70421, 0, -33.96161)
+size = Vector3(12.81136, 35.2352, 12.04377)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower16" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100.28254, 0, -56.64878)
+size = Vector3(18.10755, 21.57182, 19.68561)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower17" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -111.23315, 0, -90.75171)
+size = Vector3(15.15094, 26.46271, 18.99877)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower18" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.3571, 0, -95.75746)
+size = Vector3(13.86685, 16.85561, 14.82753)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower19" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.96153, 0, -101.25272)
+size = Vector3(15.02732, 37.50317, 18.87316)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="LitWindow7" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.96153, 22.5019, -91.05272)
+size = Vector3(1.2, 1.4, 0.2)
+color = Color(1, 0.75, 0.45, 1)
+emission = 2.5
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0
+script = ExtResource("3_scrip")
+
+[node name="Tower20" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.19649, 0, -120.59067)
+size = Vector3(17.6339, 23.07847, 19.04662)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower21" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5406, 0, -110.37177)
+size = Vector3(16.6661, 22.61953, 19.39685)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower22" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.1187, 0, -112.38428)
+size = Vector3(12.91826, 17.29533, 14.54011)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="LitWindow8" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.1187, 10.3772, -102.18428)
+size = Vector3(1.2, 1.4, 0.2)
+color = Color(1, 0.75, 0.45, 1)
+emission = 2.5
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0
+script = ExtResource("3_scrip")
+
+[node name="Tower23" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 66.36639, 0, -103.25435)
+size = Vector3(21.43721, 35.72609, 12.68732)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower24" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 109.66261, 0, -77.36726)
+size = Vector3(18.7024, 36.69177, 15.0789)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower25" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 106.98294, 0, -49.06696)
+size = Vector3(16.21823, 30.73501, 13.81879)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Tower26" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 140.42396, 0, -29.18112)
+size = Vector3(16.63236, 27.05167, 12.02558)
+color = Color(0.2, 0.22, 0.27, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0.5
+script = ExtResource("3_scrip")
+
+[node name="Meridian" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -175)
+size = Vector3(10, 60, 10)
+color = Color(0.16, 0.17, 0.2, 1)
+has_collision = false
+fadeable = false
+cast_shadows = false
+script = ExtResource("3_scrip")
+
+[node name="MeridianLight" type="StaticBody3D" parent="Skyline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 60, -175)
+size = Vector3(1.5, 1.5, 1.5)
+color = Color(1, 0.2, 0.15, 1)
+emission = 6
+has_collision = false
+fadeable = false
+cast_shadows = false
+snow_mask = 0
+script = ExtResource("3_scrip")
+
+[node name="Zones" type="Node3D" parent="."]
+
+[node name="Loc_shelter_street" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51, 0, 3)
+location_id = "shelter_street"
+display_name = "У дома 12"
+script = ExtResource("5_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Loc_shelter_street"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_5")
+
+[node name="Loc_main_street" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+location_id = "main_street"
+display_name = "Главная улица"
+script = ExtResource("5_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Loc_main_street"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_6")
+
+[node name="Loc_car" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 1.5)
+location_id = "car"
+display_name = "Брошенная машина"
+script = ExtResource("5_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Loc_car"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_7")
+
+[node name="Loc_narrow_street" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
+location_id = "narrow_street"
+display_name = "Узкая улица"
+script = ExtResource("5_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Loc_narrow_street"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_8")
+
+[node name="Loc_square" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -44)
+location_id = "square"
+display_name = "Малая площадь"
+script = ExtResource("5_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Loc_square"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_9")
+
+[node name="Loc_radio_point" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -51)
+location_id = "radio_point"
+display_name = "Радиоточка"
+script = ExtResource("5_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Loc_radio_point"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_7")
+
+[node name="Loc_pharmacy" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, -46)
+location_id = "pharmacy"
+display_name = "Аптека"
+script = ExtResource("5_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Loc_pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_10")
+
+[node name="Loc_house" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51, 0, -18)
+location_id = "house"
+display_name = "Жилой дом №7"
+script = ExtResource("5_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Loc_house"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_11")
+
+[node name="Loc_shop" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 16)
+location_id = "shop"
+display_name = "Магазин «Северный»"
+script = ExtResource("5_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Loc_shop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_12")
+
+[node name="Loc_alley" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0, 27)
+location_id = "alley"
+display_name = "Переулок"
+script = ExtResource("5_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Loc_alley"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_13")
+
+[node name="Loc_substation" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29, 0, 13)
+location_id = "substation"
+display_name = "Подстанция №9"
+script = ExtResource("5_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Loc_substation"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_14")
+
+[node name="Loc_north_road" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -61)
+location_id = "north_road"
+display_name = "Северная дорога"
+script = ExtResource("5_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Loc_north_road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_15")
+
+[node name="Indoor_shop" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 16)
+building_id = "shop"
+script = ExtResource("6_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Indoor_shop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_16")
+
+[node name="Indoor_house" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51, 0, -18)
+building_id = "house"
+script = ExtResource("6_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Indoor_house"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_17")
+
+[node name="Indoor_pharmacy" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -46)
+building_id = "pharmacy"
+script = ExtResource("6_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Indoor_pharmacy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_18")
+
+[node name="Heat_barrel" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -44)
+strength = 1.7
+first_warm_flag = "found_heat_source"
+script = ExtResource("7_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Heat_barrel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("SphereShape3D_19")
+
+[node name="Heat_device" type="Area3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0, 43)
+strength = 0.6
+script = ExtResource("7_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Zones/Heat_device"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("SphereShape3D_20")
+
+[node name="Interactables" type="Node3D" parent="."]
+
+[node name="ShelterDoor" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.5, 0, 8.2)
+display_name = "Дом 12 — убежище"
+interaction_text = "Войти"
+target_level = "shelter"
+target_spawn = "default"
+script = ExtResource("8_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/ShelterDoor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+shape = SubResource("BoxShape3D_21")
+
+[node name="SubstationDoor" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29, 0, 12.2)
+display_name = "Дверь подстанции"
+interaction_text = "Осмотреть"
+title = "Подстанция №9"
+text = "Заперто изнутри. Сквозь металл идёт низкий ровный гул — будто что-то внутри всё ещё работает. Когда-нибудь вы узнаете, что там."
+consequences = [{"add_info": "note_substation"}, {"set_flag": "saw_substation"}]
+script = ExtResource("9_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/SubstationDoor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+shape = SubResource("BoxShape3D_22")
+
+[node name="SubstationBox" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.2, 0, 11)
+display_name = "Ящик у забора"
+items = {"pistol_ammo": 2, "scrap_metal": 1}
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/SubstationBox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("BoxShape3D_23")
+
+[node name="ShopShelf1" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8, 0, 13.5)
+display_name = "Полка с консервами"
+items = {"canned_food": 2}
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/ShopShelf1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_24")
+
+[node name="ShopShelf2" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8, 0, 18)
+display_name = "Полка с водой"
+items = {"water_bottle": 2, "dry_food": 1}
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/ShopShelf2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_24")
+
+[node name="ShopStock" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 20.6)
+display_name = "Коробки со склада"
+items = {"cloth": 1, "wood": 1}
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/ShopStock"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_24")
+
+[node name="ShopRegister" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.6, 0, 13.4)
+display_name = "Касса"
+interaction_text = "Разобрать"
+items = {"electronics": 1}
+found_text = "Из кассы выходит пригоршня плат и проводов."
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/ShopRegister"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_24")
+
+[node name="ShopDoor" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.5, 0, 19.5)
+display_name = "За ящиками"
+script = ExtResource("11_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/ShopDoor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_25")
+
+[node name="CarInterior" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3, 0, 2.6)
+display_name = "Брошенная машина"
+items = {"scrap_metal": 2, "pistol": 1, "pistol_ammo": 4, "water_bottle": 1}
+found_text = "В бардачке — старый пистолет, завёрнутый в тряпку. Патронов мало."
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/CarInterior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_26")
+
+[node name="CarTrunk" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.9, 0, 1)
+display_name = "Багажник"
+interaction_text = "Вскрыть"
+items = {"electronics": 1, "cloth": 1}
+required_item = "crowbar"
+requirement_text = "Багажник заклинило. Нужна монтировка."
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/CarTrunk"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_27")
+
+[node name="Car2" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, -1)
+display_name = "Машина"
+items = {"scrap_metal": 1, "dry_food": 1, "electronics": 1}
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/Car2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_26")
+
+[node name="Bus" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73, 0, 3)
+display_name = "Перевёрнутый автобус"
+items = {"scrap_metal": 1, "cloth": 1}
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/Bus"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_28")
+
+[node name="HouseKitchen" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58.2, 0, -12.5)
+display_name = "Кухонный шкаф"
+items = {"dry_food": 1, "water_bottle": 1, "canned_food": 1}
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/HouseKitchen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_24")
+
+[node name="HouseToolbox" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.9, 0, -16.8)
+display_name = "Ящик с инструментами"
+items = {"crowbar": 1}
+found_text = "Под отвёртками — тяжёлая монтировка."
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/HouseToolbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_24")
+
+[node name="HouseWardrobe" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.5, 0, -24.5)
+display_name = "Шкаф"
+items = {"warm_jacket": 1, "cloth": 2}
+found_text = "Старый пуховик. Велик, но тёплый."
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/HouseWardrobe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_24")
+
+[node name="HouseChair" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56, 0, -20.3)
+display_name = "Сломанный стул"
+interaction_text = "Разобрать на доски"
+items = {"wood": 1}
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/HouseChair"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_24")
+
+[node name="HouseDesk" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.5, 0, -24.3)
+display_name = "Стол с деталями"
+title = "Стол Elias"
+text = "Паяльник, лупа, разобранный приёмник. На листке — начатая схема передатчика и надпись: «не хватает питания и трёх плат»."
+script = ExtResource("9_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/HouseDesk"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_29")
+
+[node name="PharmacyCounter" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.2, 0, -46)
+display_name = "Прилавок"
+items = {"bandage": 2}
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/PharmacyCounter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_30")
+
+[node name="PharmacyBackroom" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.1, 0, -46)
+display_name = "Подсобка"
+interaction_text = "Вскрыть"
+items = {"medicine": 2, "protective_mask": 1}
+required_item = "crowbar"
+requirement_text = "Дверь подсобки заперта. Нужна монтировка."
+found_text = "Монтировка с хрустом выламывает замок. Внутри — лекарства и маска."
+consequences = [{"set_flag": "pharmacy_backroom_opened"}]
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/PharmacyBackroom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+shape = SubResource("BoxShape3D_31")
+
+[node name="PharmacyNote" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, -40.5)
+info_id = "note_pharmacy"
+script = ExtResource("12_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/PharmacyNote"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_32")
+
+[node name="PharmacyShelf" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.7, 0, -52.8)
+display_name = "Пустые полки"
+items = {}
+empty_text = "Всё выгребли. Остались только пустые коробки."
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/PharmacyShelf"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_33")
+
+[node name="NoticeBoard" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -31.4)
+info_id = "note_evac"
+interaction_text = "Прочитать"
+script = ExtResource("12_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/NoticeBoard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_34")
+
+[node name="WoodPile" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, -52.2)
+display_name = "Поддоны"
+interaction_text = "Разобрать"
+items = {"wood": 2}
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/WoodPile"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_24")
+
+[node name="SquareWater" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -38.2)
+item_id = "water_bottle"
+count = 1
+script = ExtResource("13_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/SquareWater"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("SphereShape3D_35")
+
+[node name="RadioPoint" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -51.2)
+display_name = "Радиоточка"
+interaction_text = "Настроить приёмник"
+panel = "radio"
+station_id = "radio_point"
+consequences = [{"set_flag": "radio_point_used"}]
+script = ExtResource("14_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/RadioPoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_29")
+
+[node name="RadioLocker" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.3, 0, -51.1)
+display_name = "Шкафчик радиоточки"
+interaction_text = "Открыть"
+items = {"electronics": 2}
+conditions = [{"any": [{"item": "crowbar"}, {"tier_min": ["vera", "cooperative"]}, {"npc_not_at": ["vera", "district"]}]}]
+requirement_text = "Шкафчик заперт, Vera следит за ним. Можно вскрыть монтировкой — или заслужить её доверие."
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/RadioLocker"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_36")
+
+[node name="SquareBin" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.6, 0, -41)
+display_name = "Мусорный бак"
+script = ExtResource("11_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/SquareBin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_37")
+
+[node name="NarrowBin" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 0, -13.5)
+display_name = "Мусорный бак"
+script = ExtResource("11_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/NarrowBin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_37")
+
+[node name="NarrowCrate" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0, -25.3)
+display_name = "Ящик"
+items = {"scrap_metal": 1}
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/NarrowCrate"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_24")
+
+[node name="StreetBin" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 6.6)
+display_name = "Мусорный бак"
+script = ExtResource("11_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/StreetBin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_38")
+
+[node name="AlleyBin1" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.1, 0, 16)
+display_name = "Мусорный бак"
+script = ExtResource("11_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/AlleyBin1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_37")
+
+[node name="AlleyBin2" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.9, 0, 31)
+display_name = "Мусорный бак"
+script = ExtResource("11_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/AlleyBin2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_37")
+
+[node name="AlleyPallets" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39, 0, 23.5)
+display_name = "Поддоны"
+interaction_text = "Разобрать"
+items = {"wood": 2}
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/AlleyPallets"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_24")
+
+[node name="AlleyCrate" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.9, 0, 37.5)
+display_name = "Ящик"
+items = {"scrap_metal": 1}
+script = ExtResource("10_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/AlleyCrate"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_24")
+
+[node name="Device" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0, 42.2)
+display_name = "Тёплый предмет"
+title = "Тёплый предмет"
+text = "Тёмный металлический цилиндр высотой по колено. Он тёплый — как живое существо. Снег тает вокруг него идеальным кругом, асфальт под ним сухой. На крышке выгравирован знак: круг и три черты.\n\nЛучше его не трогать."
+consequences = [{"add_info": "device_warm"}]
+script = ExtResource("9_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/Device"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("SphereShape3D_39")
+
+[node name="Symbol" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.2, 0, 36)
+display_name = "Знак на стене"
+title = "Знак"
+text = "Свежая краска поверх кирпича: круг и три вертикальные черты внутри, как падающий снег. Краска не замёрзла."
+consequences = [{"set_flag": "seen_symbol"}]
+script = ExtResource("9_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/Symbol"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+shape = SubResource("BoxShape3D_40")
+
+[node name="TracksAlley" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0, 19)
+display_name = "Странные следы"
+title = "Следы"
+text = "Цепочка трёхпалых следов уходит в глубь переулка. Шаг — почти два метра. Края отпечатков оплавлены, будто то, что прошло здесь, было тёплым."
+available_if = [{"day_min": 2}]
+hide_when_unavailable = true
+consequences = [{"set_flag": "q04_alley_tracks"}]
+script = ExtResource("9_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/TracksAlley"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_41")
+
+[node name="Prints" type="StaticBody3D" parent="Interactables/TracksAlley"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
+kind = "tracks"
+size = Vector3(1, 1, 3.5)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="TracksDoor" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47, 0, 4.2)
+display_name = "Следы у двери"
+title = "Следы"
+text = "Ночью кто-то стоял прямо у двери убежища. Трёхпалые отпечатки. Потом следы уходят на восток — к переулку."
+available_if = [{"day_min": 2}]
+hide_when_unavailable = true
+consequences = [{"set_flag": "q04_door_tracks"}]
+script = ExtResource("9_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/TracksDoor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_42")
+
+[node name="Prints" type="StaticBody3D" parent="Interactables/TracksDoor"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 0)
+kind = "tracks"
+size = Vector3(1, 1, 2.2)
+has_collision = false
+script = ExtResource("4_scrip")
+
+[node name="NorthRoad" type="Area3D" parent="Interactables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -58.6)
+display_name = "Северная дорога"
+interaction_text = "Осмотреть дорогу"
+dialogue_id = "north_road"
+script = ExtResource("9_scrip")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/NorthRoad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_43")
+
+[node name="Spawns" type="Node3D" parent="."]
+
+[node name="spawn_shelter_door" type="Marker3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.5, 0, 6)
+
+[node name="spawn_default" type="Marker3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.5, 0, 6)
+
+[node name="spawn_square" type="Marker3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -37)
+
+[node name="spawn_pharmacy" type="Marker3D" parent="Spawns"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 21, 0, -46)
+
+[node name="spawn_alley" type="Marker3D" parent="Spawns"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -38, 0, 12)
+
+[node name="spawn_north_road" type="Marker3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -55)
+
+[node name="spawn_house" type="Marker3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51, 0, -7.5)
+
+[node name="spawn_shop" type="Marker3D" parent="Spawns"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -26.5, 0, 7.5)
+
+[node name="spawn_narrow_street" type="Marker3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="npc_mara_street" type="Marker3D" parent="Spawns"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 2.1, 0, -19.5)
+
+[node name="npc_elias_house" type="Marker3D" parent="Spawns"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -49.5, 0, -22.3)
+
+[node name="npc_vera_radio" type="Marker3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2, 0, -50.4)
+
+[node name="npc_anton_car" type="Marker3D" parent="Spawns"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -6.6, 0, 3.5)
+
+[node name="npc_tomas_shop" type="Marker3D" parent="Spawns"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.5, 0, 17)
+
+[node name="npc_grey_alley" type="Marker3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37, 0, 40.2)
+
+[node name="npc_mara_pharmacy" type="Marker3D" parent="Spawns"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 31, 0, -43.5)
+
+[node name="npc_tomas_alley" type="Marker3D" parent="Spawns"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -36.8, 0, 34)
+
+[node name="Actors" type="Node3D" parent="."]
+
+[node name="EnemySpawner" type="Node3D" parent="."]
+script = ExtResource("15_scrip")
+
+[node name="Routes" type="Node3D" parent="EnemySpawner"]
+
+[node name="Alley" type="Node3D" parent="EnemySpawner/Routes"]
+
+[node name="P0" type="Marker3D" parent="EnemySpawner/Routes/Alley"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0, 12)
+
+[node name="P1" type="Marker3D" parent="EnemySpawner/Routes/Alley"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0, 40)
+
+[node name="P2" type="Marker3D" parent="EnemySpawner/Routes/Alley"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37, 0, 26)
+
+[node name="Square" type="Node3D" parent="EnemySpawner/Routes"]
+
+[node name="P0" type="Marker3D" parent="EnemySpawner/Routes/Square"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, -55)
+
+[node name="P1" type="Marker3D" parent="EnemySpawner/Routes/Square"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, -56)
+
+[node name="P2" type="Marker3D" parent="EnemySpawner/Routes/Square"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, -34)
+
+[node name="P3" type="Marker3D" parent="EnemySpawner/Routes/Square"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, -34)
+
+[node name="East" type="Node3D" parent="EnemySpawner/Routes"]
+
+[node name="P0" type="Marker3D" parent="EnemySpawner/Routes/East"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 1)
+
+[node name="P1" type="Marker3D" parent="EnemySpawner/Routes/East"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62, 0, 2)
+
+[node name="P2" type="Marker3D" parent="EnemySpawner/Routes/East"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 0, -5)
+
+[node name="North" type="Node3D" parent="EnemySpawner/Routes"]
+
+[node name="P0" type="Marker3D" parent="EnemySpawner/Routes/North"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, -30.5)
+
+[node name="P1" type="Marker3D" parent="EnemySpawner/Routes/North"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, -30.5)
+
+[node name="P2" type="Marker3D" parent="EnemySpawner/Routes/North"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)

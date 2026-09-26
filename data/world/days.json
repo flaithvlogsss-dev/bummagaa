@@ -1,0 +1,32 @@
+{
+	"1": {
+		"title": "Первая ночь",
+		"snow_level": 0.12,
+		"weather": [{"hour": 7, "state": "LIGHT"}]
+	},
+	"2": {
+		"title": "Следы",
+		"snow_level": 0.35,
+		"weather": [
+			{"hour": 7, "state": "LIGHT"},
+			{"hour": 13, "state": "HEAVY"},
+			{"hour": 19, "state": "LIGHT"},
+			{"hour": 1, "state": "HEAVY"}
+		]
+	},
+	"3": {
+		"title": "Метель",
+		"snow_level": 0.6,
+		"weather": [
+			{"hour": 7, "state": "HEAVY"},
+			{"hour": 13, "state": "BLIZZARD"},
+			{"hour": 19, "state": "HEAVY"},
+			{"hour": 22, "state": "LIGHT"}
+		]
+	},
+	"4": {
+		"title": "После метели",
+		"snow_level": 0.8,
+		"weather": [{"hour": 7, "state": "LIGHT"}]
+	}
+}

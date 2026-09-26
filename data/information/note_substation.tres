@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="InformationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/information_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "note_substation"
+title = "Табличка на подстанции"
+info_type = "document"
+content = "«ПОДСТАНЦИЯ №9. Доступ закрыт по распоряжению проекта «Меридиан». Без пропуска не входить.» Ниже, свежей краской: круг и три вертикальные черты."
+tags = PackedStringArray("meridian", "unknown")

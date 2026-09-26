@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="InformationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/information_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "anton_map"
+title = "Карта Anton"
+info_type = "document"
+content = "Карта северной дороги от руки: «Виадук держится. От КПП — 6 км до депо. Идти только днём, только после метели, только вместе»."
+tags = PackedStringArray("route")
+sets_flags = PackedStringArray("north_route_known")

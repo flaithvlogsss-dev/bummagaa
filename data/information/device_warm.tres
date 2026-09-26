@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="InformationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/information_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "device_warm"
+title = "Тёплый предмет"
+info_type = "note"
+content = "Тёмный металлический цилиндр в конце переулка. Тёплый, как живой. Снег тает вокруг него идеальным кругом. На крышке — тот же знак: круг и три черты."
+tags = PackedStringArray("unknown", "clue")
+sets_flags = PackedStringArray("found_warm_device")

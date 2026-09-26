@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CameraSettings" format=3]
+
+[ext_resource type="Script" path="res://scripts/player/camera_settings.gd" id="1_cam"]
+
+[resource]
+script = ExtResource("1_cam")
+pitch_degrees = -52.0
+yaw_degrees = 0.0
+distance = 16.0
+outdoor_extra_distance = 2.5
+sprint_extra_distance = 1.5
+interior_distance = 13.0
+fov = 38.0
+follow_smoothing = 6.0
+zoom_smoothing = 2.5
+look_ahead = 1.2

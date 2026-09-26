@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://scripts/npc/character_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "tomas"
+display_name = "Tomas"
+unknown_name = "Парень в кепке"
+age = 19
+occupation = "Курьер"
+bio = "Развозил посылки на велосипеде. Застрял в квартале с последней доставкой, которую так и не отдал."
+unique_line = "Я быстрый. Снег — медленный. Пока что."
+personal_need = "Не сидеть без дела. И узнать, куда уехала мать."
+skills = PackedStringArray("scouting", "running")
+dialogue_id = "tomas"
+start_location = "district"
+start_spawn = "tomas_shop"
+max_health = 90.0
+relationship_start = {"trust": 0, "fear": 0, "respect": 0, "affinity": 5}
+silhouette = "short"
+accessory = "cap"
+coat_color = Color(0.9, 0.62, 0.15, 1.0)
+pants_color = Color(0.15, 0.18, 0.28, 1.0)
+hair_color = Color(0.35, 0.22, 0.12, 1.0)
+skin_color = Color(0.8, 0.62, 0.48, 1.0)
+accent_color = Color(0.15, 0.4, 0.75, 1.0)

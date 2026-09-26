@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/npc/npc.gd" id="1_npc"]
+[ext_resource type="Script" path="res://scripts/gfx/pixel_character.gd" id="2_sprite"]
+[ext_resource type="Script" path="res://scripts/npc/npc_talk.gd" id="3_talk"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_npc"]
+radius = 0.3
+height = 1.6
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_talk"]
+radius = 1.1
+
+[node name="NPC" type="CharacterBody3D"]
+script = ExtResource("1_npc")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("CapsuleShape3D_npc")
+
+[node name="Sprite" type="Sprite3D" parent="."]
+script = ExtResource("2_sprite")
+
+[node name="Talk" type="Area3D" parent="."]
+script = ExtResource("3_talk")
+
+[node name="Shape" type="CollisionShape3D" parent="Talk"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("SphereShape3D_talk")
+
+[node name="Name" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, 0)
+pixel_size = 0.008
+billboard = 1
+no_depth_test = true
+texture_filter = 0
+modulate = Color(1, 0.92, 0.8, 1)
+outline_modulate = Color(0, 0, 0, 1)
+font_size = 28
+outline_size = 8

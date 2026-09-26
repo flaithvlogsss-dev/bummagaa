@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://scripts/npc/character_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "mara"
+display_name = "Mara"
+unknown_name = "Раненая женщина"
+age = 34
+occupation = "Фельдшер скорой помощи"
+bio = "Возвращалась со смены, когда начался снег. Машину скорой занесло у подстанции; напарник ушёл за помощью и не вернулся."
+unique_line = "Холод — это не погода. Это счёт времени."
+personal_need = "Лекарства и тёплое место, чтобы пережить рану. Потом — снова помогать."
+skills = PackedStringArray("medicine", "first_aid")
+dialogue_id = "mara"
+start_location = "district"
+start_spawn = "mara_street"
+start_injured = true
+max_health = 45.0
+relationship_start = {"trust": 0, "fear": 10, "respect": 0, "affinity": 0}
+death_loot = {"medicine": 1, "bandage": 2}
+silhouette = "slim"
+accessory = "armband"
+coat_color = Color(0.62, 0.18, 0.16, 1.0)
+pants_color = Color(0.2, 0.22, 0.3, 1.0)
+hair_color = Color(0.12, 0.08, 0.06, 1.0)
+skin_color = Color(0.86, 0.7, 0.58, 1.0)
+accent_color = Color(0.95, 0.95, 0.95, 1.0)

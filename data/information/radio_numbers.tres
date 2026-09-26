@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="InformationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/information_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "radio_numbers"
+title = "Радио: числа"
+info_type = "radio"
+content = "Ровный голос читает числа: «…четыре. девять. девять. четыре…» Потом: «Кольцо смыкается. Держите фонари зажжёнными». Тишина. Снова числа."
+tags = PackedStringArray("radio", "unknown")

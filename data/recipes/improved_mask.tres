@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/crafting/recipe_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "improved_mask"
+name = "Улучшенная маска"
+description = "Маска с многослойным фильтром и подогревом от батарейки."
+ingredients = {"cloth": 2, "electronics": 2}
+result_item = "protective_mask"
+result_count = 1
+crafting_time = 45
+required_station = "workbench"
+required_shelter_level = 2

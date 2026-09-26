@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/crafting/recipe_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "warm_pack"
+name = "Грелка"
+description = "Металлическая стружка в тканевом мешочке: при встряхивании греет."
+ingredients = {"cloth": 1, "scrap_metal": 1}
+result_item = "warm_pack"
+result_count = 1
+crafting_time = 20
+required_station = "workbench"
+required_shelter_level = 1

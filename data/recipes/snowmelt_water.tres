@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/crafting/recipe_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "snowmelt_water"
+name = "Талая вода"
+description = "Растопить снег у печи и процедить через ткань. Нужна работающая печь или генератор."
+ingredients = {"cloth": 1}
+result_item = "water_bottle"
+result_count = 1
+crafting_time = 30
+required_station = "workbench"
+required_shelter_level = 1
+conditions = [{"any": [{"flag": "stove_lit"}, {"flag": "generator_repaired"}]}]

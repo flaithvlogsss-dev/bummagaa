@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="InformationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/information_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "doc_parcel"
+title = "Посылка Tomas"
+info_type = "document"
+content = "Адресат: «Метеостанция «Меридиан», лаборатория 4». Внутри — катушка магнитной ленты и записка: «Если это читает не Ирина — уничтожить». Ленту уже не прочесть."
+tags = PackedStringArray("meridian", "clue")

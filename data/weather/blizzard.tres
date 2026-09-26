@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="WeatherPreset" format=3]
+
+[ext_resource type="Script" path="res://scripts/weather/weather_preset.gd" id="1_wp"]
+
+[resource]
+script = ExtResource("1_wp")
+id = "BLIZZARD"
+display_name = "Метель"
+intensity = 1.0
+wind = 1.0
+visibility = 14.0
+temperature = -27.0
+cold_rate = 3.2
+stamina_cost = 1.6
+footprint_fade = 5.0
+noise_mask = 0.55
+stress_rate = 0.08
+severe = true

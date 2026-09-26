@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory/item_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "bandage"
+name = "Бинт"
+description = "Стерильная повязка. Останавливает кровотечение и немного лечит."
+icon_shape = "bandage"
+icon_color = Color(0.9, 0.88, 0.85, 1.0)
+weight = 0.1
+stack_size = 10
+category = "Medical"
+value = 5
+usable = true
+craftable = true
+use_text = "Перевязать"
+use_effects = [{"stat": {"health": 15}}, {"status": {"bleeding": 0}}]
+tags = PackedStringArray("medical")

@@ -469,3 +469,6 @@ func _register_consequences() -> void:
 	K.register("ending", func(v, _ctx):
 		ending_id = str(v)
 		ending_requested.emit(ending_id))
+	K.register("evaluate_ending", func(_v, _ctx):
+		ending_id = EndingDirector.evaluate()
+		ending_requested.emit(ending_id))

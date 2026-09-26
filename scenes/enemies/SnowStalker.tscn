@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/snow_stalker.gd" id="1_stalker"]
+[ext_resource type="Script" path="res://scripts/gfx/pixel_character.gd" id="2_sprite"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_stalker"]
+radius = 0.38
+height = 2.5
+
+[node name="SnowStalker" type="CharacterBody3D"]
+script = ExtResource("1_stalker")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CapsuleShape3D_stalker")
+
+[node name="Sprite" type="Sprite3D" parent="."]
+script = ExtResource("2_sprite")
+
+[node name="Agent" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.8
+target_desired_distance = 1.0
+radius = 0.45
+height = 2.4
+
+[node name="Eyes" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0.3)
+light_color = Color(0.75, 0.9, 1, 1)
+light_energy = 0.5
+omni_range = 3.0

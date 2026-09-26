@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/gfx/pixel_character.gd" id="2_sprite"]
+[ext_resource type="Script" path="res://scripts/survival/survival_system.gd" id="3_survival"]
+[ext_resource type="Script" path="res://scripts/player/interaction_sensor.gd" id="4_sensor"]
+[ext_resource type="Script" path="res://scripts/player/player_flashlight.gd" id="5_flash"]
+[ext_resource type="Script" path="res://scripts/player/player_combat.gd" id="6_combat"]
+[ext_resource type="Script" path="res://scripts/player/footprints.gd" id="7_prints"]
+[ext_resource type="Script" path="res://scripts/player/breath_effect.gd" id="8_breath"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.3
+height = 1.6
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_sensor"]
+radius = 1.7
+
+[node name="Player" type="CharacterBody3D"]
+floor_snap_length = 0.3
+script = ExtResource("1_player")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="Sprite" type="Sprite3D" parent="."]
+script = ExtResource("2_sprite")
+
+[node name="Survival" type="Node" parent="."]
+script = ExtResource("3_survival")
+
+[node name="InteractionSensor" type="Area3D" parent="."]
+script = ExtResource("4_sensor")
+
+[node name="Shape" type="CollisionShape3D" parent="InteractionSensor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("SphereShape3D_sensor")
+
+[node name="Flashlight" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+script = ExtResource("5_flash")
+
+[node name="Combat" type="Node3D" parent="."]
+script = ExtResource("6_combat")
+
+[node name="Footprints" type="Node3D" parent="."]
+script = ExtResource("7_prints")
+
+[node name="Breath" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+script = ExtResource("8_breath")
+
+[node name="PersonalLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0.6)
+light_color = Color(0.75, 0.82, 1, 1)
+light_energy = 0.35
+omni_range = 3.5

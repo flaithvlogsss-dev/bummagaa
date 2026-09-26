@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="InformationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/information_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "sorel_words"
+title = "Слова человека в сером"
+info_type = "note"
+content = "«Прилив приходит, когда станция поёт. Уходит, когда замолкает. Мы только слушаем». Он говорил о «Меридиане» как о живом существе."
+tags = PackedStringArray("unknown", "clue")

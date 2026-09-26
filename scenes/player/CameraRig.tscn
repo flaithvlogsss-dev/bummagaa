@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player/camera_rig.gd" id="1_rig"]
+[ext_resource type="Resource" path="res://data/config/camera_settings.tres" id="2_settings"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_arm"]
+radius = 0.3
+
+[node name="CameraRig" type="Node3D"]
+script = ExtResource("1_rig")
+settings = ExtResource("2_settings")
+
+[node name="Yaw" type="Node3D" parent="."]
+
+[node name="Listener" type="AudioListener3D" parent="Yaw"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="Pitch" type="Node3D" parent="Yaw"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Arm" type="SpringArm3D" parent="Yaw/Pitch"]
+shape = SubResource("SphereShape3D_arm")
+spring_length = 17.0
+collision_mask = 64
+
+[node name="Camera" type="Camera3D" parent="Yaw/Pitch/Arm"]
+current = true
+fov = 38.0
+near = 0.2
+far = 320.0

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory/item_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "canned_food"
+name = "Консервы"
+description = "Тушёная фасоль в жестяной банке. Сытно, даже холодной."
+icon_shape = "can"
+icon_color = Color(0.62, 0.55, 0.4, 1.0)
+weight = 0.5
+stack_size = 10
+category = "Food"
+value = 4
+usable = true
+use_text = "Съесть"
+use_effects = [{"stat": {"hunger": 40, "stress": -3}}]
+tags = PackedStringArray("food")

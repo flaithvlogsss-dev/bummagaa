@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="InformationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/information_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "note_evac"
+title = "Объявление на площади"
+info_type = "document"
+content = "ГОРОДСКАЯ СЛУЖБА ЧС. Жителям квартала 9: эвакуация через северный КПП завершена. Оставшимся — не выходить на улицу при усилении снегопада. Пункты обогрева: не работают. Ждите указаний по радио."
+tags = PackedStringArray("evac", "world")

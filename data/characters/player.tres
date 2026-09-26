@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://scripts/npc/character_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "player"
+display_name = "Alex"
+age = 29
+occupation = "Звукорежиссёр"
+bio = "Жил один на первом этаже дома 12. Работал на местном радио до сокращения."
+unique_line = "Просто дожить до утра."
+personal_need = "Тепло, еда и кто-то рядом."
+faction = "player"
+is_npc = false
+silhouette = "average"
+accessory = "scarf"
+coat_color = Color(0.22, 0.3, 0.36, 1.0)
+pants_color = Color(0.18, 0.19, 0.24, 1.0)
+hair_color = Color(0.2, 0.14, 0.1, 1.0)
+skin_color = Color(0.92, 0.78, 0.66, 1.0)
+accent_color = Color(0.95, 0.55, 0.2, 1.0)

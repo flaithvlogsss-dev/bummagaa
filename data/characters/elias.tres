@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://scripts/npc/character_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "elias"
+display_name = "Elias"
+unknown_name = "Пожилой мужчина"
+age = 61
+occupation = "Инженер-связист на пенсии"
+bio = "Тридцать лет обслуживал городские ретрансляторы. Живёт в доме №7, соседи зовут его «профессором». Сердце шалит."
+unique_line = "Любую тишину можно разобрать на частоты."
+personal_need = "Лекарство для сердца. И кто-то, кто закончит его передатчик."
+skills = PackedStringArray("electronics", "radio", "repair")
+dialogue_id = "elias"
+start_location = "district"
+start_spawn = "elias_house"
+max_health = 70.0
+relationship_start = {"trust": 5, "fear": 0, "respect": 0, "affinity": 0}
+silhouette = "broad"
+accessory = "glasses"
+coat_color = Color(0.42, 0.38, 0.3, 1.0)
+pants_color = Color(0.25, 0.24, 0.22, 1.0)
+hair_color = Color(0.78, 0.78, 0.8, 1.0)
+skin_color = Color(0.9, 0.76, 0.66, 1.0)
+accent_color = Color(0.75, 0.7, 0.3, 1.0)

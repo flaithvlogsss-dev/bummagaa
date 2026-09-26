@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory/item_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "crowbar"
+name = "Монтировка"
+description = "Открывает запертые двери и багажники."
+icon_shape = "crowbar"
+icon_color = Color(0.7, 0.2, 0.18, 1.0)
+weight = 1.5
+stack_size = 1
+category = "Tool"
+value = 6
+tags = PackedStringArray("tool")

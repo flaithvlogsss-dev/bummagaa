@@ -17,8 +17,15 @@ config/icon="res://icon.svg"
 
 Data="*res://autoload/data_registry.gd"
 Settings="*res://autoload/settings.gd"
+AudioManager="*res://autoload/audio_manager.gd"
 GameState="*res://autoload/game_state.gd"
 TimeManager="*res://autoload/time_manager.gd"
+WeatherManager="*res://autoload/weather_manager.gd"
+QuestManager="*res://autoload/quest_manager.gd"
+DialogueManager="*res://autoload/dialogue_manager.gd"
+EventManager="*res://autoload/event_manager.gd"
+RadioManager="*res://autoload/radio_manager.gd"
+SaveManager="*res://autoload/save_manager.gd"
 
 [display]
 

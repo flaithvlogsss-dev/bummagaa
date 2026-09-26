@@ -5,6 +5,8 @@ extends Resource
 
 @export var id: String = ""
 @export var display_name: String = ""
+## Shown before the player learns the name.
+@export var unknown_name: String = "Незнакомец"
 @export var age: int = 30
 @export var occupation: String = ""
 @export_multiline var bio: String = ""

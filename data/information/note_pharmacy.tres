@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="InformationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/information_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "note_pharmacy"
+title = "Накладная аптеки"
+info_type = "document"
+content = "Поставка для метеостанции «Меридиан»: 40 упаковок средств от обморожения, 12 термоодеял. Пометка от руки: «Почему им это нужно ДО снегопада?»"
+tags = PackedStringArray("meridian", "clue")

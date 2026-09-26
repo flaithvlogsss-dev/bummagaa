@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/crafting/recipe_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "repair_kit"
+name = "Ремкомплект"
+description = "Собрать из деталей набор для ремонта генератора."
+ingredients = {"scrap_metal": 2, "electronics": 1}
+result_item = "repair_kit"
+result_count = 1
+crafting_time = 40
+required_station = "workbench"
+required_shelter_level = 2

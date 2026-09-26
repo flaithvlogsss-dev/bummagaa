@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="InformationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/information_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "radio_warning"
+title = "Радио: предупреждение"
+info_type = "radio"
+content = "«…если кто-нибудь слышит… не выходите после усиления снега… он забирает тепло прямо из тела… повторяю…»"
+tags = PackedStringArray("radio")

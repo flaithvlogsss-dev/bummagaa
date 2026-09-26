@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/crafting/recipe_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "bandage"
+name = "Бинт"
+description = "Нарезать и прокипятить ткань."
+ingredients = {"cloth": 2}
+result_item = "bandage"
+result_count = 1
+crafting_time = 15
+required_station = "workbench"
+required_shelter_level = 1

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory/item_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "electronics"
+name = "Электроника"
+description = "Платы, провода, конденсаторы. Нужны для ремонта и радио."
+icon_shape = "chip"
+icon_color = Color(0.25, 0.55, 0.35, 1.0)
+weight = 0.4
+stack_size = 20
+category = "Electronics"
+rarity = "uncommon"
+value = 6
+tags = PackedStringArray("material", "electronics")

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="WeatherPreset" format=3]
+
+[ext_resource type="Script" path="res://scripts/weather/weather_preset.gd" id="1_wp"]
+
+[resource]
+script = ExtResource("1_wp")
+id = "HEAVY"
+display_name = "Сильный снег"
+intensity = 0.6
+wind = 0.45
+visibility = 38.0
+temperature = -16.0
+cold_rate = 1.7
+stamina_cost = 1.2
+footprint_fade = 2.0
+noise_mask = 0.25
+stress_rate = 0.02
+severe = false
