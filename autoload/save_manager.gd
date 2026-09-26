@@ -16,7 +16,7 @@ signal saved(slot: String)
 signal save_failed(slot: String, error: String)
 
 const SAVE_DIR := "user://saves"
-const VERSION := 1
+const VERSION := 2
 const SLOTS: Array[String] = ["1", "2", "3", "auto"]
 const AUTOSAVE_COOLDOWN_MS := 45000
 
@@ -157,4 +157,27 @@ func _migrate(data: Dictionary) -> Dictionary:
 		if data.has("inventory") and data.game_state is Dictionary:
 			data.game_state["inventory"] = data.inventory
 		data["version"] = 1
+	if v < 2:
+		# v1 -> v2: slot inventory. Inventory.deserialize reads the old item list itself; the
+		# pistol's magazine and wear moved from the player stats onto the weapon stack.
+		var gs: Dictionary = data.get("game_state", {})
+		var inv: Dictionary = gs.get("inventory", {})
+		var st: Dictionary = gs.get("stats", {})
+		var eq: Dictionary = inv.get("equipped", {})
+		var new_eq := {}
+		for slot in eq.keys():
+			var key: String = Inventory.LEGACY_SLOTS.get(str(slot), str(slot))
+			var stack := {"id": str(eq[slot]), "count": 1}
+			if key == "weapon":
+				stack["cond"] = float(st.get("weapon_durability", 100.0))
+				stack["data"] = {"mag": int(st.get("magazine", 0))}
+			new_eq[key] = stack
+		inv["equipped"] = new_eq
+		if not gs.has("known_recipes"):
+			var known: Array = []
+			for r in Data.recipes.keys():
+				if (Data.recipes[r] as RecipeData).known_from_start:
+					known.append(r)
+			gs["known_recipes"] = known
+		data["version"] = 2
 	return data

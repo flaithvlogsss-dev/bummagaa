@@ -25,6 +25,14 @@ const DEFAULTS := {
 	"fire": ["mouse:1"],
 	"aim": ["mouse:2"],
 	"heal_quick": ["key:H"],
+	"mask_toggle": ["key:G"],
+	"throw": ["key:T"],
+	"swap_weapon": ["key:X"],
+	"quick_1": ["key:1"],
+	"quick_2": ["key:2"],
+	"quick_3": ["key:3"],
+	"quick_4": ["key:4"],
+	"quick_5": ["key:5"],
 }
 
 static var overrides: Dictionary = {}

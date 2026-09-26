@@ -177,23 +177,26 @@ func _process(_delta: float) -> void:
 		_info.text = debug_text()
 
 
+## Military backpack first (room), then a survival kit; what does not fit lands at the feet.
 func _give_items() -> void:
-	for id in ["scrap_metal", "wood", "cloth", "electronics"]:
-		GameState.inventory.add(id, 5)
-	for id in ["canned_food", "dry_food", "water_bottle"]:
-		GameState.inventory.add(id, 2)
-	for id in ["bandage", "medicine"]:
-		GameState.inventory.add(id, 2)
-	for id in ["flashlight", "crowbar", "repair_kit", "warm_jacket", "protective_mask", "pistol", "warm_pack"]:
-		GameState.inventory.add(id, 1)
-	GameState.inventory.add("pistol_ammo", 12)
+	var inv := GameState.inventory
+	if inv.get_equipped("backpack") != "military_backpack":
+		inv.add_stack({"id": "military_backpack", "count": 1}, true)
+		inv.equip("military_backpack")
+	if inv.get_equipped("mask").is_empty():
+		inv.add("gas_mask", 1, true)
+		inv.equip("gas_mask")
+	var kit := {"scrap_metal": 3, "cloth": 4, "electronics": 2, "canned_food": 2, "water_bottle": 2,
+		"bandage": 2, "medicine": 1, "filter_standard": 2, "flashlight": 1, "crowbar": 1, "pistol": 1,
+		"pistol_ammo": 12, "empty_bottle": 2, "flare": 1, "warm_jacket": 1}
+	for id in kit.keys():
+		GameState.give_or_drop(id, kit[id], false)
 	GameState.notify("Debug: предметы выданы.")
 
 
 func _add_food() -> void:
-	GameState.inventory.add("canned_food", 3)
-	GameState.inventory.add("dry_food", 2)
-	GameState.inventory.add("water_bottle", 3)
+	for id in ["canned_food", "dry_food", "water_bottle"]:
+		GameState.give_or_drop(id, 2, false)
 
 
 func _heal() -> void:

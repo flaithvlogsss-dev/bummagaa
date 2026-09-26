@@ -6,12 +6,14 @@ extends Node3D
 ##   spawns the NPCs whose GameState location is this level.
 ## Spawn points: Marker3D nodes named "spawn_<id>" (player) and "npc_<id>" (NPCs).
 ## Dependencies: GameState (npc registry), NPC scene.
+## Also spawns the WorldItems of GameState.dropped_items for this level.
 ## Public API: get_spawn_transform(id), is_heated(), refresh_npcs(), get_npc_node(id)
 ## Signals: level_ready
 
 signal level_ready
 
 const NPC_SCENE := "res://scenes/npc/NPC.tscn"
+const WORLD_ITEM_SCENE := "res://scenes/items/WorldItem.tscn"
 
 @export var level_id: String = ""
 @export var display_name: String = ""
@@ -36,6 +38,8 @@ func _ready() -> void:
 		_actors.name = "Actors"
 		add_child(_actors)
 	refresh_npcs()
+	for entry in GameState.get_dropped(level_id):
+		_spawn_world_item(entry)
 	GameState.world_request.connect(_on_world_request)
 	level_ready.emit()
 
@@ -109,6 +113,17 @@ func _spawn_npc(npc_id: String) -> void:
 	_npc_nodes[npc_id] = npc
 
 
-func _on_world_request(kind: String, _data: Dictionary) -> void:
-	if kind == "npc_moved":
-		refresh_npcs.call_deferred()
+func _spawn_world_item(entry: Dictionary) -> void:
+	var scene: PackedScene = load(WORLD_ITEM_SCENE)
+	var node: WorldItem = scene.instantiate()
+	node.setup(entry, level_id)
+	_actors.add_child(node)
+
+
+func _on_world_request(kind: String, data: Dictionary) -> void:
+	match kind:
+		"npc_moved":
+			refresh_npcs.call_deferred()
+		"item_dropped":
+			if GameState.current_location == level_id:
+				_spawn_world_item(data.entry)

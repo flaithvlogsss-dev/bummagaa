@@ -1,0 +1,20 @@
+[
+{"id": "warm_jacket", "name": "Пуховик", "category": "Clothing", "icon_shape": "jacket", "weight": 1.4, "stack_size": 1, "rarity": "uncommon", "value": 16, "equip_slot": "body", "insulation": 0.4, "has_condition": true, "tags": ["clothing"],
+ "description": "Пуховая куртка с капюшоном. Сильно замедляет потерю тепла на улице.", "effect_text": "утепление 40%"},
+{"id": "military_parka", "name": "Армейская парка", "category": "Clothing", "icon_shape": "parka", "weight": 1.8, "stack_size": 1, "rarity": "rare", "value": 24, "equip_slot": "body", "insulation": 0.55, "protection": 0.1, "has_condition": true, "tags": ["clothing"],
+ "description": "Парка с меховым капюшоном и ветрозащитой. Держит мороз и немного — удары.", "effect_text": "утепление 55%, защита 10%"},
+{"id": "knit_hat", "name": "Вязаная шапка", "category": "Clothing", "icon_shape": "beanie", "weight": 0.1, "stack_size": 1, "value": 3, "equip_slot": "head", "insulation": 0.08, "has_condition": true, "tags": ["clothing"],
+ "description": "Шапка с помпоном. Уши будут целы.", "effect_text": "утепление 8%"},
+{"id": "ushanka", "name": "Ушанка", "category": "Clothing", "icon_shape": "ushanka", "weight": 0.3, "stack_size": 1, "rarity": "uncommon", "value": 8, "equip_slot": "head", "insulation": 0.15, "has_condition": true, "tags": ["clothing"],
+ "description": "Меховая шапка-ушанка. Самое тёплое, что можно надеть на голову.", "effect_text": "утепление 15%"},
+{"id": "hard_hat", "name": "Строительная каска", "category": "Clothing", "icon_shape": "helmet", "weight": 0.4, "stack_size": 1, "value": 5, "equip_slot": "head", "insulation": 0.02, "protection": 0.2, "has_condition": true, "tags": ["clothing"],
+ "description": "Пластиковая каска. Не греет, но держит удар.", "effect_text": "защита 20%"},
+{"id": "improvised_backpack", "name": "Самодельный мешок", "category": "Clothing", "icon_shape": "sackpack", "weight": 0.3, "stack_size": 1, "value": 3, "equip_slot": "backpack", "backpack_capacity": 5.0, "backpack_slots": 4, "has_condition": true, "tags": ["backpack"],
+ "description": "Наволочка с лямками из верёвки. Хоть что-то.", "effect_text": "+5 кг, +4 ячейки"},
+{"id": "small_backpack", "name": "Школьный рюкзак", "category": "Clothing", "icon_shape": "backpack", "weight": 0.6, "stack_size": 1, "value": 8, "equip_slot": "backpack", "backpack_capacity": 8.0, "backpack_slots": 6, "has_condition": true, "tags": ["backpack"],
+ "description": "Небольшой рюкзак со светоотражателями. Чей-то сменный пенал всё ещё внутри.", "effect_text": "+8 кг, +6 ячеек"},
+{"id": "hiking_backpack", "name": "Туристический рюкзак", "category": "Clothing", "icon_shape": "hikingpack", "weight": 1.2, "stack_size": 1, "rarity": "uncommon", "value": 18, "equip_slot": "backpack", "backpack_capacity": 14.0, "backpack_slots": 10, "has_condition": true, "tags": ["backpack"],
+ "description": "Большой рюкзак с каркасом и скаткой. Кто-то собирался в горы.", "effect_text": "+14 кг, +10 ячеек"},
+{"id": "military_backpack", "name": "Армейский рюкзак", "category": "Clothing", "icon_shape": "milpack", "weight": 1.5, "stack_size": 1, "rarity": "rare", "value": 28, "equip_slot": "backpack", "backpack_capacity": 20.0, "backpack_slots": 14, "has_condition": true, "tags": ["backpack"],
+ "description": "Рюкзак с подсумками и поясным ремнём. Вмещает всё, что можно унести.", "effect_text": "+20 кг, +14 ячеек"}
+]

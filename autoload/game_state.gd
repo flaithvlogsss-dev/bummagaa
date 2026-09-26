@@ -28,9 +28,9 @@ signal location_changed(level_id: String)
 signal new_game_started
 signal state_loaded
 
-const PLAYER_CARRY_WEIGHT := 25.0
 const MAX_SHELTER_LEVEL := 3
-const FOOD_ITEMS: Array[String] = ["canned_food", "dry_food"]
+## Worn at the start of a new game: slot -> item id.
+const START_EQUIPMENT := {"backpack": "small_backpack", "head": "knit_hat"}
 
 var player_name: String = "Alex"
 var flags: Dictionary = {}
@@ -44,6 +44,12 @@ var player_position: Vector3 = Vector3.ZERO
 var map_markers: Array = []
 ## Persistent per-object state for interactables: {persistent_id: {...}}
 var world_objects: Dictionary = {}
+## Items lying in the world: {level_id: [{"stack": {...}, "pos": [x, y, z]}]}
+var dropped_items: Dictionary = {}
+## Recipe ids the player knows (books, notes, people).
+var known_recipes: Array = []
+## Seed for per-playthrough randomness (loot rolls).
+var world_seed: int = 0
 var ending_id: String = ""
 var play_time: float = 0.0
 
@@ -56,8 +62,8 @@ var world: WorldState
 
 
 func _ready() -> void:
-	inventory = Inventory.new("player", PLAYER_CARRY_WEIGHT)
-	storage = Inventory.new("storage", 0.0)
+	inventory = Inventory.new("player", true)
+	storage = Inventory.new("storage", false)
 	stats = PlayerStats.new()
 	relationships = RelationshipSystem.new()
 	npcs = NPCRegistry.new()
@@ -65,6 +71,7 @@ func _ready() -> void:
 	_register_conditions()
 	_register_consequences()
 	reset_state()
+	TimeManager.hour_passed.connect(func(_d, _h): _tick_spoilage())
 
 
 func _process(delta: float) -> void:
@@ -86,6 +93,12 @@ func reset_state() -> void:
 	player_position = Vector3.ZERO
 	map_markers.clear()
 	world_objects.clear()
+	dropped_items.clear()
+	known_recipes.clear()
+	world_seed = randi()
+	for r in Data.recipes.keys():
+		if (Data.recipes[r] as RecipeData).known_from_start:
+			known_recipes.append(r)
 	ending_id = ""
 	play_time = 0.0
 	inventory.clear()
@@ -102,6 +115,9 @@ func reset_state() -> void:
 
 func new_game() -> void:
 	reset_state()
+	for slot in START_EQUIPMENT.keys():
+		if inventory.add(START_EQUIPMENT[slot], 1, true, {"cond": 80.0}) > 0:
+			inventory.equip(START_EQUIPMENT[slot])
 	new_game_started.emit()
 
 
@@ -207,25 +223,49 @@ func dead_survivors() -> Array[String]:
 	return npcs.dead_ids()
 
 
+## Ready-to-eat food (not ingredients, not spoiled) in the backpack and the shelter storage.
 func food_total() -> int:
 	var n := 0
-	for id in FOOD_ITEMS:
-		n += inventory.count(id) + storage.count(id)
+	for inv in [inventory, storage]:
+		for e in inv.get_entries():
+			if is_meal(e.item):
+				n += int(e.count)
 	return n
 
 
-## Morning routine: every survivor in the shelter eats one food item from storage.
+static func is_meal(item: ItemData) -> bool:
+	return item != null and item.has_tag("food") and item.is_usable() and not item.has_tag("spoiled")
+
+
+## Removes one meal from storage, soonest-to-spoil and cheapest first. Returns its id or "".
+func _take_meal_from_storage() -> String:
+	var best := -1
+	var best_score := INF
+	var list := storage.get_slots()
+	for i in list.size():
+		var st: Dictionary = list[i]
+		if st.is_empty():
+			continue
+		var item := Data.get_item(st.id)
+		if not is_meal(item):
+			continue
+		var score := float(item.value) + (float(st.data.exp) / 100000.0 if st.has("data") and st.data.has("exp") else 50.0)
+		if score < best_score:
+			best_score = score
+			best = i
+	if best < 0:
+		return ""
+	return str(storage.take_at(best, 1).get("id", ""))
+
+
+## Morning routine: every survivor in the shelter eats one meal from storage.
 func _feed_survivors() -> void:
 	var ids := survivors_in_shelter()
 	if ids.is_empty():
 		return
 	var hungry: PackedStringArray = []
 	for id in ids:
-		var ate := false
-		for f in FOOD_ITEMS:
-			if storage.remove(f, 1):
-				ate = true
-				break
+		var ate := not _take_meal_from_storage().is_empty()
 		if ate:
 			npcs.modify_stat(id, "hope", 5.0)
 		else:
@@ -237,6 +277,75 @@ func _feed_survivors() -> void:
 	else:
 		notify("Утро. Еды на складе не хватило: %s остались голодными." % ", ".join(hungry), "warning")
 		stats.modify("stress", 8.0)
+
+
+# --- Items in the world ----------------------------------------------------------------
+
+## Gives items to the player; whatever does not fit is dropped at the player's feet.
+## Returns how many went into the backpack.
+func give_or_drop(item_id: String, amount: int, notify_player: bool = true, props: Dictionary = {}) -> int:
+	if not Data.has_item(item_id) or amount <= 0:
+		return 0
+	var added := inventory.add(item_id, amount, false, props)
+	var rest := amount - added
+	if rest > 0:
+		var stack := {"id": item_id, "count": rest}
+		for k in props.keys():
+			stack[k] = props[k]
+		drop_stack(stack)
+	if notify_player:
+		var n := Data.get_item_name(item_id)
+		if rest > 0:
+			notify("+%d %s (%d не влезло — лежит рядом)" % [amount, n, rest], "warning")
+		else:
+			notify("+%d %s" % [amount, n], "item")
+	return added
+
+
+## Puts a stack on the ground near `pos` (default: the player) in the current level.
+func drop_stack(stack: Dictionary, pos: Variant = null) -> void:
+	if stack.is_empty():
+		return
+	var p: Vector3 = player_position
+	var pl := Main.get_player() if Main.instance else null
+	if pos is Vector3:
+		p = pos
+	elif pl:
+		p = pl.global_position + Vector3(randf_range(-0.6, 0.6), 0.0, randf_range(0.3, 0.8))
+	var entry := {"stack": stack.duplicate(true), "pos": [snappedf(p.x, 0.01), snappedf(p.y, 0.01), snappedf(p.z, 0.01)]}
+	if not dropped_items.has(current_location):
+		dropped_items[current_location] = []
+	dropped_items[current_location].append(entry)
+	request_world("item_dropped", {"entry": entry})
+
+
+func get_dropped(level_id: String) -> Array:
+	return dropped_items.get(level_id, [])
+
+
+func remove_dropped(level_id: String, entry: Dictionary) -> void:
+	if dropped_items.has(level_id):
+		dropped_items[level_id].erase(entry)
+
+
+func learn_recipe(recipe_id: String, announce: bool = true) -> bool:
+	if known_recipes.has(recipe_id) or not Data.recipes.has(recipe_id):
+		return false
+	known_recipes.append(recipe_id)
+	if announce:
+		notify("Новый рецепт: %s" % Data.get_recipe(recipe_id).name, "info")
+	return true
+
+
+func knows_recipe(recipe_id: String) -> bool:
+	return known_recipes.has(recipe_id)
+
+
+func _tick_spoilage() -> void:
+	for inv in [inventory, storage]:
+		var spoiled: Array = inv.tick_spoilage(TimeManager.total_minutes)
+		if inv == inventory and not spoiled.is_empty():
+			notify("Испортилось: %s" % Data.get_item_name(str(spoiled[0])), "warning")
 
 
 # --- Presentation helpers -------------------------------------------------------------
@@ -300,6 +409,9 @@ func serialize() -> Dictionary:
 		"player_position": [player_position.x, player_position.y, player_position.z],
 		"map_markers": map_markers.duplicate(true),
 		"world_objects": world_objects.duplicate(true),
+		"dropped_items": dropped_items.duplicate(true),
+		"known_recipes": known_recipes.duplicate(),
+		"world_seed": world_seed,
 		"play_time": play_time,
 		"inventory": inventory.serialize(),
 		"storage": storage.serialize(),
@@ -330,6 +442,13 @@ func deserialize(d: Dictionary) -> void:
 		player_position = Vector3(float(p[0]), float(p[1]), float(p[2]))
 	map_markers = d.get("map_markers", []).duplicate(true)
 	world_objects = d.get("world_objects", {}).duplicate(true)
+	dropped_items = d.get("dropped_items", {}).duplicate(true)
+	world_seed = int(d.get("world_seed", world_seed))
+	if d.has("known_recipes"):
+		known_recipes = []
+		for r in d.known_recipes:
+			if Data.recipes.has(str(r)):
+				known_recipes.append(str(r))
 	play_time = float(d.get("play_time", 0.0))
 	inventory.deserialize(d.get("inventory", {}))
 	storage.deserialize(d.get("storage", {}))
@@ -366,6 +485,8 @@ func _register_conditions() -> void:
 		return inventory.count(pair[0]) + storage.count(pair[0]) >= pair[1])
 	C.register("food_total_min", func(v, _ctx): return food_total() >= int(v))
 	C.register("equipped", func(v, _ctx): return inventory.is_equipped(str(v)))
+	C.register("item_tag", func(v, _ctx): return inventory.has_tag(str(v)))
+	C.register("recipe_known", func(v, _ctx): return knows_recipe(str(v)))
 	C.register("info", func(v, _ctx): return has_information(str(v)))
 	C.register("not_info", func(v, _ctx): return not has_information(str(v)))
 	C.register("info_count_min", func(v, _ctx):
@@ -436,8 +557,28 @@ func _register_consequences() -> void:
 	K.register("clear_flag", func(v, _ctx): clear_flag(str(v)))
 	K.register("give_item", func(v, _ctx):
 		var pair := _id_count(v)
-		if inventory.add(pair[0], pair[1]) > 0:
-			notify("+%d %s" % [pair[1], Data.get_item_name(pair[0])], "item"))
+		give_or_drop(pair[0], pair[1]))
+	K.register("return_item", func(v, _ctx):
+		var pair := _id_count(v)
+		give_or_drop(pair[0], pair[1], false))
+	K.register("learn_recipes", func(v, _ctx):
+		var learned := 0
+		for r in (v if v is Array else [v]):
+			if learn_recipe(str(r), false):
+				learned += 1
+		if learned > 0:
+			notify("Изучено рецептов: %d. Смотри в мастерской." % learned, "info")
+		else:
+			notify("Ничего нового — всё это ты уже знаешь.", "info"))
+	K.register("illness_chance", func(v, _ctx):
+		var chance := float(v) * (0.5 if stats.vitamins > 0.0 else 1.0)
+		if randf() < chance and not stats.illness:
+			stats.illness = true
+			stats.changed.emit("status", 0.0)
+			notify("Тебя знобит. Кажется, ты заболел.", "danger"))
+	K.register("charge_flashlight", func(v, _ctx):
+		stats.flashlight_battery = minf(100.0, stats.flashlight_battery + float(v))
+		stats.changed.emit("status", 0.0))
 	K.register("take_item", func(v, _ctx):
 		var pair := _id_count(v)
 		if inventory.remove(pair[0], pair[1]):
@@ -482,6 +623,8 @@ func _register_consequences() -> void:
 			stats.illness = bool(v["illness"])
 		if v.has("warm_pack"):
 			stats.warm_pack_time = maxf(stats.warm_pack_time, float(v["warm_pack"]))
+		if v.has("vitamins"):
+			stats.vitamins = maxf(stats.vitamins, float(v["vitamins"]))
 		stats.changed.emit("status", 0.0))
 	K.register("decision", func(v, _ctx): record_decision(str(v[0]), v[1] if v.size() > 1 else true))
 	K.register("notify", func(v, _ctx): notify(format_text(str(v))))

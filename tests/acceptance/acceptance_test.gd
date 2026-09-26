@@ -57,6 +57,12 @@ func _use(path: String) -> void:
 		n._last_used = -1000.0
 		n.interact(player)
 	await _frames(2)
+	# Containers open the looting panel: take everything, like pressing E there.
+	var panel := UIRoot.instance.current as ContainerPanel if UIRoot.instance else null
+	if panel and panel.open_data.has("inventory"):
+		panel._take_all()
+		UIRoot.close_all()
+		await _frames(2)
 
 
 ## Finishes the active dialogue, choosing the first choice containing `pick` when given.
@@ -201,7 +207,7 @@ func _run() -> void:
 	GameState.inventory.equip("pistol")
 	player.combat.reload()
 	await _wait(1.8)
-	check(GameState.stats.magazine > 0, "reloaded the pistol")
+	check(player.combat.get_magazine() > 0, "reloaded the pistol")
 	if not enemies.is_empty() and is_instance_valid(enemies[0]):
 		var st: SnowStalker = enemies[0]
 		var hp := st.health
@@ -222,7 +228,7 @@ func _run() -> void:
 		check(main.current_level.get_node_or_null("Actors/NPC_mara") != null, "Mara waits inside the shelter")
 	# 16-17. Resources → craft.
 	for id in ["scrap_metal", "wood", "cloth", "electronics"]:
-		GameState.inventory.add(id, 4)
+		GameState.storage.add(id, 4)
 	await _use("Interactables/Workbench")
 	var craft := UIRoot.instance.current as CraftingPanel
 	check(craft != null, "workbench opens crafting")

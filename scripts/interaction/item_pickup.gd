@@ -1,6 +1,7 @@
 class_name ItemPickup
 extends Interactable
-## A single item lying in the world, shown as a floating pixel icon.
+## A single authored item lying in the level, shown as a floating pixel icon.
+## Takes as many as fit; the rest stays (remaining count is saved in the object state).
 
 @export var item_id: String = ""
 @export var count: int = 1
@@ -21,7 +22,7 @@ func _ready() -> void:
 	if display_name == "Объект" or display_name.is_empty():
 		display_name = Data.get_item_name(item_id)
 	_icon = Sprite3D.new()
-	_icon.texture = PixelArt.item_icon(Data.get_item(item_id))
+	_icon.texture = IconArt.item_icon(Data.get_item(item_id))
 	_icon.pixel_size = 0.03
 	_icon.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_icon.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
@@ -43,12 +44,25 @@ func _process(delta: float) -> void:
 		_icon.position.y = 0.5 + sin(_t * 2.2) * 0.06
 
 
+func remaining() -> int:
+	return int(get_state("left", count))
+
+
 func get_prompt() -> String:
-	return "%s — %s%s" % [interaction_text, display_name, " ×%d" % count if count > 1 else ""]
+	var n := remaining()
+	return "%s — %s%s" % [interaction_text, display_name, " ×%d" % n if n > 1 else ""]
 
 
 func _on_interact(_actor: Node) -> bool:
-	if GameState.inventory.add(item_id, count) <= 0:
+	var n := remaining()
+	var added := GameState.inventory.add(item_id, n)
+	if added <= 0:
+		GameState.notify("Не влезет: рюкзак полон или слишком тяжёл.", "warning")
+		AudioManager.play_ui("deny")
 		return false
-	GameState.notify("+%d %s" % [count, Data.get_item_name(item_id)], "item")
+	GameState.notify("+%d %s" % [added, Data.get_item_name(item_id)], "item")
+	if added < n:
+		set_state("left", n - added)
+		AudioManager.play_sfx(interaction_sound)
+		return false
 	return true

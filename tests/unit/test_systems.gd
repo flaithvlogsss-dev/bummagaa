@@ -41,17 +41,125 @@ func test_inventory_consume_and_equip() -> void:
 
 func test_inventory_weight_and_serialization() -> void:
 	var inv := GameState.inventory
-	inv.add("scrap_metal", 30)
-	assert_true(inv.is_overweight(), "30 kg of scrap is too heavy")
-	inv.add("pistol", 1)
+	var added := inv.add("scrap_metal", 30)
+	assert_lt(added, 30, "the carry limit stops pickups")
+	assert_gt(added, 0)
+	assert_false(inv.is_overweight(), "adding never overloads")
+	assert_eq(inv.can_fit("scrap_metal", 5), 0)
+	assert_true(inv.remove("scrap_metal", added))
+	inv.add("pistol", 1, false, {"cond": 40.0})
 	inv.equip("pistol")
+	inv.add("cloth", 3)
 	var data := inv.serialize()
-	var other := Inventory.new("copy", 25.0)
-	data["items"].append(["removed_item_from_old_save", 3])
+	var other := Inventory.new("copy", true)
+	data["slots"].append({"id": "removed_item_from_old_save", "count": 3})
 	other.deserialize(data)
-	assert_eq(other.count("scrap_metal"), 30)
+	assert_eq(other.count("cloth"), 3)
 	assert_true(other.is_equipped("pistol"))
+	assert_eq(other.get_equipped_stack("weapon").get("cond"), 40.0, "condition survives saving")
 	assert_eq(other.count("removed_item_from_old_save"), 0)
+	var legacy := Inventory.new("legacy", true)
+	legacy.deserialize({"items": [["cloth", 2], ["pistol", 1]], "equipped": {"hand": "pistol"}})
+	assert_eq(legacy.count("cloth"), 2, "v1 saves still load")
+	assert_true(legacy.is_equipped("pistol"), "v1 'hand' slot maps to weapon")
+	assert_eq(legacy.count("pistol"), 1)
+
+
+func test_inventory_slots_backpack_and_instances() -> void:
+	var inv := GameState.inventory
+	assert_eq(inv.get_equipped("backpack"), "small_backpack", "new game starts with a backpack")
+	var slots := inv.slot_count()
+	assert_eq(slots, Inventory.BASE_SLOTS + 6)
+	# Non-stackable gear takes one slot each and keeps its own condition.
+	inv.add("knife", 1, false, {"cond": 30.0, "q": 2})
+	inv.add("knife", 1, false, {"cond": 90.0})
+	assert_eq(inv.count("knife"), 2)
+	var conds: Array = []
+	for s in inv.get_slots():
+		if not s.is_empty() and s.id == "knife":
+			conds.append(s.cond)
+	conds.sort()
+	assert_eq(conds, [30.0, 90.0])
+	# Transfer keeps instance data.
+	assert_eq(StorageSystem.transfer(inv, GameState.storage, "knife", -1), 2)
+	assert_eq(StorageSystem.transfer(GameState.storage, inv, "knife", -1), 2)
+	var q_found := false
+	for s in inv.get_slots():
+		if not s.is_empty() and s.id == "knife" and float(s.cond) == 30.0:
+			q_found = int(s.q) == 2
+	assert_true(q_found, "quality and condition survive transfers")
+	# Filling every slot, then the backpack cannot come off.
+	while inv.free_slots() > 0:
+		inv.add("stone", 1, true, {"data": {"tag": inv.free_slots()}})
+	assert_eq(inv.add("cloth", 1), 0, "no free slot")
+	assert_false(inv.unequip("backpack"), "cannot drop the bag while it is full")
+	assert_eq(inv.get_equipped("backpack"), "small_backpack")
+
+
+func test_give_or_drop_spills_to_the_ground() -> void:
+	var inv := GameState.inventory
+	while inv.free_slots() > 0:
+		inv.add("stone", 1, true, {"data": {"tag": inv.free_slots()}})
+	var before := GameState.get_dropped(GameState.current_location).size()
+	assert_eq(GameState.give_or_drop("canned_food", 2, false), 0)
+	var drops := GameState.get_dropped(GameState.current_location)
+	assert_eq(drops.size(), before + 1, "overflow lies on the ground")
+	assert_eq(drops[-1].stack.id, "canned_food")
+	assert_eq(int(drops[-1].stack.count), 2)
+	var data := GameState.serialize()
+	GameState.deserialize(data)
+	assert_eq(GameState.get_dropped(GameState.current_location).size(), before + 1, "drops are saved")
+
+
+func test_mask_filter_install_and_eject() -> void:
+	var inv := GameState.inventory
+	inv.add("filter_standard", 2)
+	var idx := inv.find_index("filter_standard")
+	assert_false(inv.use_at(idx), "no mask yet")
+	inv.add("gas_mask", 1)
+	assert_true(inv.equip("gas_mask"))
+	assert_true(inv.use_at(inv.find_index("filter_standard")))
+	assert_eq(inv.count("filter_standard"), 1)
+	assert_eq(inv.get_mask_filter_left(), 60.0)
+	inv.get_equipped_stack("mask").data["filter_left"] = 20.0
+	assert_true(inv.use_at(inv.find_index("filter_standard")), "swap filters")
+	assert_eq(inv.get_mask_filter_left(), 60.0)
+	var used := {}
+	for s in inv.get_slots():
+		if not s.is_empty() and s.id == "filter_standard" and s.has("data"):
+			used = s
+	assert_eq(float(used.get("data", {}).get("left", 0.0)), 20.0, "the old filter keeps its charge")
+	inv.get_equipped_stack("mask").data["filter_left"] = 0.0
+	inv.eject_filter()
+	assert_eq(inv.count("filter_spent"), 1, "an empty filter becomes a spent one")
+
+
+func test_food_spoils_and_survivors_eat_meals() -> void:
+	var inv := GameState.inventory
+	inv.add("cooked_meal", 1)
+	assert_eq(inv.count("cooked_meal"), 1)
+	inv.tick_spoilage(TimeManager.total_minutes + 2 * 1440)
+	assert_eq(inv.count("cooked_meal"), 0)
+	assert_eq(inv.count("spoiled_food"), 1)
+	GameState.storage.add("rice", 3)
+	assert_eq(GameState.food_total(), 0, "raw rice and spoiled food are not meals")
+	GameState.storage.add("canned_food", 1)
+	assert_eq(GameState.food_total(), 1)
+
+
+func test_loot_tables_roll_deterministically() -> void:
+	var a := LootTables.roll("pharmacy_backroom", "district:test", 1)
+	var b := LootTables.roll("pharmacy_backroom", "district:test", 1)
+	assert_eq(a, b, "same container, same contents")
+	assert_gt(a.size(), 0)
+	for s in a:
+		assert_true(Data.has_item(str(s.id)))
+	assert_eq(LootTables.roll("no_such_table", "x", 1), [])
+	var gear := LootTables.roll("military_crate", "district:crate", 3)
+	for s in gear:
+		var item := Data.get_item(str(s.id))
+		if item.has_condition:
+			assert_true(s.has("cond") and s.has("q"), "gear rolls condition and quality")
 
 
 func test_storage_transfer() -> void:

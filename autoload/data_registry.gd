@@ -2,8 +2,10 @@ extends Node
 ## Data — read-only registry of all game content.
 ##
 ## Purpose: loads every content record from res://data/ once and offers lookup by id.
-##   Flat records are Godot Resources (.tres, editable in the Inspector):
-##     items, recipes, characters, information, weather presets.
+##   Items are JSON tables (data/items/*.json, one row per item -> ItemData.from_dict);
+##   loot tables live in data/loot/tables.json.
+##   Other flat records are Godot Resources (.tres, editable in the Inspector):
+##     recipes, characters, information, weather presets.
 ##   Graph/scripted records are JSON (conditions + consequences inside):
 ##     dialogues, quests, events, radio signals, world tables (days, upgrades, endings).
 ## Dependencies: none (must be the first autoload).
@@ -24,6 +26,7 @@ const DIR_DIALOGUES := "res://data/dialogues"
 const DIR_EVENTS := "res://data/events"
 const DIR_RADIO := "res://data/radio"
 const DIR_WORLD := "res://data/world"
+const LOOT_TABLES := "res://data/loot/tables.json"
 
 var items: Dictionary = {}
 var recipes: Dictionary = {}
@@ -35,6 +38,7 @@ var dialogues: Dictionary = {}
 var events: Dictionary = {}
 var radio_signals: Dictionary = {}
 var world_tables: Dictionary = {}
+var loot_tables: Dictionary = {}
 
 var _warned: Dictionary = {}
 
@@ -53,7 +57,7 @@ func _exit_tree() -> void:
 
 
 func reload() -> void:
-	items = _load_resources(DIR_ITEMS)
+	items = _load_items(DIR_ITEMS)
 	recipes = _load_resources(DIR_RECIPES)
 	characters = _load_resources(DIR_CHARACTERS)
 	information = _load_resources(DIR_INFORMATION)
@@ -65,6 +69,8 @@ func reload() -> void:
 	world_tables = {}
 	for path in _list_files(DIR_WORLD, ["json"]):
 		world_tables[path.get_file().get_basename()] = load_json(path)
+	var loot = load_json(LOOT_TABLES) if FileAccess.file_exists(LOOT_TABLES) else {}
+	loot_tables = loot if loot is Dictionary else {}
 	data_reloaded.emit()
 
 
@@ -81,6 +87,11 @@ func has_item(id: String) -> bool:
 func get_item_name(id: String) -> String:
 	var item := get_item(id)
 	return item.name if item else id
+
+
+func get_loot_table(id: String) -> Dictionary:
+	var t = _lookup(loot_tables, id, "loot table")
+	return t if t is Dictionary else {}
 
 
 func get_recipe(id: String) -> RecipeData:
@@ -172,6 +183,24 @@ func _load_resources(dir_path: String) -> Dictionary:
 		if result.has(id):
 			push_warning("Data: duplicate id '%s' in %s" % [id, path])
 		result[id] = res
+	return result
+
+
+## Item rows from JSON tables plus any hand-made ItemData .tres in the same folder.
+func _load_items(dir_path: String) -> Dictionary:
+	var result := _load_resources(dir_path)
+	for path in _list_files(dir_path, ["json"]):
+		var rows = load_json(path)
+		if not (rows is Array):
+			push_warning("Data: %s must be an array of item rows" % path)
+			continue
+		for row in rows:
+			if not (row is Dictionary) or str(row.get("id", "")).is_empty():
+				push_warning("Data: item row without id in %s" % path)
+				continue
+			if result.has(row.id):
+				push_warning("Data: duplicate item id '%s' in %s" % [row.id, path])
+			result[row.id] = ItemData.from_dict(row)
 	return result
 
 

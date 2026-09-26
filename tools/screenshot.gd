@@ -3,7 +3,8 @@ extends Node
 ## Env: SHOT_OUT, SHOT_LEVEL, SHOT_SPAWN, SHOT_POS ("x,z"), SHOT_HOUR, SHOT_DAY, SHOT_WEATHER,
 ##      SHOT_FLASH (1 = flashlight on), SHOT_PANEL (ui panel), SHOT_DIALOGUE ("id" or "id:npc"),
 ##      SHOT_ENEMY (1 = spawn a Snow Stalker nearby), SHOT_TITLE (1 = title screen only),
-##      SHOT_FRAMES, SHOT_ITEMS (1 = give sample items), SHOT_LEVELUP (shelter level)
+##      SHOT_FRAMES, SHOT_ITEMS (1 = give sample items), SHOT_LEVELUP (shelter level),
+##      SHOT_LOOT (loot table shown by SHOT_PANEL=container)
 ## Usage: xvfb-run godot --path . --rendering-method gl_compatibility res://tools/Screenshot.tscn
 
 func _ready() -> void:
@@ -20,9 +21,14 @@ func _ready() -> void:
 		GameState.set_flag(f, true)
 	GameState.inventory.add("flashlight")
 	if _env("SHOT_ITEMS", "0") == "1":
-		for id in ["canned_food", "water_bottle", "bandage", "medicine", "scrap_metal", "wood", "cloth", "electronics", "warm_jacket", "pistol", "pistol_ammo"]:
-			GameState.inventory.add(id, 2)
-		GameState.inventory.equip("warm_jacket")
+		UIRoot.instance.panels["debug"]._give_items()
+		var inv := GameState.inventory
+		inv.equip("warm_jacket")
+		inv.equip("pistol")
+		inv.use_at(inv.find_index("filter_standard"))
+		inv.set_quick(0, "bandage")
+		inv.set_quick(1, "empty_bottle")
+		inv.set_quick(2, "flare")
 		QuestManager.start_quest("main_first_night")
 		QuestManager.start_quest("q02_medicine")
 	GameState.set_shelter_level(int(_env("SHOT_LEVELUP", "1")))
@@ -71,7 +77,12 @@ func _ready() -> void:
 			GameState.npcs.set_value("vera", "met", true)
 			GameState.add_marker("danger", Vector2(-38, 30), "")
 			GameState.add_marker("resource", Vector2(-10, 2), "")
-		UIRoot.open_panel(panel, {"station": _env("SHOT_STATION", "radio_point"), "ending": "home"})
+		var pdata := {"station": _env("SHOT_STATION", "radio_point"), "ending": "home"}
+		if panel == "container":
+			var box := Inventory.new("shot", false)
+			box.deserialize({"slots": LootTables.roll(_env("SHOT_LOOT", "military_crate"), "shot", 3) + LootTables.roll("pharmacy_backroom", "shot", 1)})
+			pdata = {"title": "Армейский ящик", "inventory": box, "hint": "Крышка сорвана, но внутри кое-что осталось."}
+		UIRoot.open_panel(panel, pdata)
 		for i in 20:
 			await get_tree().process_frame
 		if panel == "radio":

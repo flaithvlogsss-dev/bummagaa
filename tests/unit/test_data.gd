@@ -105,12 +105,36 @@ func test_quests_events_radio_references() -> void:
 
 
 func test_items_recipes_characters() -> void:
-	assert_true(Data.items.size() >= 17, "at least 17 items")
+	assert_true(Data.items.size() >= 90, "at least 90 items")
+	var icons := {}
 	for id in Data.items.keys():
 		var it: ItemData = Data.items[id]
-		assert_eq(it.id, id, "item id matches file")
+		assert_eq(it.id, id, "item id matches its row")
 		assert_true(not it.name.is_empty(), "item %s has a name" % id)
+		assert_true(not it.description.is_empty(), "item %s has a description" % id)
+		assert_true(ItemData.CATEGORY_NAMES.has(it.category), "item %s category %s" % [id, it.category])
+		assert_true(IconArt.has_template(it.icon_shape), "item %s icon template %s" % [id, it.icon_shape])
+		var parts := it.icon_shape.split("+")
+		if parts.size() > 1:
+			assert_true(IconArt.has_badge(parts[1]), "item %s icon badge %s" % [id, parts[1]])
+		var icon_key := "%s|%s" % [it.icon_shape, str(it.icon_colors)]
+		assert_false(icons.has(icon_key), "item %s has the same icon as %s" % [id, icons.get(icon_key, "")])
+		icons[icon_key] = id
+		if it.is_equippable():
+			assert_true(it.equip_slot in Inventory.EQUIP_SLOTS, "item %s slot %s" % [id, it.equip_slot])
+		if it is WeaponData and (it as WeaponData).is_firearm():
+			assert_true(Data.has_item((it as WeaponData).ammo_type), "weapon %s ammo" % id)
+		if it.equip_slot == "backpack":
+			assert_gt(it.backpack_capacity, 0.0, "backpack %s capacity" % id)
+		if it.is_filter():
+			assert_gt(it.filter_efficiency, 0.0, "filter %s efficiency" % id)
+		if it.equip_slot == "mask":
+			assert_gt(it.mask_efficiency, 0.0, "mask %s efficiency" % id)
 		_check_lists({"use_effects": it.use_effects}, "item " + id)
+	for t in Data.loot_tables.keys():
+		var table: Dictionary = Data.loot_tables[t]
+		for e in table.get("entries", []) + table.get("guaranteed", []):
+			assert_true(str(e.id) == "nothing" or Data.has_item(str(e.id)), "loot table %s item %s" % [t, e.id])
 	for id in Data.recipes.keys():
 		var r: RecipeData = Data.recipes[id]
 		assert_true(Data.has_item(r.result_item), "recipe %s result exists" % id)
@@ -135,6 +159,8 @@ func test_level_interactables_reference_valid_data() -> void:
 			if n is LootContainer:
 				for id in n.items.keys():
 					assert_true(Data.has_item(str(id)), "%s: loot item %s" % [n.name, id])
+				if not n.loot_table.is_empty():
+					assert_true(Data.loot_tables.has(n.loot_table), "%s: loot table %s" % [n.name, n.loot_table])
 			if n is ItemPickup:
 				assert_true(Data.has_item(n.item_id), "%s: pickup item %s" % [n.name, n.item_id])
 			if n is InfoPickup:

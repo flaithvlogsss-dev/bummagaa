@@ -79,7 +79,7 @@ func _search_body() -> void:
 	death["looted"] = true
 	var lines: PackedStringArray = []
 	for id in data.death_loot.keys():
-		GameState.inventory.add(str(id), int(data.death_loot[id]))
+		GameState.give_or_drop(str(id), int(data.death_loot[id]), false)
 		lines.append("%s ×%d" % [Data.get_item_name(str(id)), int(data.death_loot[id])])
 	DialogueManager.show_text(data.display_name, "%s больше не дышит. Иней на ресницах.\n\nВ сумке: %s." % [data.display_name, ", ".join(lines)])
 	GameState.set_flag("searched_body_" + character_id, true)

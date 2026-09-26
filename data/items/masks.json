@@ -1,0 +1,16 @@
+[
+{"id": "gas_mask", "name": "Противогаз", "category": "Mask", "icon_shape": "gasmask", "weight": 0.9, "stack_size": 1, "rarity": "uncommon", "value": 22, "equip_slot": "mask", "mask_efficiency": 0.92, "mask_visibility": 0.35, "has_condition": true, "tags": ["mask"],
+ "description": "Гражданская маска с двумя стёклами. Держит заражённый воздух, пока жив фильтр. Стёкла запотевают, дышать тяжело. [G] — снять или надеть.", "effect_text": "защита 92% с фильтром"},
+{"id": "military_gas_mask", "name": "Армейский противогаз", "category": "Mask", "icon_shape": "panomask", "weight": 1.0, "stack_size": 1, "rarity": "rare", "value": 34, "equip_slot": "mask", "mask_efficiency": 0.98, "mask_visibility": 0.2, "has_condition": true, "tags": ["mask"],
+ "description": "Панорамное стекло и плотная резина. Видно лучше, дышится легче, держит почти всё.", "effect_text": "защита 98% с фильтром"},
+{"id": "protective_mask", "name": "Респиратор", "category": "Mask", "icon_shape": "respirator", "weight": 0.3, "stack_size": 1, "value": 10, "equip_slot": "mask", "mask_efficiency": 0.6, "mask_visibility": 0.06, "has_condition": true, "tags": ["mask"],
+ "description": "Строительная полумаска с двумя картриджами. Лёгкая, почти не мешает — и пропускает часть заразы.", "effect_text": "защита 60% с фильтром"},
+{"id": "filter_homemade", "name": "Самодельный фильтр", "category": "Mask", "icon_shape": "filterhome", "weight": 0.15, "stack_size": 4, "value": 3, "filter_capacity": 20, "filter_efficiency": 0.7, "tags": ["filter"],
+ "description": "Корпус старого фильтра, уголь и вата. Минут двадцать чистого воздуха — если повезёт.", "effect_text": "20 мин, очистка 70%"},
+{"id": "filter_old", "name": "Старый фильтр", "category": "Mask", "icon_shape": "filter", "icon_colors": ["#6a6a58", "#8a7a4a"], "weight": 0.2, "stack_size": 4, "value": 5, "filter_capacity": 30, "filter_efficiency": 0.85, "tags": ["filter"],
+ "description": "Фильтр со склада ГО. Срок годности вышел лет десять назад.", "effect_text": "30 мин, очистка 85%"},
+{"id": "filter_standard", "name": "Фильтр", "category": "Mask", "icon_shape": "filter", "weight": 0.2, "stack_size": 4, "rarity": "uncommon", "value": 10, "filter_capacity": 60, "filter_efficiency": 0.95, "tags": ["filter"],
+ "description": "Стандартная фильтрующая коробка в заводской плёнке.", "effect_text": "60 мин, очистка 95%"},
+{"id": "filter_military", "name": "Армейский фильтр", "category": "Mask", "icon_shape": "filter", "icon_colors": ["#3a4a36", "#c83a2a"], "weight": 0.3, "stack_size": 4, "rarity": "rare", "value": 20, "filter_capacity": 120, "filter_efficiency": 1.0, "tags": ["filter"],
+ "description": "Угольный и противоаэрозольный слои, красная полоса. Два часа чистого воздуха.", "effect_text": "120 мин, очистка 100%"}
+]

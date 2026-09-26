@@ -52,6 +52,15 @@ static func make(id: String) -> AudioStreamWAV:
 		"creak": return _one(_creak(), RATE)
 		"metal_distant": return _one(_metal(), RATE)
 		"eat": return _one(_noise_burst(0.3, 0.6, 0.2), RATE)
+		"equip": return _one(_equip(), RATE)
+		"drop": return _one(_thud(0.18, 95.0, 0.45), RATE)
+		"melee_swing": return _one(_whoosh(0.28, 0.45), RATE)
+		"melee_hit": return _one(_hit(), RATE)
+		"throw": return _one(_whoosh(0.35, 0.3), RATE)
+		"glass_break": return _one(_glass(), RATE)
+		"stone_hit": return _one(_thud(0.16, 180.0, 0.55), RATE)
+		"flare_burn": return _loop(_seamless(_hiss(3.0), 2000), RATE)
+		"zipper": return _one(_zipper(), RATE)
 	return null
 
 
@@ -286,6 +295,75 @@ static func _gunshot() -> PackedFloat32Array:
 		var t := float(i) / RATE
 		lp += (randf_range(-1.0, 1.0) - lp) * (0.9 if t < 0.02 else 0.15)
 		b[i] = lp * exp(-t * 8.0) * 1.2 + sin(TAU * 60.0 * t) * exp(-t * 12.0) * 0.6
+	return b
+
+
+static func _equip() -> PackedFloat32Array:
+	var b := _noise_burst(0.22, 0.5, 0.18)
+	var start := int(0.16 * RATE)
+	for i in range(start, b.size()):
+		var t := float(i - start) / RATE
+		b[i] += sin(TAU * 1400.0 * t) * exp(-t * 70.0) * 0.3
+	return b
+
+
+## Air rushing past: band-limited noise with a rising-then-falling brightness.
+static func _whoosh(seconds: float, amp: float) -> PackedFloat32Array:
+	var b := _buf(seconds, RATE)
+	var lp := 0.0
+	for i in b.size():
+		var t := float(i) / b.size()
+		lp += (randf_range(-1.0, 1.0) - lp) * (0.05 + sin(PI * t) * 0.35)
+		b[i] = lp * sin(PI * t) * amp * 2.2
+	return b
+
+
+static func _hit() -> PackedFloat32Array:
+	var b := _whoosh(0.12, 0.3)
+	var hit := _thud(0.3, 75.0, 0.9)
+	b.resize(hit.size())
+	for i in hit.size():
+		b[i] += hit[i]
+	return b
+
+
+static func _glass() -> PackedFloat32Array:
+	var b := _buf(0.7, RATE)
+	var hp := 0.0
+	var prev := 0.0
+	for i in b.size():
+		var t := float(i) / RATE
+		var n := randf_range(-1.0, 1.0)
+		hp = 0.7 * (hp + n - prev)
+		prev = n
+		b[i] = hp * exp(-t * 10.0) * 0.45
+	for k in 9:
+		var f := randf_range(2400.0, 5600.0)
+		var start := int(randf_range(0.0, 0.3) * RATE)
+		for i in range(start, mini(b.size(), start + int(0.2 * RATE))):
+			var t := float(i - start) / RATE
+			b[i] += sin(TAU * f * t) * exp(-t * 28.0) * 0.16
+	return b
+
+
+static func _hiss(seconds: float) -> PackedFloat32Array:
+	var b := _buf(seconds, RATE)
+	var lp := 0.0
+	for i in b.size():
+		var t := float(i) / RATE
+		lp += (randf_range(-1.0, 1.0) - lp) * 0.45
+		b[i] = lp * (0.22 + 0.06 * sin(TAU * 7.0 * t) + randf() * 0.04)
+	return b
+
+
+static func _zipper() -> PackedFloat32Array:
+	var b := _buf(0.32, RATE)
+	var tick := 0.0
+	for i in b.size():
+		var t := float(i) / RATE
+		tick += (70.0 + t * 120.0) / RATE
+		var click := exp(-fmod(tick, 1.0) * 18.0)
+		b[i] = randf_range(-1.0, 1.0) * click * 0.25 * sin(PI * t / 0.32)
 	return b
 
 

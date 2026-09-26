@@ -1,0 +1,15 @@
+[
+{"id": "electronics", "name": "Радиодетали", "category": "Electronics", "icon_shape": "chip", "weight": 0.3, "stack_size": 10, "rarity": "uncommon", "value": 6, "tags": ["material", "electronics"],
+ "description": "Платы, конденсаторы, лампы. Нужны для ремонта и для радио."},
+{"id": "wire", "name": "Провод", "category": "Electronics", "icon_shape": "spool", "weight": 0.3, "stack_size": 10, "value": 3, "tags": ["material", "electronics"],
+ "description": "Моток медного провода. Проводка, антенны, обмотки."},
+{"id": "batteries", "name": "Батарейки", "category": "Electronics", "icon_shape": "cells", "weight": 0.1, "stack_size": 8, "value": 4, "tags": ["electronics", "battery"],
+ "description": "Пальчиковые батарейки. Заряд для фонаря и рации.", "effect_text": "заряжает фонарь",
+ "use_text": "Зарядить фонарь", "use_effects": [{"charge_flashlight": 100}]},
+{"id": "car_battery", "name": "Автомобильный аккумулятор", "category": "Electronics", "icon_shape": "carbattery", "weight": 7.0, "stack_size": 1, "rarity": "rare", "value": 18, "tags": ["electronics", "power"],
+ "description": "Тяжёлый, но ещё держит заряд. Запас энергии для радио и света в убежище."},
+{"id": "light_bulb", "name": "Лампочка", "category": "Electronics", "icon_shape": "bulb", "weight": 0.05, "stack_size": 6, "value": 3, "tags": ["electronics"],
+ "description": "Целая лампочка. Редкость — почти все полопались от мороза."},
+{"id": "walkie_talkie", "name": "Рация", "category": "Electronics", "icon_shape": "walkie", "weight": 0.4, "stack_size": 1, "rarity": "uncommon", "value": 14, "equip_slot": "utility", "has_condition": true, "tags": ["electronics", "radio"],
+ "description": "Портативная рация. Ловит ближние частоты — и, может быть, кого-то ещё.", "effect_text": "радиоэфир вне убежища"}
+]

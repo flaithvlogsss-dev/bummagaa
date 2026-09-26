@@ -1,0 +1,20 @@
+[
+{"id": "manual_first_aid", "name": "Справочник первой помощи", "category": "Book", "icon_shape": "book+cross", "icon_colors": ["#e8e4dc", "#c83a2e", "#c83a2e"], "weight": 0.4, "stack_size": 1, "rarity": "uncommon", "value": 10, "keep_on_use": true, "tags": ["book"],
+ "description": "Потрёпанная книжка из школьного кабинета ОБЖ. Карандашом подчёркнуто: «шина», «жгут», «не паниковать».", "effect_text": "рецепты: стерильный бинт, шина, антисептик, аптечка",
+ "use_text": "Прочитать", "use_effects": [{"learn_recipes": ["bandage_sterile", "splint", "antiseptic", "first_aid_kit"]}]},
+{"id": "manual_civil_defense", "name": "Памятка ГО «Средства защиты»", "category": "Book", "icon_shape": "manual+mask", "icon_colors": ["#d8c860", "#e8e0c8", "#3a4a3a"], "weight": 0.2, "stack_size": 1, "rarity": "uncommon", "value": 12, "keep_on_use": true, "tags": ["book"],
+ "description": "Брошюра со склада гражданской обороны. «Противогаз — ваш второй друг. Первый — вы сами».", "effect_text": "рецепты: самодельный фильтр, восстановление фильтра, ремонт маски, респиратор, уголь, очистка воды",
+ "use_text": "Прочитать", "use_effects": [{"learn_recipes": ["filter_homemade", "filter_restore", "mask_repair", "respirator", "charcoal", "purify_charcoal"]}]},
+{"id": "radio_magazine", "name": "Журнал «Эфир и паяльник»", "category": "Book", "icon_shape": "magazine+bolt", "weight": 0.2, "stack_size": 1, "value": 8, "keep_on_use": true, "tags": ["book"],
+ "description": "Выпуск для радиолюбителей. Схемы на полях исписаны чьими-то расчётами частот.", "effect_text": "рецепты: рация, фонарь",
+ "use_text": "Прочитать", "use_effects": [{"learn_recipes": ["walkie_talkie", "flashlight"]}]},
+{"id": "mechanic_manual", "name": "Руководство по ремонту двигателей", "category": "Book", "icon_shape": "book+gear", "icon_colors": ["#3a4a6a", "#c8c8c0", "#3a4a6a"], "weight": 0.8, "stack_size": 1, "rarity": "uncommon", "value": 10, "keep_on_use": true, "tags": ["book"],
+ "description": "Толстая книга в масляных пятнах. Половина — о тракторах, но принципы те же.", "effect_text": "рецепты: простой ремкомплект, ремонт оружия, патроны, нож",
+ "use_text": "Прочитать", "use_effects": [{"learn_recipes": ["repair_kit_basic", "weapon_repair", "shotgun_shells", "pistol_ammo", "knife"]}]},
+{"id": "cookbook", "name": "Книга «Походная кухня»", "category": "Book", "icon_shape": "book+pot", "icon_colors": ["#6a8a3a", "#e8d8a8", "#6a8a3a"], "weight": 0.5, "stack_size": 1, "value": 6, "keep_on_use": true, "tags": ["book"],
+ "description": "Рецепты для костра и котелка. Между страницами засохший лист клёна.", "effect_text": "рецепты: горячая каша, суп",
+ "use_text": "Прочитать", "use_effects": [{"learn_recipes": ["cooked_meal", "soup"]}]},
+{"id": "survival_guide", "name": "Выживание в городе", "category": "Book", "icon_shape": "book+flame", "icon_colors": ["#8a6a2a", "#e8d8a8", "#8a6a2a"], "weight": 0.5, "stack_size": 1, "rarity": "uncommon", "value": 10, "keep_on_use": true, "tags": ["book"],
+ "description": "Карманное издание для туристов. Кто-то дописал на обложке: «ПРИГОДИЛОСЬ».", "effect_text": "рецепты: фальшфейер, отмычки, ремонт одежды, шапка, спальник",
+ "use_text": "Прочитать", "use_effects": [{"learn_recipes": ["flare", "lockpick", "clothing_repair", "knit_hat", "sleeping_bag"]}]}
+]

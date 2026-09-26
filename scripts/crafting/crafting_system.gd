@@ -60,7 +60,7 @@ static func craft(recipe: RecipeData, use_storage: bool = true) -> bool:
 			GameState.inventory.remove(str(id), from_bag)
 		if need - from_bag > 0:
 			GameState.storage.remove(str(id), need - from_bag)
-	GameState.inventory.add(recipe.result_item, recipe.result_count)
+	GameState.give_or_drop(recipe.result_item, recipe.result_count, false)
 	if recipe.crafting_time > 0:
 		TimeManager.advance_minutes(recipe.crafting_time)
 	GameState.set_flag("crafted_" + recipe.id, true)

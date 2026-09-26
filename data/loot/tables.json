@@ -1,0 +1,100 @@
+{
+"kitchen_cabinet": {"rolls": [1, 3], "entries": [
+	{"id": "canned_food", "w": 10, "n": [1, 2]}, {"id": "canned_fish", "w": 6}, {"id": "dry_food", "w": 6},
+	{"id": "rice", "w": 5}, {"id": "tea", "w": 5}, {"id": "frozen_bread", "w": 4}, {"id": "chocolate", "w": 2},
+	{"id": "energy_bar", "w": 3}, {"id": "water_bottle", "w": 5}, {"id": "empty_bottle", "w": 6},
+	{"id": "matches", "w": 4}, {"id": "pot", "w": 1}, {"id": "spoiled_food", "w": 3}, {"id": "nothing", "w": 6}]},
+"fridge": {"rolls": [0, 2], "entries": [
+	{"id": "spoiled_food", "w": 10}, {"id": "frozen_bread", "w": 5}, {"id": "canned_meat", "w": 3},
+	{"id": "water_bottle", "w": 4}, {"id": "nothing", "w": 8}]},
+"pantry": {"rolls": [2, 4], "entries": [
+	{"id": "canned_food", "w": 10, "n": [1, 2]}, {"id": "canned_meat", "w": 5}, {"id": "rice", "w": 6},
+	{"id": "tea", "w": 4}, {"id": "dry_food", "w": 6}, {"id": "water_bottle", "w": 6}, {"id": "matches", "w": 3}]},
+"shop_food": {"rolls": [1, 3], "scarcity": 0.15, "entries": [
+	{"id": "canned_food", "w": 10}, {"id": "canned_fish", "w": 8}, {"id": "chocolate", "w": 4},
+	{"id": "energy_bar", "w": 5}, {"id": "dry_food", "w": 5}, {"id": "water_bottle", "w": 8},
+	{"id": "tea", "w": 4}, {"id": "rice", "w": 4}, {"id": "nothing", "w": 6}]},
+"shop_counter": {"rolls": [1, 2], "entries": [
+	{"id": "batteries", "w": 6}, {"id": "matches", "w": 6}, {"id": "chocolate", "w": 5},
+	{"id": "energy_bar", "w": 5}, {"id": "painkillers", "w": 2}, {"id": "electronics", "w": 2}, {"id": "nothing", "w": 5}]},
+"shop_stock": {"rolls": [2, 4], "entries": [
+	{"id": "canned_food", "w": 8, "n": [1, 2]}, {"id": "water_bottle", "w": 8}, {"id": "rice", "w": 5},
+	{"id": "cloth", "w": 5, "n": [1, 2]}, {"id": "duct_tape", "w": 3}, {"id": "rope", "w": 3},
+	{"id": "batteries", "w": 3}, {"id": "empty_bottle", "w": 4}, {"id": "gas_canister", "w": 2}]},
+"pharmacy_shelf": {"rolls": [0, 2], "entries": [
+	{"id": "bandage", "w": 8}, {"id": "painkillers", "w": 6}, {"id": "vitamins", "w": 5},
+	{"id": "antiseptic", "w": 4}, {"id": "activated_charcoal", "w": 6, "n": [1, 3]}, {"id": "medicine", "w": 1},
+	{"id": "iodine_pills", "w": 1}, {"id": "nothing", "w": 10}]},
+"pharmacy_backroom": {"rolls": [2, 4], "entries": [
+	{"id": "medicine", "w": 5}, {"id": "bandage", "w": 6, "n": [1, 3]}, {"id": "first_aid_kit", "w": 3},
+	{"id": "antiseptic", "w": 5}, {"id": "iodine_pills", "w": 4}, {"id": "painkillers", "w": 5},
+	{"id": "activated_charcoal", "w": 5, "n": [2, 4]}, {"id": "protective_mask", "w": 2}, {"id": "filter_old", "w": 3}]},
+"medicine_cabinet": {"rolls": [1, 2], "entries": [
+	{"id": "bandage", "w": 6}, {"id": "painkillers", "w": 5}, {"id": "vitamins", "w": 4},
+	{"id": "antiseptic", "w": 4}, {"id": "activated_charcoal", "w": 5, "n": [1, 2]}, {"id": "iodine_pills", "w": 1},
+	{"id": "nothing", "w": 5}]},
+"wardrobe": {"rolls": [1, 3], "cond": [40, 100], "entries": [
+	{"id": "cloth", "w": 8, "n": [1, 3]}, {"id": "knit_hat", "w": 3}, {"id": "ushanka", "w": 1},
+	{"id": "warm_jacket", "w": 1}, {"id": "foam", "w": 3}, {"id": "small_backpack", "w": 1},
+	{"id": "rope", "w": 2}, {"id": "nothing", "w": 3}]},
+"toolbox": {"rolls": [1, 3], "entries": [
+	{"id": "nails", "w": 8, "n": [3, 8]}, {"id": "duct_tape", "w": 5}, {"id": "hammer", "w": 3},
+	{"id": "multitool", "w": 1}, {"id": "wire", "w": 4}, {"id": "scrap_metal", "w": 5},
+	{"id": "repair_kit", "w": 1}, {"id": "rubber", "w": 3}]},
+"garage_shelf": {"rolls": [2, 4], "entries": [
+	{"id": "scrap_metal", "w": 8, "n": [1, 2]}, {"id": "nails", "w": 6, "n": [2, 6]}, {"id": "wire", "w": 5},
+	{"id": "duct_tape", "w": 4}, {"id": "rubber", "w": 5, "n": [1, 2]}, {"id": "chemicals", "w": 3},
+	{"id": "fuel_can", "w": 1}, {"id": "gas_canister", "w": 3}, {"id": "rope", "w": 3},
+	{"id": "hammer", "w": 2}, {"id": "repair_kit", "w": 1}, {"id": "lead_pipe", "w": 2},
+	{"id": "shotgun_shells", "w": 1, "n": [2, 4], "day": 2}]},
+"car_glovebox": {"rolls": [0, 2], "entries": [
+	{"id": "matches", "w": 4}, {"id": "batteries", "w": 4}, {"id": "chocolate", "w": 3},
+	{"id": "painkillers", "w": 2}, {"id": "flashlight", "w": 1}, {"id": "pistol_ammo", "w": 1, "n": [2, 4]},
+	{"id": "dry_food", "w": 3}, {"id": "cloth", "w": 2}, {"id": "nothing", "w": 6}]},
+"car_trunk": {"rolls": [1, 3], "entries": [
+	{"id": "scrap_metal", "w": 6}, {"id": "rubber", "w": 5}, {"id": "fuel_can", "w": 2},
+	{"id": "first_aid_kit", "w": 1}, {"id": "empty_bottle", "w": 4}, {"id": "rope", "w": 3},
+	{"id": "duct_tape", "w": 2}, {"id": "hiking_backpack", "w": 0.5}, {"id": "wire", "w": 2},
+	{"id": "gas_canister", "w": 2}, {"id": "water_bottle", "w": 2}, {"id": "nothing", "w": 3}]},
+"office_desk": {"rolls": [0, 2], "entries": [
+	{"id": "batteries", "w": 3}, {"id": "electronics", "w": 2}, {"id": "painkillers", "w": 2},
+	{"id": "chocolate", "w": 2}, {"id": "wire", "w": 2}, {"id": "light_bulb", "w": 2},
+	{"id": "energy_bar", "w": 2}, {"id": "nothing", "w": 8}]},
+"electrical_box": {"rolls": [1, 2], "entries": [
+	{"id": "wire", "w": 8}, {"id": "electronics", "w": 4}, {"id": "light_bulb", "w": 3},
+	{"id": "rubber", "w": 2}, {"id": "batteries", "w": 2}, {"id": "nothing", "w": 3}]},
+"radio_equipment": {"rolls": [1, 3], "entries": [
+	{"id": "electronics", "w": 8, "n": [1, 2]}, {"id": "wire", "w": 6}, {"id": "batteries", "w": 5},
+	{"id": "light_bulb", "w": 2}, {"id": "walkie_talkie", "w": 1}]},
+"civil_defense_locker": {"rolls": [2, 4], "cond": [50, 100], "entries": [
+	{"id": "filter_old", "w": 8, "n": [1, 2]}, {"id": "filter_standard", "w": 3}, {"id": "protective_mask", "w": 3},
+	{"id": "gas_mask", "w": 1}, {"id": "iodine_pills", "w": 3}, {"id": "activated_charcoal", "w": 4, "n": [2, 4]},
+	{"id": "bandage", "w": 3}, {"id": "manual_civil_defense", "w": 1}]},
+"military_crate": {"rolls": [2, 3], "quality": [10, 50, 30, 10], "cond": [60, 100], "entries": [
+	{"id": "filter_military", "w": 3, "day": 2}, {"id": "filter_standard", "w": 5}, {"id": "pistol_ammo", "w": 5, "n": [4, 8]},
+	{"id": "shotgun_shells", "w": 3, "n": [2, 5]}, {"id": "rifle_ammo", "w": 2, "n": [2, 5], "day": 2},
+	{"id": "first_aid_kit", "w": 2}, {"id": "dry_food", "w": 5, "n": [1, 2]}, {"id": "military_backpack", "w": 0.5},
+	{"id": "military_gas_mask", "w": 0.5, "day": 2}]},
+"trash": {"rolls": [0, 2], "entries": [
+	{"id": "empty_bottle", "w": 8}, {"id": "spoiled_food", "w": 5}, {"id": "cloth", "w": 4},
+	{"id": "scrap_metal", "w": 3}, {"id": "rubber", "w": 2}, {"id": "filter_spent", "w": 2}, {"id": "nothing", "w": 8}]},
+"rubble": {"rolls": [0, 2], "entries": [
+	{"id": "scrap_metal", "w": 6}, {"id": "wood", "w": 6}, {"id": "stone", "w": 5, "n": [1, 2]},
+	{"id": "nails", "w": 3, "n": [2, 5]}, {"id": "nothing", "w": 5}]},
+"woodpile": {"rolls": [1, 2], "scarcity": 0.0, "entries": [{"id": "wood", "w": 10, "n": [1, 2]}]},
+"corpse_civilian": {"rolls": [1, 3], "cond": [20, 70], "entries": [
+	{"id": "dry_food", "w": 3}, {"id": "water_bottle", "w": 2}, {"id": "painkillers", "w": 2},
+	{"id": "bandage", "w": 2}, {"id": "cloth", "w": 3}, {"id": "matches", "w": 2}, {"id": "chocolate", "w": 1},
+	{"id": "filter_old", "w": 2, "left": [0.1, 0.6]}, {"id": "filter_spent", "w": 3}, {"id": "small_backpack", "w": 0.5},
+	{"id": "knit_hat", "w": 1}]},
+"corpse_scavenger": {"rolls": [2, 4], "cond": [20, 80], "entries": [
+	{"id": "filter_standard", "w": 2, "left": [0.1, 0.7]}, {"id": "filter_homemade", "w": 3}, {"id": "pistol_ammo", "w": 2, "n": [1, 4]},
+	{"id": "lead_pipe", "w": 2}, {"id": "knife", "w": 1}, {"id": "canned_food", "w": 3}, {"id": "bandage", "w": 3},
+	{"id": "gas_mask", "w": 0.5}, {"id": "stone", "w": 1}]},
+"stalker_remains": {"rolls": [0, 2], "scarcity": 0.0, "entries": [
+	{"id": "cloth", "w": 4}, {"id": "scrap_metal", "w": 2}, {"id": "filter_spent", "w": 3},
+	{"id": "activated_charcoal", "w": 1}, {"id": "nothing", "w": 5}]},
+"bookshelf": {"rolls": [0, 1], "scarcity": 0.0, "entries": [
+	{"id": "cookbook", "w": 2}, {"id": "survival_guide", "w": 1}, {"id": "manual_first_aid", "w": 1},
+	{"id": "radio_magazine", "w": 1}, {"id": "mechanic_manual", "w": 1}, {"id": "nothing", "w": 5}]}
+}

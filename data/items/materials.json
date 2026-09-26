@@ -1,0 +1,22 @@
+[
+{"id": "scrap_metal", "name": "Металлолом", "category": "Material", "icon_shape": "scrap", "weight": 1.0, "stack_size": 10, "value": 2, "tags": ["material", "metal"],
+ "description": "Гнутые листы, болты, куски труб. Основа почти любого ремонта."},
+{"id": "wood", "name": "Доски", "category": "Material", "icon_shape": "plank", "weight": 1.0, "stack_size": 10, "value": 2, "fuel_value": 45, "tags": ["material", "fuel"],
+ "description": "Доски от поддонов и сломанной мебели. Горят около сорока минут."},
+{"id": "cloth", "name": "Ткань", "category": "Material", "icon_shape": "cloth", "weight": 0.2, "stack_size": 15, "value": 2, "tags": ["material"],
+ "description": "Обрезки одеял и старая одежда. Повязки, утепление, фильтры."},
+{"id": "duct_tape", "name": "Изолента", "category": "Material", "icon_shape": "tape", "weight": 0.15, "stack_size": 5, "rarity": "uncommon", "value": 4, "tags": ["material"],
+ "description": "Серый армированный скотч. Чинит почти всё — по крайней мере, на время."},
+{"id": "nails", "name": "Гвозди", "category": "Material", "icon_shape": "nails", "weight": 0.2, "stack_size": 20, "value": 1, "tags": ["material", "metal"],
+ "description": "Горсть ржавых гвоздей. Баррикады, полки, ящики."},
+{"id": "rope", "name": "Верёвка", "category": "Material", "icon_shape": "rope", "weight": 0.3, "stack_size": 5, "value": 3, "tags": ["material"],
+ "description": "Капроновый шнур, метров десять. Лямки, связки, растяжки."},
+{"id": "chemicals", "name": "Химикаты", "category": "Material", "icon_shape": "chem", "weight": 0.5, "stack_size": 5, "rarity": "uncommon", "value": 5, "tags": ["material"],
+ "description": "Бытовая химия и растворители. Для фильтров, горючего и грелок. Не нюхать."},
+{"id": "rubber", "name": "Резина", "category": "Material", "icon_shape": "rubber", "weight": 0.3, "stack_size": 10, "value": 2, "tags": ["material"],
+ "description": "Куски камеры и прокладки. Без них противогаз не починить."},
+{"id": "foam", "name": "Утеплитель", "category": "Material", "icon_shape": "foam", "weight": 0.3, "stack_size": 8, "value": 2, "tags": ["material"],
+ "description": "Поролон и синтепон из старых матрасов. Для одежды и щелей в окнах."},
+{"id": "filter_spent", "name": "Отработанный фильтр", "category": "Material", "icon_shape": "filterspent", "weight": 0.1, "stack_size": 6, "value": 1, "tags": ["material"],
+ "description": "Пустая коробка фильтра. Корпус ещё пригодится для самодельного."}
+]

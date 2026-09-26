@@ -2696,7 +2696,8 @@ shape = SubResource("BoxShape3D_22")
 script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.2, 0, 11)
 display_name = "Ящик у забора"
-items = {"pistol_ammo": 2, "scrap_metal": 1}
+items = {"pistol_ammo": 2}
+loot_table = "electrical_box"
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/SubstationBox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
@@ -2706,7 +2707,8 @@ shape = SubResource("BoxShape3D_23")
 script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8, 0, 13.5)
 display_name = "Полка с консервами"
-items = {"canned_food": 2}
+items = {"canned_food": 1}
+loot_table = "shop_food"
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/ShopShelf1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -2716,7 +2718,8 @@ shape = SubResource("BoxShape3D_24")
 script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8, 0, 18)
 display_name = "Полка с водой"
-items = {"water_bottle": 2, "dry_food": 1}
+items = {"water_bottle": 1}
+loot_table = "shop_food"
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/ShopShelf2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -2726,7 +2729,8 @@ shape = SubResource("BoxShape3D_24")
 script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 20.6)
 display_name = "Коробки со склада"
-items = {"cloth": 1, "wood": 1}
+items = {}
+loot_table = "shop_stock"
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/ShopStock"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -2738,6 +2742,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.6, 0, 13.4)
 display_name = "Касса"
 interaction_text = "Разобрать"
 items = {"electronics": 1}
+loot_table = "shop_counter"
 found_text = "Из кассы выходит пригоршня плат и проводов."
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/ShopRegister"]
@@ -2757,7 +2762,8 @@ shape = SubResource("BoxShape3D_25")
 script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3, 0, 2.6)
 display_name = "Брошенная машина"
-items = {"scrap_metal": 2, "pistol": 1, "pistol_ammo": 4, "water_bottle": 1}
+items = {"pistol": 1, "pistol_ammo": 4}
+loot_table = "car_glovebox"
 found_text = "В бардачке — старый пистолет, завёрнутый в тряпку. Патронов мало."
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/CarInterior"]
@@ -2769,7 +2775,8 @@ script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.9, 0, 1)
 display_name = "Багажник"
 interaction_text = "Вскрыть"
-items = {"electronics": 1, "cloth": 1}
+items = {"electronics": 1}
+loot_table = "car_trunk"
 required_item = "crowbar"
 requirement_text = "Багажник заклинило. Нужна монтировка."
 
@@ -2781,7 +2788,8 @@ shape = SubResource("BoxShape3D_27")
 script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, -1)
 display_name = "Машина"
-items = {"scrap_metal": 1, "dry_food": 1, "electronics": 1}
+items = {}
+loot_table = "car_glovebox"
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/Car2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -2791,7 +2799,8 @@ shape = SubResource("BoxShape3D_26")
 script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73, 0, 3)
 display_name = "Перевёрнутый автобус"
-items = {"scrap_metal": 1, "cloth": 1}
+items = {}
+loot_table = "car_trunk"
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/Bus"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -2801,7 +2810,8 @@ shape = SubResource("BoxShape3D_28")
 script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58.2, 0, 13.5)
 display_name = "Кухонный шкаф"
-items = {"dry_food": 1, "water_bottle": 1, "canned_food": 1}
+items = {"canned_food": 1}
+loot_table = "kitchen_cabinet"
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/HouseKitchen"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -2812,6 +2822,7 @@ script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.9, 0, 16.8)
 display_name = "Ящик с инструментами"
 items = {"crowbar": 1}
+loot_table = "toolbox"
 found_text = "Под отвёртками — тяжёлая монтировка."
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/HouseToolbox"]
@@ -2822,7 +2833,8 @@ shape = SubResource("BoxShape3D_24")
 script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.5, 0, 24.5)
 display_name = "Шкаф"
-items = {"warm_jacket": 1, "cloth": 2}
+items = {"warm_jacket": 1}
+loot_table = "wardrobe"
 found_text = "Старый пуховик. Велик, но тёплый."
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/HouseWardrobe"]
@@ -2834,7 +2846,8 @@ script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56, 0, 20.3)
 display_name = "Сломанный стул"
 interaction_text = "Разобрать на доски"
-items = {"wood": 1}
+items = {}
+loot_table = "woodpile"
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/HouseChair"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -2855,7 +2868,8 @@ shape = SubResource("BoxShape3D_29")
 script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.2, 0, -46)
 display_name = "Прилавок"
-items = {"bandage": 2}
+items = {"bandage": 1}
+loot_table = "pharmacy_shelf"
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/PharmacyCounter"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -2867,6 +2881,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.1, 0, -46)
 display_name = "Подсобка"
 interaction_text = "Вскрыть"
 items = {"medicine": 2, "protective_mask": 1}
+loot_table = "pharmacy_backroom"
 required_item = "crowbar"
 requirement_text = "Дверь подсобки заперта. Нужна монтировка."
 found_text = "Монтировка с хрустом выламывает замок. Внутри — лекарства и маска."
@@ -2911,7 +2926,8 @@ script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, -52.2)
 display_name = "Поддоны"
 interaction_text = "Разобрать"
-items = {"wood": 2}
+items = {}
+loot_table = "woodpile"
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/WoodPile"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -2946,6 +2962,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.3, 0, -51.1)
 display_name = "Шкафчик радиоточки"
 interaction_text = "Открыть"
 items = {"electronics": 2}
+loot_table = "radio_equipment"
 conditions = [{"any": [{"item": "crowbar"}, {"tier_min": ["vera", "cooperative"]}, {"flag": "vera_locker_ok"}, {"npc_not_at": ["vera", "district"]}]}]
 requirement_text = "Шкафчик заперт, Vera следит за ним. Можно вскрыть монтировкой — или заслужить её доверие."
 
@@ -2975,7 +2992,8 @@ shape = SubResource("BoxShape3D_37")
 script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0, -25.3)
 display_name = "Ящик"
-items = {"scrap_metal": 1}
+items = {}
+loot_table = "rubble"
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/NarrowCrate"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -3023,7 +3041,8 @@ shape = SubResource("BoxShape3D_24")
 script = ExtResource("10_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.9, 0, 37.5)
 display_name = "Ящик"
-items = {"scrap_metal": 1}
+items = {}
+loot_table = "trash"
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/AlleyCrate"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

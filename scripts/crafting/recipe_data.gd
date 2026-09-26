@@ -13,5 +13,7 @@ extends Resource
 @export var crafting_time: int = 20
 @export var required_station: String = "workbench"
 @export var required_shelter_level: int = 1
+## Known without a book / teacher (otherwise learned via GameState.learn_recipe).
+@export var known_from_start: bool = true
 ## Extra data-driven conditions (see Conditions), e.g. [{"flag": "shelter_heated"}].
 @export var conditions: Array = []

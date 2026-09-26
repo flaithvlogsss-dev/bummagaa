@@ -1,0 +1,14 @@
+[
+{"id": "flashlight", "name": "Фонарь", "category": "Tool", "icon_shape": "flashlight", "weight": 0.4, "stack_size": 1, "value": 8, "equip_slot": "utility", "tags": ["tool", "light"],
+ "description": "Динамо-фонарь с аккумулятором. [F] — включить. Садится минут за десять, заряжается от сети и батареек.", "effect_text": "свет в темноте"},
+{"id": "repair_kit", "name": "Ремкомплект", "category": "Tool", "icon_shape": "toolbox", "weight": 1.2, "stack_size": 3, "rarity": "uncommon", "value": 10, "tags": ["tool", "repair"],
+ "description": "Детали и ключи в жестяном ящике. Чинит генератор, механизмы и оружие."},
+{"id": "lockpick", "name": "Отмычки", "category": "Tool", "icon_shape": "lockpick", "weight": 0.05, "stack_size": 1, "rarity": "rare", "value": 12, "has_condition": true, "tags": ["tool", "lockpick"],
+ "description": "Набор отмычек на кольце. Тихо открывают простые замки — и ломаются."},
+{"id": "multitool", "name": "Мультитул", "category": "Tool", "icon_shape": "multitool", "weight": 0.25, "stack_size": 1, "rarity": "uncommon", "value": 10, "has_condition": true, "tags": ["tool", "fine_tool"],
+ "description": "Пассатижи, отвёртки, нож. Без него к электронике лучше не лезть."},
+{"id": "hammer", "name": "Молоток", "category": "Tool", "icon_shape": "hammer", "weight": 0.9, "stack_size": 1, "value": 5, "has_condition": true, "tags": ["tool", "hammer"],
+ "description": "Тяжёлый слесарный молоток. Для мастерской и баррикад."},
+{"id": "pot", "name": "Котелок", "category": "Tool", "icon_shape": "pot", "weight": 0.6, "stack_size": 1, "value": 6, "tags": ["tool", "cookware"],
+ "description": "Закопчённый алюминиевый котелок. В нём кипятят воду и варят еду."}
+]

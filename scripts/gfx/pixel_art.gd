@@ -8,7 +8,7 @@ extends RefCounted
 ## Character sheet layout (FRAME_W x FRAME_H per frame, 4 columns x 5 rows):
 ##   rows: 0 down (facing camera), 1 up, 2 right, 3 left, 4 special
 ##   cols: 0 idle, 1 walk A, 2 walk B, 3 aim;  special row: 0 sitting/injured, 1 lying, 2 crouch
-## Public API: character_sheet(data), stalker_sheet(), item_icon(item), clear_cache()
+## Public API: character_sheet(data), stalker_sheet(), item_icon(item) (-> IconArt), clear_cache()
 
 const FRAME_W := 24
 const FRAME_H := 28
@@ -24,6 +24,7 @@ static var _cache: Dictionary = {}
 
 static func clear_cache() -> void:
 	_cache.clear()
+	IconArt.clear_cache()
 
 
 # --- Characters ----------------------------------------------------------------------------
@@ -419,121 +420,4 @@ static func _draw_stalker(g: PackedByteArray, dir: int, col: int) -> void:
 # --- Item icons ---------------------------------------------------------------------------------
 
 static func item_icon(item: ItemData) -> Texture2D:
-	if item == null:
-		return null
-	if item.icon:
-		return item.icon
-	var key := "icon:%s" % item.id
-	if _cache.has(key):
-		return _cache[key]
-	var s := 16
-	var g := _new_grid(s, s)
-	var main := COAT
-	var dark := SHADE
-	var light := HIGHLIGHT
-	match item.icon_shape:
-		"can":
-			_rect(g, s, s, 4, 3, 8, 11, main)
-			_rect(g, s, s, 4, 6, 8, 4, ACCENT)
-			_rect(g, s, s, 4, 3, 8, 1, light)
-		"packet":
-			_rect(g, s, s, 3, 3, 10, 10, main)
-			_rect(g, s, s, 3, 3, 10, 2, dark)
-			_rect(g, s, s, 5, 7, 6, 3, light)
-		"bottle":
-			_rect(g, s, s, 6, 1, 4, 2, ACCENT)
-			_rect(g, s, s, 7, 3, 2, 2, main)
-			_rect(g, s, s, 5, 5, 6, 10, main)
-			_rect(g, s, s, 6, 6, 1, 7, light)
-		"bandage":
-			_rect(g, s, s, 3, 5, 10, 6, light)
-			_rect(g, s, s, 3, 5, 3, 6, main)
-			_rect(g, s, s, 8, 7, 3, 2, ACCENT)
-		"pills":
-			_rect(g, s, s, 4, 2, 8, 3, light)
-			_rect(g, s, s, 4, 5, 8, 9, main)
-			_rect(g, s, s, 7, 7, 2, 5, light)
-			_rect(g, s, s, 6, 8, 4, 2, light)
-		"plank":
-			_rect(g, s, s, 1, 6, 14, 4, main)
-			_rect(g, s, s, 1, 6, 14, 1, light)
-			_rect(g, s, s, 4, 8, 1, 1, dark)
-			_rect(g, s, s, 10, 7, 1, 1, dark)
-		"scrap":
-			_rect(g, s, s, 3, 6, 9, 3, main)
-			_rect(g, s, s, 6, 3, 3, 10, dark)
-			_rect(g, s, s, 9, 9, 4, 4, main)
-			_px(g, s, s, 4, 6, light)
-		"cloth":
-			_rect(g, s, s, 2, 4, 12, 9, main)
-			_rect(g, s, s, 2, 4, 12, 2, light)
-			_rect(g, s, s, 5, 8, 7, 1, dark)
-		"chip":
-			_rect(g, s, s, 3, 3, 10, 10, main)
-			_rect(g, s, s, 5, 5, 6, 6, dark)
-			for i in 4:
-				_px(g, s, s, 4 + i * 2, 1, METAL)
-				_px(g, s, s, 4 + i * 2, 2, METAL)
-				_px(g, s, s, 4 + i * 2, 13, METAL)
-				_px(g, s, s, 4 + i * 2, 14, METAL)
-		"flashlight":
-			_rect(g, s, s, 2, 6, 8, 4, main)
-			_rect(g, s, s, 10, 5, 3, 6, dark)
-			_rect(g, s, s, 13, 6, 1, 4, ACCENT)
-			_rect(g, s, s, 4, 5, 2, 1, light)
-		"crowbar":
-			for i in 11:
-				_rect(g, s, s, 2 + i, 13 - i, 2, 1, main)
-			_rect(g, s, s, 12, 1, 2, 3, main)
-			_rect(g, s, s, 11, 1, 1, 1, main)
-		"kit":
-			_rect(g, s, s, 2, 4, 12, 9, main)
-			_rect(g, s, s, 6, 2, 4, 2, dark)
-			_rect(g, s, s, 7, 6, 2, 5, ACCENT)
-			_rect(g, s, s, 5, 7, 6, 2, ACCENT)
-		"jacket":
-			_rect(g, s, s, 4, 2, 8, 12, main)
-			_rect(g, s, s, 1, 3, 3, 9, main)
-			_rect(g, s, s, 12, 3, 3, 9, main)
-			_rect(g, s, s, 7, 3, 2, 11, dark)
-			_rect(g, s, s, 5, 1, 6, 2, light)
-		"mask":
-			_rect(g, s, s, 3, 5, 10, 7, main)
-			_rect(g, s, s, 5, 8, 6, 3, dark)
-			_rect(g, s, s, 1, 6, 2, 1, ACCENT)
-			_rect(g, s, s, 13, 6, 2, 1, ACCENT)
-		"ammo":
-			for i in 3:
-				_rect(g, s, s, 3 + i * 4, 5, 3, 9, main)
-				_rect(g, s, s, 3 + i * 4, 3, 3, 2, ACCENT)
-		"pistol":
-			_rect(g, s, s, 2, 4, 11, 3, main)
-			_rect(g, s, s, 3, 7, 4, 7, dark)
-			_rect(g, s, s, 7, 7, 2, 2, dark)
-			_rect(g, s, s, 12, 4, 2, 1, light)
-		"pack":
-			_rect(g, s, s, 3, 3, 10, 10, main)
-			_rect(g, s, s, 5, 5, 6, 6, ACCENT)
-			_rect(g, s, s, 3, 3, 10, 1, light)
-		"note":
-			_rect(g, s, s, 3, 2, 10, 12, light)
-			for i in 4:
-				_rect(g, s, s, 5, 4 + i * 2, 6, 1, dark)
-		_:
-			_rect(g, s, s, 3, 3, 10, 10, main)
-			_rect(g, s, s, 3, 3, 10, 2, light)
-	_outline(g, s, s)
-	var c := item.icon_color
-	var palette := {
-		OUTLINE: Color(0.05, 0.06, 0.08),
-		COAT: c,
-		SHADE: c.darkened(0.35),
-		HIGHLIGHT: c.lightened(0.45),
-		ACCENT: Color(0.85, 0.25, 0.2) if item.category != "Medical" else Color(0.9, 0.15, 0.15),
-		METAL: Color(0.7, 0.72, 0.75),
-	}
-	var img := Image.create_empty(s, s, false, Image.FORMAT_RGBA8)
-	_blit(img, g, s, s, 0, 0, palette)
-	var tex := ImageTexture.create_from_image(img)
-	_cache[key] = tex
-	return tex
+	return IconArt.item_icon(item)

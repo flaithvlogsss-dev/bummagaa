@@ -258,8 +258,12 @@ func _process(delta: float) -> void:
 func _weapon_text() -> String:
 	var w: WeaponData = _player.combat.get_weapon() if _player else null
 	if w == null:
-		return "Без оружия" if not GameState.inventory.has_item("pistol") else "Пистолет: [ПКМ] прицелиться"
-	return "%s  %d / %d   [R]" % [w.name, GameState.stats.magazine, GameState.inventory.count(w.ammo_type)]
+		return "Без оружия"
+	var cond := int(_player.combat.get_condition())
+	var wear := "" if cond > 25 else ("  (сломано)" if cond <= 0 else "  (износ %d%%)" % cond)
+	if w.melee:
+		return "%s  [ЛКМ] удар%s" % [w.name, wear]
+	return "%s  %d / %d   [R]%s" % [w.name, _player.combat.get_magazine(), GameState.inventory.count(w.ammo_type), wear]
 
 
 func _refresh_stats() -> void:

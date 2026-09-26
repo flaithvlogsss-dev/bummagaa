@@ -78,6 +78,10 @@ func set_muffled(value: bool) -> void:
 		AudioServer.set_bus_effect_enabled(amb, _lowpass_index, value)
 
 
+func is_silent() -> bool:
+	return _silent
+
+
 func get_stream(id: String) -> AudioStream:
 	if id.is_empty():
 		return null

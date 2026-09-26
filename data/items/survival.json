@@ -1,0 +1,19 @@
+[
+{"id": "warm_pack", "name": "Грелка", "category": "Survival", "icon_shape": "heatpack", "weight": 0.1, "stack_size": 5, "value": 5, "tags": ["warmth"],
+ "description": "Химическая грелка: встряхнуть — и несколько минут рукам тепло.", "effect_text": "+15 тепло, защита от холода 3 мин",
+ "use_text": "Активировать", "use_effects": [{"status": {"warm_pack": 180}}, {"stat": {"temperature": 15}}]},
+{"id": "matches", "name": "Спички", "category": "Survival", "icon_shape": "matches", "weight": 0.05, "stack_size": 5, "value": 3, "tags": ["fire"],
+ "description": "Коробок охотничьих спичек. Горят даже на ветру. Нужны, чтобы разжечь печь."},
+{"id": "flare", "name": "Фальшфейер", "category": "Survival", "icon_shape": "flare", "weight": 0.2, "stack_size": 4, "rarity": "uncommon", "value": 7, "throwable": true, "tags": ["throwable", "light"],
+ "description": "Красный сигнальный огонь. Брось — и всё, что бродит в снегу, пойдёт на свет, а не к тебе.", "effect_text": "бросок [T]: свет и приманка на минуту"},
+{"id": "empty_bottle", "name": "Пустая бутылка", "category": "Survival", "icon_shape": "bottle", "icon_colors": ["#c8d8e0", "#e0e0d8", "#7a8a9a"], "weight": 0.05, "stack_size": 6, "value": 1, "throwable": true, "tags": ["throwable", "container"],
+ "description": "Бутылку можно набить снегом. Или бросить — звон стекла слышно издалека.", "effect_text": "бросок [T]: громкий отвлекающий шум"},
+{"id": "stone", "name": "Камень", "category": "Survival", "icon_shape": "stone", "weight": 0.4, "stack_size": 5, "value": 0, "throwable": true, "tags": ["throwable"],
+ "description": "Обломок бордюра. Бросить в сторону — пусть посмотрят туда.", "effect_text": "бросок [T]: тихий отвлекающий шум"},
+{"id": "sleeping_bag", "name": "Спальник", "category": "Survival", "icon_shape": "bedroll", "weight": 1.5, "stack_size": 1, "rarity": "uncommon", "value": 14, "tags": ["sleep_bonus"],
+ "description": "Зимний спальник. Сон в нём возвращает больше сил и тепла — даже в холодной комнате."},
+{"id": "fuel_can", "name": "Канистра бензина", "category": "Survival", "icon_shape": "jerrycan", "weight": 3.5, "stack_size": 2, "rarity": "uncommon", "value": 14, "fuel_value": 240, "tags": ["fuel", "petrol"],
+ "description": "Пять литров бензина, слитых из бака. Генератору хватит на несколько часов.", "effect_text": "топливо генератора: 4 ч"},
+{"id": "gas_canister", "name": "Газовый баллон", "category": "Survival", "icon_shape": "gascan", "weight": 0.3, "stack_size": 4, "value": 5, "fuel_value": 60, "tags": ["fuel", "gas"],
+ "description": "Баллон для походной плитки. Вскипятить воду можно и без печи.", "effect_text": "топливо плитки: 1 ч"}
+]

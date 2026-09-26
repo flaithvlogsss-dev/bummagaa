@@ -1,0 +1,17 @@
+[
+{"id": "water_bottle", "name": "Бутылка воды", "category": "Water", "icon_shape": "bottle", "weight": 0.6, "stack_size": 6, "value": 4, "tags": ["water", "clean_water"],
+ "description": "Полтора литра чистой воды из магазина. Вода в трубах давно замёрзла.", "effect_text": "+40 вода",
+ "use_text": "Выпить", "use_effects": [{"stat": {"hydration": 40}}, {"return_item": "empty_bottle"}]},
+{"id": "dirty_water", "name": "Талая вода", "category": "Water", "icon_shape": "bottle", "icon_colors": ["#8a9a88", "#c8c0a8", "#4a5a4a"], "weight": 0.6, "stack_size": 6, "value": 1, "tags": ["water"],
+ "description": "Растопленный снег. Мутная, с привкусом пепла. Лучше прокипятить.", "effect_text": "+30 вода, риск болезни 35%",
+ "use_text": "Выпить", "use_effects": [{"stat": {"hydration": 30}}, {"illness_chance": 0.35}, {"return_item": "empty_bottle"}]},
+{"id": "purified_water", "name": "Кипячёная вода", "category": "Water", "icon_shape": "flask", "weight": 0.6, "stack_size": 6, "value": 4, "tags": ["water", "clean_water"],
+ "description": "Прокипячённая и процеженная через ткань. Ещё тёплая.", "effect_text": "+40 вода, +3 тепло",
+ "use_text": "Выпить", "use_effects": [{"stat": {"hydration": 40, "temperature": 3}}]},
+{"id": "snow", "name": "Снег", "category": "Water", "icon_shape": "snowbag", "weight": 0.5, "stack_size": 6, "value": 0, "tags": ["snow"],
+ "description": "Плотно набитый в пакет снег. Растопить у печи — будет вода. Есть его — плохая идея.", "effect_text": "+8 вода, −12 тепло",
+ "use_text": "Съесть", "use_effects": [{"stat": {"hydration": 8, "temperature": -12}}]},
+{"id": "hot_tea", "name": "Горячий чай", "category": "Water", "icon_shape": "mug", "weight": 0.3, "stack_size": 2, "rarity": "uncommon", "value": 5, "tags": ["water", "hot"],
+ "description": "Кружка крепкого чая. Руки наконец перестают дрожать.", "effect_text": "+30 вода, +15 тепло, −8 стресс",
+ "use_text": "Выпить", "use_effects": [{"stat": {"hydration": 30, "temperature": 15, "stress": -8}}]}
+]

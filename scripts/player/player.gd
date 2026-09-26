@@ -36,6 +36,7 @@ var god_mode: bool = false
 @onready var sensor: InteractionSensor = $InteractionSensor
 @onready var flashlight: PlayerFlashlight = $Flashlight
 @onready var combat: PlayerCombat = $Combat
+var thrower: PlayerThrow
 @onready var footprints: Footprints = $Footprints
 @onready var breath: BreathEffect = $Breath
 
@@ -50,6 +51,9 @@ func _ready() -> void:
 	sprite.setup_character(Data.get_character("player"))
 	breath.survival = survival
 	sensor.focus_changed.connect(func(t): interaction_focus_changed.emit(t))
+	thrower = PlayerThrow.new()
+	thrower.name = "Throw"
+	add_child(thrower)
 
 
 func set_input_enabled(value: bool) -> void:
@@ -130,22 +134,60 @@ func _physics_process(delta: float) -> void:
 			flashlight.toggle()
 		if Input.is_action_just_pressed("heal_quick"):
 			quick_heal()
+		if Input.is_action_just_pressed("throw") and hiding_spot == null:
+			thrower.throw_item()
+		for i in Inventory.QUICK_SLOTS:
+			if Input.is_action_just_pressed("quick_%d" % (i + 1)):
+				use_quick_slot(i)
 
 
-## [H]: bandage when bleeding or hurt, otherwise medicine when ill.
+## [H]: the cheapest thing that helps — bandages for bleeding, medicine for illness,
+## a first aid kit or painkillers for low health.
 func quick_heal() -> void:
 	var s := GameState.stats
+	var inv := GameState.inventory
+	var options: Array = []
+	if s.bleeding > 0.0:
+		options = ["rag_bandage", "bandage", "first_aid_kit"]
+	elif s.illness:
+		options = ["medicine"]
+	elif s.health < 70.0:
+		options = ["bandage", "rag_bandage", "splint", "painkillers", "first_aid_kit"]
 	var id := ""
-	if (s.bleeding > 0.0 or s.health < 70.0) and GameState.inventory.has_item("bandage"):
-		id = "bandage"
-	elif s.illness and GameState.inventory.has_item("medicine"):
-		id = "medicine"
+	for o in options:
+		if inv.count_in_grid(o) > 0:
+			id = o
+			break
 	if id.is_empty():
 		GameState.notify("Нечем лечиться (или незачем).", "warning")
 		return
-	GameState.inventory.consume(id)
+	inv.consume(id)
 	AudioManager.play_sfx("rustle")
 	GameState.notify("Использовано: %s" % Data.get_item_name(id), "item")
+
+
+## Keys 1..5: throw, draw or use the bound item.
+func use_quick_slot(index: int) -> void:
+	var inv := GameState.inventory
+	var id := inv.get_quick(index)
+	if id.is_empty():
+		GameState.notify("Слот %d пуст. Назначь предмет в рюкзаке: наведи и нажми %d." % [index + 1, index + 1], "info")
+		return
+	var item := Data.get_item(id)
+	if item == null or not inv.has_item(id):
+		GameState.notify("Нет: %s" % Data.get_item_name(id), "warning")
+		return
+	if item.throwable:
+		thrower.throw_item(id)
+	elif item.is_equippable():
+		if inv.is_equipped(id):
+			inv.unequip(item.equip_slot)
+		else:
+			inv.equip(id)
+		AudioManager.play_sfx("equip")
+	elif item.is_usable() and inv.consume(id):
+		AudioManager.play_sfx("eat" if item.category in ["Food", "Water"] else "rustle")
+		GameState.notify("%s: %s" % [item.use_text, item.name], "item")
 
 
 func _footstep_sounds(delta: float, moving: bool, outdoors: bool) -> void:
