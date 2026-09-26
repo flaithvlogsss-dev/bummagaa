@@ -25,7 +25,7 @@ func _init() -> void:
 
 
 func reset() -> void:
-	values = {"snow_level": 0.12, "threat_level": 0.0, "city_state": "isolated"}
+	values = {"snow_level": 0.32, "threat_level": 0.0, "city_state": "isolated"}
 	routes = {"north_road": true, "alley": true, "square": true}
 	destroyed_buildings = []
 	faction_attitude = {"survivors": 0.0, "unknown": 0.0}

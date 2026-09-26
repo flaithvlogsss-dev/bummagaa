@@ -7,7 +7,7 @@
 			{"if": {"npc_met": "self"}, "next": "again"},
 			{"next": "first"}
 		]},
-		"first": {"speaker": "self", "text": "Не трогай машину. …Хотя там уже нечего брать, наверное. Anton. Спасатель. Бывший.", "next": "menu"},
+		"first": {"speaker": "self", "text": "Не трогай машину. …Хотя там уже нечего брать, наверное. Антон. Спасатель. Бывший.", "next": "menu"},
 		"again": {"speaker": "self", "text": "Снова ты. Держишься?", "next": "menu"},
 		"menu": {
 			"speaker": "self",

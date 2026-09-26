@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_s")
 id = "note_elias"
-title = "Схема Elias"
+title = "Схема Элиаса"
 info_type = "document"
 content = "Аккуратный чертёж: как превратить приёмник в передатчик. «Антенна на крышу, питание от генератора, выходной каскад — из трёх плат». Подпись: E."
 tags = PackedStringArray("radio", "schematic")

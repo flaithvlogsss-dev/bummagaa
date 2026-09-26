@@ -20,7 +20,9 @@ var _talk_face_t: float = 0.0
 
 @onready var sprite: PixelCharacter = $Sprite
 @onready var talk_area: Interactable = $Talk
-@onready var name_label: Label3D = $Name
+## Name shown above the head by the HUD (WorldLabels) while the player is near.
+var name_text: String = ""
+var show_name: bool = false
 
 
 func _ready() -> void:
@@ -31,7 +33,7 @@ func _ready() -> void:
 	add_to_group("npc")
 	collision_layer = 4
 	collision_mask = 1
-	sprite.setup_character(data)
+	sprite.setup_character(data, _is_outdoors())
 	talk_area.persistent_id = "npc:" + character_id
 	_refresh_labels()
 	GameState.npcs.npc_changed.connect(func(id):
@@ -44,14 +46,22 @@ func _ready() -> void:
 		sprite.pose = "sit"
 
 
+## NPCs in the open city wear their masks; inside they take them off.
+func _is_outdoors() -> bool:
+	var node := get_parent()
+	while node and not (node is Level):
+		node = node.get_parent()
+	return node is Level and not (node as Level).is_interior
+
+
 func _refresh_labels() -> void:
 	var met: bool = GameState.npcs.get_state(character_id).get("met", false)
 	var shown := data.display_name if met else data.unknown_name
 	talk_area.display_name = shown
-	name_label.text = shown
+	name_text = shown
 	if is_dead_body:
 		talk_area.interaction_text = "Осмотреть тело"
-		name_label.text = ""
+		name_text = ""
 	else:
 		talk_area.interaction_text = "Поговорить"
 		sprite.pose = "sit" if GameState.npcs.get_state(character_id).get("injured", false) else ""
@@ -94,7 +104,7 @@ func _physics_process(delta: float) -> void:
 		return
 	var player := Main.get_player()
 	var near := player != null and player.global_position.distance_to(global_position) < 5.0
-	name_label.visible = near
+	show_name = near and not name_text.is_empty()
 	var injured: bool = GameState.npcs.get_state(character_id).get("injured", false)
 	var huddle := WeatherManager.is_severe() and GameState.current_location == "district"
 	_talk_face_t -= delta

@@ -1,6 +1,11 @@
 class_name UIKit
 extends RefCounted
 ## UIKit — pixel-style theme and small widget helpers shared by every UI panel.
+##
+## Fonts: Pixelify Sans Bold (OFL, assets/ui/fonts; Latin + Cyrillic subsets chained, the
+## engine font last for symbols) for titles and big numbers, where its pixel look reads well;
+## the clean engine sans for body text, buttons and fine print (Pixelify is not on a strict
+## pixel grid and gets muddy below ~22 px). Frames: procedural 9-slice pixel borders.
 
 const BG := Color(0.045, 0.055, 0.075, 0.9)
 const BG_SOFT := Color(0.06, 0.07, 0.095, 0.72)
@@ -12,21 +17,87 @@ const COLD := Color(0.55, 0.78, 1.0)
 const DANGER := Color(0.95, 0.35, 0.3)
 const GOOD := Color(0.55, 0.9, 0.6)
 
+const FONT_DIR := "res://assets/ui/fonts/"
+
 static var _theme: Theme
+static var _fonts: Dictionary = {}
+
+
+## Pixelify Sans (regular or bold) with Cyrillic and symbol fallbacks.
+static func font(bold: bool = false) -> Font:
+	var key := "bold" if bold else "regular"
+	if _fonts.has(key):
+		return _fonts[key]
+	var weight := "700" if bold else "400"
+	var latin: FontFile = load(FONT_DIR + "pixelify-sans-latin-%s-normal.woff2" % weight)
+	var cyr: FontFile = load(FONT_DIR + "pixelify-sans-cyrillic-%s-normal.woff2" % weight)
+	if latin == null or cyr == null:
+		_fonts[key] = ThemeDB.fallback_font
+		return _fonts[key]
+	for f in [latin, cyr]:
+		f.antialiasing = TextServer.FONT_ANTIALIASING_NONE
+		f.hinting = TextServer.HINTING_NONE
+		f.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
+	var fallbacks: Array[Font] = [cyr, ThemeDB.fallback_font]
+	latin.fallbacks = fallbacks
+	_fonts[key] = latin
+	return latin
+
+
+## 9-slice pixel frame: dark outline with cut corners, a lit top-left edge and a shaded
+## bottom-right edge, drawn at 2x so each art pixel is 2 screen pixels.
+static func frame(fill: Color, light: Color, dark: Color, outline: Color = Color(0.02, 0.025, 0.035, 1.0), margin: int = 10) -> StyleBoxTexture:
+	var art := [
+		".oooooo.",
+		"ohhhhhhs",
+		"ohffffss",
+		"ohffffso",
+		"ohffffso",
+		"ohffffso",
+		"osssssso",
+		".oooooo.",
+	]
+	var img := Image.create_empty(16, 16, false, Image.FORMAT_RGBA8)
+	for y in 8:
+		for x in 8:
+			var ch: String = art[y][x]
+			var c := Color(0, 0, 0, 0)
+			match ch:
+				"o":
+					c = outline
+				"h":
+					c = light
+				"s":
+					c = dark
+				"f":
+					c = fill
+			img.fill_rect(Rect2i(x * 2, y * 2, 2, 2), c)
+	var sb := StyleBoxTexture.new()
+	sb.texture = ImageTexture.create_from_image(img)
+	sb.texture_margin_left = 6
+	sb.texture_margin_top = 6
+	sb.texture_margin_right = 6
+	sb.texture_margin_bottom = 6
+	sb.set_content_margin_all(margin)
+	sb.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	sb.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	return sb
 
 
 static func theme() -> Theme:
 	if _theme:
 		return _theme
 	var t := Theme.new()
+	t.default_font = ThemeDB.fallback_font
 	t.default_font_size = 15
-	t.set_stylebox("panel", "PanelContainer", box(BG, BORDER, 2, 10))
-	t.set_stylebox("panel", "Panel", box(BG, BORDER, 2, 10))
-	t.set_stylebox("normal", "Button", box(Color(0.1, 0.12, 0.16, 0.95), Color(0.35, 0.4, 0.48), 1, 6))
-	t.set_stylebox("hover", "Button", box(Color(0.16, 0.19, 0.25, 0.98), ACCENT, 1, 6))
-	t.set_stylebox("pressed", "Button", box(Color(0.22, 0.18, 0.12, 1.0), ACCENT, 2, 6))
-	t.set_stylebox("disabled", "Button", box(Color(0.07, 0.08, 0.1, 0.9), Color(0.2, 0.22, 0.26), 1, 6))
-	t.set_stylebox("focus", "Button", box(Color(0, 0, 0, 0), ACCENT, 1, 6))
+	t.set_stylebox("panel", "PanelContainer", frame(BG, Color(0.42, 0.48, 0.58), Color(0.18, 0.21, 0.26), Color(0.02, 0.025, 0.035), 14))
+	t.set_stylebox("panel", "Panel", frame(BG, Color(0.42, 0.48, 0.58), Color(0.18, 0.21, 0.26), Color(0.02, 0.025, 0.035), 14))
+	t.set_stylebox("normal", "Button", frame(Color(0.1, 0.12, 0.16, 0.96), Color(0.36, 0.41, 0.5), Color(0.06, 0.07, 0.09), Color(0.02, 0.025, 0.035), 8))
+	t.set_stylebox("hover", "Button", frame(Color(0.16, 0.19, 0.25, 0.98), ACCENT, Color(0.5, 0.33, 0.14), Color(0.02, 0.025, 0.035), 8))
+	t.set_stylebox("pressed", "Button", frame(Color(0.24, 0.18, 0.1, 1.0), Color(0.5, 0.33, 0.14), ACCENT, Color(0.02, 0.025, 0.035), 8))
+	t.set_stylebox("disabled", "Button", frame(Color(0.06, 0.07, 0.09, 0.9), Color(0.16, 0.18, 0.22), Color(0.05, 0.06, 0.07), Color(0.02, 0.025, 0.035), 8))
+	t.set_stylebox("focus", "Button", box(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 8))
+
 	t.set_color("font_color", "Button", TEXT)
 	t.set_color("font_hover_color", "Button", ACCENT)
 	t.set_color("font_disabled_color", "Button", Color(0.4, 0.42, 0.46))
@@ -60,10 +131,24 @@ static func box(bg: Color, border: Color, border_w: int, margin: int) -> StyleBo
 	return s
 
 
+## Pixel font for display sizes (titles, clock), sans for everything else.
+static func font_for_size(size: int) -> Font:
+	return font(true) if size >= 22 else ThemeDB.fallback_font
+
+
+static func snap_size(size: int) -> int:
+	if size < 22:
+		return size
+	if size <= 26:
+		return 24
+	return 32
+
+
 static func label(text: String = "", size: int = 15, color: Color = TEXT) -> Label:
 	var l := Label.new()
 	l.text = text
-	l.add_theme_font_size_override("font_size", size)
+	l.add_theme_font_override("font", font_for_size(size))
+	l.add_theme_font_size_override("font_size", snap_size(size))
 	l.add_theme_color_override("font_color", color)
 	l.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
 	l.add_theme_constant_override("shadow_offset_x", 1)
@@ -135,8 +220,12 @@ static func centered(parent: Control, min_size: Vector2) -> PanelContainer:
 
 
 static func title(text: String) -> Label:
-	var l := label(text, 20, ACCENT)
-	return l
+	return label(text, 24, ACCENT)
+
+
+## Small numbers and fine print (counts in slots, hints).
+static func small_font() -> Font:
+	return ThemeDB.fallback_font
 
 
 static func spacer(h: int = 8) -> Control:

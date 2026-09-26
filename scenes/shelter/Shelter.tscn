@@ -455,7 +455,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 0, -4.7)
 display_name = "Телефон"
 interaction_text = "Снять трубку"
 title = "Телефон"
-text = "Тишина. Даже гудка нет. Сообщение Elias осталось на автоответчике — оно в журнале [Q]."
+text = "Тишина. Даже гудка нет. Сообщение Элиаса осталось на автоответчике — оно в журнале [Q]."
 available_if = [{"flag": "phone_answered"}]
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/PhoneDead"]

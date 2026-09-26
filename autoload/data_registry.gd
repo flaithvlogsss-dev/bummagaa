@@ -53,7 +53,10 @@ func _exit_tree() -> void:
 	Consequences.clear_handlers()
 	MeshBuilder.clear_cache()
 	LowPolyBlock.clear_materials()
-	PixelArt.clear_cache()
+	IconArt.clear_cache()
+	CharacterArt.clear_cache()
+	EnemyArt.clear_cache()
+	WorldTextures.clear()
 
 
 func reload() -> void:

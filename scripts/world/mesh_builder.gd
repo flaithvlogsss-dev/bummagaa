@@ -3,7 +3,7 @@ extends RefCounted
 ## MeshBuilder — merges primitive meshes into one ArrayMesh with per-vertex colour.
 ##
 ## Purpose: every low-poly prop/block becomes ONE mesh instance (colour in COLOR.rgb,
-##   snow exposure in COLOR.a, emission in UV2.x). Far fewer draw calls and only one
+##   snow exposure in COLOR.a, emission in UV2.x, material id (WorldTextures) in UV2.y). Far fewer draw calls and only one
 ##   per-instance shader variable (the occlusion fade). Identical props share a cached mesh.
 
 static var _cache: Dictionary = {}
@@ -27,7 +27,7 @@ static func clear_cache() -> void:
 	_cache.clear()
 
 
-func add(mesh: PrimitiveMesh, xform: Transform3D, color: Color, snow: float = 1.0, emission: float = 0.0) -> void:
+func add(mesh: PrimitiveMesh, xform: Transform3D, color: Color, snow: float = 1.0, emission: float = 0.0, material: int = 0) -> void:
 	var arrays := mesh.get_mesh_arrays()
 	var v: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
 	var n: PackedVector3Array = arrays[Mesh.ARRAY_NORMAL]
@@ -35,7 +35,7 @@ func add(mesh: PrimitiveMesh, xform: Transform3D, color: Color, snow: float = 1.
 	var base := _verts.size()
 	var nbasis := xform.basis.inverse().transposed()
 	var c := Color(color.r, color.g, color.b, snow)
-	var e := Vector2(emission, 0.0)
+	var e := Vector2(emission, float(material))
 	for i in v.size():
 		_verts.append(xform * v[i])
 		_normals.append((nbasis * n[i]).normalized())

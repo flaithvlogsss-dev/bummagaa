@@ -397,7 +397,7 @@ def district():
     b.area(I, "HouseToolbox", S_LOOT, (-43.9, 0, 16.8), {"display_name": "Ящик с инструментами", "items": {"crowbar": 1}, "loot_table": "toolbox", "found_text": "Под отвёртками — тяжёлая монтировка."})
     b.area(I, "HouseWardrobe", S_LOOT, (-44.5, 0, 24.5), {"display_name": "Шкаф", "items": {"warm_jacket": 1}, "loot_table": "wardrobe", "found_text": "Старый пуховик. Велик, но тёплый."})
     b.area(I, "HouseChair", S_LOOT, (-56, 0, 20.3), {"display_name": "Сломанный стул", "interaction_text": "Разобрать на доски", "items": {}, "loot_table": "woodpile"})
-    b.area(I, "HouseDesk", S_EXAM, (-51.5, 0, 24.3), {"display_name": "Стол с деталями", "title": "Стол Elias",
+    b.area(I, "HouseDesk", S_EXAM, (-51.5, 0, 24.3), {"display_name": "Стол с деталями", "title": "Стол Элиаса",
         "text": "Паяльник, лупа, разобранный приёмник. На листке — начатая схема передатчика и надпись: «не хватает питания и трёх плат»."}, shape=("box", (2.4, 2, 1.4)))
     # Pharmacy
     b.area(I, "PharmacyCounter", S_LOOT, (27.2, 0, -46), {"display_name": "Прилавок", "items": {"bandage": 1}, "loot_table": "pharmacy_shelf"}, shape=("box", (1.4, 2, 2.4)))
@@ -417,7 +417,7 @@ def district():
         "consequences": [{"set_flag": "radio_point_used"}]}, shape=("box", (2.4, 2, 1.4)))
     b.area(I, "RadioLocker", S_LOOT, (14.3, 0, -51.1), {"display_name": "Шкафчик радиоточки", "interaction_text": "Открыть", "items": {"electronics": 2}, "loot_table": "radio_equipment",
         "conditions": [{"any": [{"item": "crowbar"}, {"tier_min": ["vera", "cooperative"]}, {"flag": "vera_locker_ok"}, {"npc_not_at": ["vera", "district"]}]}],
-        "requirement_text": "Шкафчик заперт, Vera следит за ним. Можно вскрыть монтировкой — или заслужить её доверие."}, shape=("box", (1.2, 2, 1.2)))
+        "requirement_text": "Шкафчик заперт, Вера следит за ним. Можно вскрыть монтировкой — или заслужить её доверие."}, shape=("box", (1.2, 2, 1.2)))
     b.area(I, "SquareBin", S_HIDE, (-17.6, 0, -41), {"display_name": "Мусорный бак"}, shape=("box", (1.4, 2, 2.0)))
     # Narrow street
     b.area(I, "NarrowBin", S_HIDE, (-1.7, 0, -13.5), {"display_name": "Мусорный бак"}, shape=("box", (1.4, 2, 2.0)))
@@ -553,7 +553,7 @@ def shelter():
     b.area(I, "Phone", S_PHONE, (-1.4, 0, -4.7), {"display_name": "Телефон", "interaction_text": "Ответить", "dialogue_id": "intro_phone",
         "available_if": [{"not_flag": "phone_answered"}]}, shape=("box", (1.4, 2, 1.4)))
     b.area(I, "PhoneDead", S_EXAM, (-1.4, 0, -4.7), {"display_name": "Телефон", "interaction_text": "Снять трубку", "title": "Телефон",
-        "text": "Тишина. Даже гудка нет. Сообщение Elias осталось на автоответчике — оно в журнале [Q].", "available_if": [{"flag": "phone_answered"}]}, shape=("box", (1.4, 2, 1.4)))
+        "text": "Тишина. Даже гудка нет. Сообщение Элиаса осталось на автоответчике — оно в журнале [Q].", "available_if": [{"flag": "phone_answered"}]}, shape=("box", (1.4, 2, 1.4)))
     b.area(I, "WindowIntro", S_EXAM, (-4.5, 0, -5.1), {"display_name": "Окно", "interaction_text": "Посмотреть", "dialogue_id": "intro_window",
         "available_if": [{"flag": "phone_answered"}, {"not_flag": "intro_done"}]}, shape=("box", (2.0, 2, 1.4)))
     b.area(I, "Window", S_EXAM, (-4.5, 0, -5.1), {"display_name": "Окно", "interaction_text": "Посмотреть", "dialogue_id": "window_view",

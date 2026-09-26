@@ -1,7 +1,7 @@
 {
 	"1": {
 		"title": "Первая ночь",
-		"snow_level": 0.12,
+		"snow_level": 0.32,
 		"weather": [
 			{
 				"hour": 7,
@@ -11,7 +11,7 @@
 	},
 	"2": {
 		"title": "Следы",
-		"snow_level": 0.35,
+		"snow_level": 0.45,
 		"weather": [
 			{
 				"hour": 7,
@@ -37,7 +37,7 @@
 	},
 	"3": {
 		"title": "Белая мгла",
-		"snow_level": 0.6,
+		"snow_level": 0.62,
 		"weather": [
 			{
 				"hour": 7,

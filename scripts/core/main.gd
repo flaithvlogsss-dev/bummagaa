@@ -110,6 +110,19 @@ static func get_mouse_world_point(height: float = 0.0) -> Variant:
 	return plane.intersects_ray(origin, normal)
 
 
+## World position -> root canvas position (where HUD controls live), or null when behind
+## the camera. Inverse of get_mouse_world_point's mapping.
+static func world_to_canvas(pos: Vector3) -> Variant:
+	if instance == null:
+		return null
+	var cam := instance.world_viewport.get_camera_3d()
+	if cam == null or cam.is_position_behind(pos):
+		return null
+	var view := instance.world_view
+	var p := cam.unproject_position(pos) * float(maxi(view.stretch_shrink, 1))
+	return view.get_global_transform_with_canvas() * p
+
+
 # --- Game flow ---------------------------------------------------------------------------------
 
 func _reset_systems() -> void:

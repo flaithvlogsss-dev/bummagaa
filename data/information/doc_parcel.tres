@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_s")
 id = "doc_parcel"
-title = "Посылка Tomas"
+title = "Посылка Томаса"
 info_type = "document"
 content = "Адресат: «Метеостанция «Меридиан», лаборатория 4». Внутри — катушка магнитной ленты и записка: «Если это читает не Ирина — уничтожить». Ленту уже не прочесть."
 tags = PackedStringArray("meridian", "clue")

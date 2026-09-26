@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_s")
 id = "photo_grey"
-title = "Фото Vera: люди в сером"
+title = "Фото Веры: люди в сером"
 info_type = "photo"
 content = "Размытый снимок: трое в серых пальто стоят у подстанции в самый разгар снега. Снег вокруг них не ложится. На обороте: «Приходят каждую ночь. Что они охраняют?»"
 tags = PackedStringArray("unknown", "clue")

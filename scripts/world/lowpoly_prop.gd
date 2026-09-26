@@ -53,6 +53,8 @@ const KINDS := [
 
 var _parts: Array[MeshInstance3D] = []
 var _mb: MeshBuilder
+## Material id used by the next parts (see _use()).
+var _mat: int = 0
 var _casts_shadow: bool = true
 var _light: OmniLight3D
 var _flicker_t: float = 0.0
@@ -96,6 +98,7 @@ func _rebuild() -> void:
 	var key := "prop:%s:%s:%s:%s:%s" % [kind, color.to_html(), size, lit, light_color.to_html()]
 	var mesh := MeshBuilder.cached(key)
 	_mb = null if mesh else MeshBuilder.new()
+	_mat = 0
 	var builder: Callable = Callable(self, "_build_" + kind)
 	if builder.is_valid():
 		builder.call()
@@ -124,7 +127,12 @@ func _part(mesh: PrimitiveMesh, pos: Vector3, col: Color, rot_deg: Vector3 = Vec
 	if _mb == null:
 		return
 	var basis := Basis.from_euler(rot_deg * (PI / 180.0)) * Basis.from_scale(scale_v)
-	_mb.add(mesh, Transform3D(basis, pos), col, snow, emission)
+	_mb.add(mesh, Transform3D(basis, pos), col, snow, emission, _mat)
+
+
+## Sets the surface material (WorldTextures name) for the following parts.
+func _use(material_name: String) -> void:
+	_mat = WorldTextures.id(material_name)
 
 
 func _box(s: Vector3, pos: Vector3, col: Color, rot: Vector3 = Vector3.ZERO, snow: float = 1.0, emission: float = 0.0) -> void:
@@ -181,10 +189,13 @@ func _omni(pos: Vector3, col: Color, energy: float, light_range_m: float, shadow
 # --- Street props ------------------------------------------------------------------------
 
 func _build_car() -> void:
+	_use("paint")
 	var body := _c(Color(0.42, 0.18, 0.16))
 	_box(Vector3(4.2, 0.75, 1.9), Vector3(0, 0.62, 0), body)
 	_box(Vector3(2.3, 0.7, 1.75), Vector3(-0.25, 1.33, 0), body.darkened(0.15))
+	_use("glass")
 	_box(Vector3(2.35, 0.45, 1.8), Vector3(-0.25, 1.35, 0), Color(0.1, 0.12, 0.16), Vector3.ZERO, 0.0)
+	_use("plastic")
 	for x in [-1.35, 1.35]:
 		for z in [-0.9, 0.9]:
 			_cyl(0.36, 0.28, Vector3(x, 0.36, z), Color(0.08, 0.08, 0.09), Vector3(90, 0, 0))
@@ -193,14 +204,17 @@ func _build_car() -> void:
 
 
 func _build_bus() -> void:
+	_use("paint")
 	var c := _c(Color(0.62, 0.52, 0.22))
 	_box(Vector3(10.0, 2.6, 2.6), Vector3(0, 1.3, 0), c)
+	_use("glass")
 	for i in 5:
 		_box(Vector3(1.4, 0.8, 0.05), Vector3(-3.6 + i * 1.8, 1.8, 1.31), Color(0.1, 0.12, 0.15), Vector3.ZERO, 0.0)
 	_col(Vector3(10.0, 2.6, 2.6), Vector3(0, 1.3, 0))
 
 
 func _build_lamp() -> void:
+	_use("metal")
 	var metal := _c(Color(0.2, 0.22, 0.25))
 	_cyl(0.08, 4.6, Vector3(0, 2.3, 0), metal)
 	_box(Vector3(1.1, 0.08, 0.08), Vector3(0.5, 4.55, 0), metal)
@@ -211,6 +225,7 @@ func _build_lamp() -> void:
 
 
 func _build_barrel_fire() -> void:
+	_use("rust")
 	_cyl(0.42, 1.0, Vector3(0, 0.5, 0), _c(Color(0.35, 0.2, 0.12)))
 	if lit:
 		_box(Vector3(0.5, 0.25, 0.5), Vector3(0, 1.05, 0), Color(1.0, 0.45, 0.1), Vector3(0, 20, 0), 0.0, 4.0)
@@ -222,15 +237,18 @@ func _build_barrel_fire() -> void:
 
 
 func _build_bench() -> void:
+	_use("planks")
 	var wood := _c(Color(0.35, 0.24, 0.16))
 	_box(Vector3(1.8, 0.1, 0.5), Vector3(0, 0.45, 0), wood)
 	_box(Vector3(1.8, 0.45, 0.08), Vector3(0, 0.75, -0.22), wood)
+	_use("metal")
 	for x in [-0.8, 0.8]:
 		_box(Vector3(0.08, 0.45, 0.45), Vector3(x, 0.22, 0), Color(0.15, 0.15, 0.17))
 	_col(Vector3(1.8, 0.9, 0.5), Vector3(0, 0.45, 0))
 
 
 func _build_pine() -> void:
+	_use("plain")
 	var green := _c(Color(0.12, 0.22, 0.18))
 	var s := size.y
 	_cyl(0.15, 1.2 * s, Vector3(0, 0.6 * s, 0), Color(0.22, 0.15, 0.1))
@@ -241,11 +259,13 @@ func _build_pine() -> void:
 
 
 func _build_drift() -> void:
+	_use("snow")
 	_sphere(1.0, 1.0, Vector3(0, 0, 0), _c(Color(0.86, 0.9, 0.96)), size)
 	_col(Vector3(size.x * 1.8, size.y, size.z * 1.8), Vector3(0, size.y * 0.25, 0))
 
 
 func _build_rubble() -> void:
+	_use("concrete")
 	var c := _c(Color(0.4, 0.4, 0.42))
 	_box(Vector3(1.4, 0.6, 1.0), Vector3(0, 0.3, 0), c, Vector3(0, 15, 8))
 	_box(Vector3(0.9, 0.5, 0.8), Vector3(0.9, 0.25, 0.5), c.darkened(0.1), Vector3(5, -30, 0))
@@ -254,6 +274,7 @@ func _build_rubble() -> void:
 
 
 func _build_bin() -> void:
+	_use("metal")
 	var c := _c(Color(0.16, 0.3, 0.22))
 	_box(Vector3(1.6, 1.05, 1.0), Vector3(0, 0.55, 0), c)
 	_box(Vector3(1.65, 0.1, 1.05), Vector3(0, 1.12, 0), c.darkened(0.3))
@@ -261,6 +282,7 @@ func _build_bin() -> void:
 
 
 func _build_antenna() -> void:
+	_use("metal")
 	var metal := _c(Color(0.45, 0.45, 0.5))
 	var h := 8.0 * size.y
 	_cyl(0.07, h, Vector3(0, h * 0.5, 0), metal, Vector3.ZERO, -1.0, 6)
@@ -271,6 +293,7 @@ func _build_antenna() -> void:
 
 
 func _build_fence() -> void:
+	_use("metal")
 	var c := _c(Color(0.3, 0.3, 0.33))
 	var length := size.x * 4.0
 	var posts := int(length / 2.0) + 1
@@ -283,6 +306,7 @@ func _build_fence() -> void:
 
 
 func _build_crate() -> void:
+	_use("planks")
 	var c := _c(Color(0.45, 0.33, 0.2))
 	_box(Vector3(0.8, 0.7, 0.8) * size, Vector3(0, 0.35 * size.y, 0), c)
 	_box(Vector3(0.82, 0.08, 0.82) * size, Vector3(0, 0.6 * size.y, 0), c.darkened(0.2))
@@ -290,6 +314,7 @@ func _build_crate() -> void:
 
 
 func _build_pallet() -> void:
+	_use("planks")
 	var c := _c(Color(0.55, 0.42, 0.28))
 	for i in 3:
 		_box(Vector3(1.2, 0.14, 1.0), Vector3(0, 0.08 + i * 0.16, 0), c.darkened(i * 0.05), Vector3(0, i * 9, 0))
@@ -297,6 +322,7 @@ func _build_pallet() -> void:
 
 
 func _build_barricade() -> void:
+	_use("concrete")
 	var length := size.x * 6.0
 	var n := int(length / 1.5)
 	for i in n:
@@ -309,6 +335,7 @@ func _build_barricade() -> void:
 
 
 func _build_tracks() -> void:
+	_use("plain")
 	# Three-toed prints of something that walks upright. Length along -Z.
 	var steps := int(size.z * 4.0)
 	var c := _c(Color(0.28, 0.33, 0.42))
@@ -321,6 +348,7 @@ func _build_tracks() -> void:
 
 
 func _build_device() -> void:
+	_use("metal")
 	# Unknown faction object: warm to the touch; snow never settles around it.
 	_cyl(2.2, 0.02, Vector3(0, 0.01, 0), Color(0.12, 0.12, 0.14), Vector3.ZERO, -1.0, 16, 0.0)
 	_cyl(0.28, 0.9, Vector3(0, 0.45, 0), _c(Color(0.16, 0.17, 0.2)), Vector3.ZERO, 0.22, 8, 0.0)
@@ -332,6 +360,7 @@ func _build_device() -> void:
 
 
 func _build_symbol() -> void:
+	_use("plain")
 	# Painted ring with three falling lines — the mark of the Unknown.
 	var paint := _c(Color(0.75, 0.9, 0.95))
 	var r := 0.55
@@ -343,6 +372,7 @@ func _build_symbol() -> void:
 
 
 func _build_kiosk() -> void:
+	_use("metal")
 	var c := _c(Color(0.3, 0.36, 0.42))
 	_box(Vector3(2.6, 2.6, 2.4), Vector3(0, 1.3, 0), c)
 	_box(Vector3(3.0, 0.2, 2.8), Vector3(0, 2.7, 0), c.darkened(0.3))
@@ -356,6 +386,7 @@ func _build_kiosk() -> void:
 
 
 func _build_notice_board() -> void:
+	_use("planks")
 	var wood := _c(Color(0.3, 0.22, 0.15))
 	_box(Vector3(0.1, 2.0, 0.1), Vector3(-0.8, 1.0, 0), wood)
 	_box(Vector3(0.1, 2.0, 0.1), Vector3(0.8, 1.0, 0), wood)
@@ -366,37 +397,44 @@ func _build_notice_board() -> void:
 
 
 func _build_hydrant() -> void:
+	_use("paint")
 	_cyl(0.18, 0.8, Vector3(0, 0.4, 0), _c(Color(0.7, 0.15, 0.1)))
 	_col(Vector3(0.4, 0.8, 0.4), Vector3(0, 0.4, 0))
 
 
 func _build_window() -> void:
+	_use("glass")
 	var glow := lit
 	_box(Vector3(1.0 * size.x, 1.2 * size.y, 0.08), Vector3(0, 0, 0), light_color if glow else Color(0.08, 0.1, 0.13), Vector3.ZERO, 0.0, 1.8 if glow else 0.0)
 	_box(Vector3(1.1 * size.x, 0.08, 0.15), Vector3(0, -0.62 * size.y, 0.04), Color(0.3, 0.3, 0.32))
 
 
 func _build_door_frame() -> void:
+	_use("door")
 	var c := _c(Color(0.25, 0.2, 0.16))
 	_box(Vector3(1.4, 2.3, 0.12), Vector3(0, 1.15, 0), c, Vector3.ZERO, 0.0)
 	_box(Vector3(0.12, 0.12, 0.14), Vector3(0.45, 1.1, 0.07), Color(0.7, 0.65, 0.4), Vector3.ZERO, 0.0)
 
 
 func _build_body_bag() -> void:
+	_use("fabric")
 	_box(Vector3(0.6, 0.25, 1.8), Vector3(0, 0.12, 0), _c(Color(0.15, 0.17, 0.2)))
 
 
 # --- Interior props ----------------------------------------------------------------------
 
 func _build_bed() -> void:
+	_use("planks")
 	var c := _c(Color(0.35, 0.3, 0.4))
 	_box(Vector3(1.1, 0.4, 2.1), Vector3(0, 0.2, 0), Color(0.3, 0.22, 0.15), Vector3.ZERO, 0.0)
+	_use("fabric")
 	_box(Vector3(1.0, 0.18, 1.5), Vector3(0, 0.49, 0.25), c, Vector3.ZERO, 0.0)
 	_box(Vector3(0.8, 0.15, 0.4), Vector3(0, 0.48, -0.75), Color(0.85, 0.85, 0.82), Vector3.ZERO, 0.0)
 	_col(Vector3(1.1, 0.6, 2.1), Vector3(0, 0.3, 0))
 
 
 func _build_shelf() -> void:
+	_use("planks")
 	var c := _c(Color(0.4, 0.32, 0.22))
 	_box(Vector3(1.8 * size.x, 2.0, 0.08), Vector3(0, 1.0, -0.22), c.darkened(0.2), Vector3.ZERO, 0.0)
 	for i in 4:
@@ -406,6 +444,7 @@ func _build_shelf() -> void:
 
 
 func _build_table() -> void:
+	_use("planks")
 	var c := _c(Color(0.42, 0.3, 0.2))
 	_box(Vector3(1.4 * size.x, 0.08, 0.8 * size.z), Vector3(0, 0.78, 0), c, Vector3.ZERO, 0.0)
 	for x in [-0.6, 0.6]:
@@ -415,6 +454,7 @@ func _build_table() -> void:
 
 
 func _build_counter() -> void:
+	_use("plastic")
 	var c := _c(Color(0.38, 0.36, 0.34))
 	_box(Vector3(2.0 * size.x, 1.0, 0.7), Vector3(0, 0.5, 0), c, Vector3.ZERO, 0.0)
 	_box(Vector3(2.05 * size.x, 0.06, 0.75), Vector3(0, 1.02, 0), c.lightened(0.2), Vector3.ZERO, 0.0)
@@ -422,6 +462,7 @@ func _build_counter() -> void:
 
 
 func _build_wardrobe() -> void:
+	_use("planks")
 	var c := _c(Color(0.32, 0.24, 0.18))
 	_box(Vector3(1.2, 2.1, 0.6), Vector3(0, 1.05, 0), c, Vector3.ZERO, 0.0)
 	_box(Vector3(0.02, 1.9, 0.02), Vector3(0, 1.05, 0.31), c.darkened(0.4), Vector3.ZERO, 0.0)
@@ -429,6 +470,7 @@ func _build_wardrobe() -> void:
 
 
 func _build_chair() -> void:
+	_use("planks")
 	var c := _c(Color(0.4, 0.28, 0.18))
 	_box(Vector3(0.45, 0.06, 0.45), Vector3(0, 0.45, 0), c, Vector3.ZERO, 0.0)
 	_box(Vector3(0.45, 0.5, 0.06), Vector3(0, 0.72, -0.2), c, Vector3.ZERO, 0.0)
@@ -436,6 +478,7 @@ func _build_chair() -> void:
 
 
 func _build_stove() -> void:
+	_use("metal")
 	var c := _c(Color(0.18, 0.18, 0.2))
 	_box(Vector3(0.9, 0.9, 0.7), Vector3(0, 0.45, 0), c, Vector3.ZERO, 0.0)
 	_cyl(0.1, 2.2, Vector3(0, 2.0, -0.2), c.darkened(0.2), Vector3.ZERO, -1.0, 6, 0.0)
@@ -448,6 +491,7 @@ func _build_stove() -> void:
 
 
 func _build_generator() -> void:
+	_use("metal")
 	var c := _c(Color(0.45, 0.4, 0.15))
 	_box(Vector3(1.3, 0.9, 0.8), Vector3(0, 0.45, 0), c, Vector3.ZERO, 0.0)
 	_cyl(0.25, 0.9, Vector3(0.2, 0.5, 0), Color(0.2, 0.2, 0.22), Vector3(0, 0, 90), -1.0, 8, 0.0)
@@ -456,6 +500,7 @@ func _build_generator() -> void:
 
 
 func _build_workbench() -> void:
+	_use("planks")
 	var c := _c(Color(0.45, 0.35, 0.22))
 	_box(Vector3(2.0, 0.1, 0.9), Vector3(0, 0.9, 0), c, Vector3.ZERO, 0.0)
 	for x in [-0.9, 0.9]:
@@ -466,6 +511,7 @@ func _build_workbench() -> void:
 
 
 func _build_radio_set() -> void:
+	_use("plastic")
 	_box(Vector3(0.9, 0.8, 0.6), Vector3(0, 0.4, 0), Color(0.3, 0.3, 0.28), Vector3.ZERO, 0.0)
 	_box(Vector3(0.7, 0.45, 0.4), Vector3(0, 1.02, 0), _c(Color(0.25, 0.2, 0.15)), Vector3.ZERO, 0.0)
 	_box(Vector3(0.35, 0.12, 0.02), Vector3(-0.1, 1.08, 0.21), Color(1.0, 0.7, 0.3) if lit else Color(0.1, 0.08, 0.05), Vector3.ZERO, 0.0, 2.0 if lit else 0.0)
@@ -474,6 +520,7 @@ func _build_radio_set() -> void:
 
 
 func _build_transmitter() -> void:
+	_use("metal")
 	_box(Vector3(1.2, 1.4, 0.7), Vector3(0, 0.7, 0), _c(Color(0.22, 0.26, 0.3)), Vector3.ZERO, 0.0)
 	for i in 3:
 		_box(Vector3(0.12, 0.08, 0.02), Vector3(-0.3 + i * 0.3, 1.1, 0.36), [Color(0.2, 1, 0.3), Color(1, 0.7, 0.2), Color(1, 0.2, 0.2)][i], Vector3.ZERO, 0.0, 3.0)
@@ -482,12 +529,14 @@ func _build_transmitter() -> void:
 
 
 func _build_phone() -> void:
+	_use("plastic")
 	_box(Vector3(0.5, 0.75, 0.4), Vector3(0, 0.375, 0), Color(0.3, 0.22, 0.15), Vector3.ZERO, 0.0)
 	_box(Vector3(0.25, 0.1, 0.18), Vector3(0, 0.8, 0), _c(Color(0.6, 0.1, 0.08)), Vector3.ZERO, 0.0)
 	_col(Vector3(0.5, 0.85, 0.4), Vector3(0, 0.42, 0))
 
 
 func _build_board() -> void:
+	_use("planks")
 	_box(Vector3(1.6, 1.1, 0.06), Vector3(0, 1.5, 0), _c(Color(0.35, 0.3, 0.22)), Vector3.ZERO, 0.0)
 	for i in 4:
 		_box(Vector3(0.3, 0.35, 0.02), Vector3(-0.55 + i * 0.37, 1.55, 0.04), Color(0.85, 0.85, 0.8), Vector3(0, 0, (i % 2) * 5.0), 0.0)
@@ -504,6 +553,7 @@ func _build_candle() -> void:
 
 
 func _build_ceiling_lamp() -> void:
+	_use("metal")
 	_box(Vector3(0.4, 0.1, 0.4), Vector3(0, 2.9, 0), Color(0.9, 0.9, 0.8) if lit else Color(0.2, 0.2, 0.2), Vector3.ZERO, 0.0, 3.0 if lit else 0.0)
 	if lit:
 		_omni(Vector3(0, 2.6, 0), light_color, light_energy, light_range, light_shadows)
@@ -526,7 +576,7 @@ func set_cutaway(value: bool) -> void:
 
 
 func _update_fade() -> void:
-	var target := 0.92 if _cutaway else (0.8 if _occluding else 0.0)
+	var target := 1.0 if _cutaway or _occluding else 0.0
 	if _fade_tween:
 		_fade_tween.kill()
 	_fade_tween = create_tween()

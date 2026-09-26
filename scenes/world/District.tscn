@@ -2857,7 +2857,7 @@ shape = SubResource("BoxShape3D_24")
 script = ExtResource("9_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.5, 0, 24.3)
 display_name = "Стол с деталями"
-title = "Стол Elias"
+title = "Стол Элиаса"
 text = "Паяльник, лупа, разобранный приёмник. На листке — начатая схема передатчика и надпись: «не хватает питания и трёх плат»."
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/HouseDesk"]
@@ -2982,7 +2982,7 @@ interaction_text = "Открыть"
 items = {"electronics": 2}
 loot_table = "radio_equipment"
 conditions = [{"any": [{"item": "crowbar"}, {"tier_min": ["vera", "cooperative"]}, {"flag": "vera_locker_ok"}, {"npc_not_at": ["vera", "district"]}]}]
-requirement_text = "Шкафчик заперт, Vera следит за ним. Можно вскрыть монтировкой — или заслужить её доверие."
+requirement_text = "Шкафчик заперт, Вера следит за ним. Можно вскрыть монтировкой — или заслужить её доверие."
 
 [node name="Shape" type="CollisionShape3D" parent="Interactables/RadioLocker"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

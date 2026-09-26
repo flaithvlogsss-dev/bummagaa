@@ -27,14 +27,3 @@ script = ExtResource("3_talk")
 [node name="Shape" type="CollisionShape3D" parent="Talk"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("SphereShape3D_talk")
-
-[node name="Name" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, 0)
-pixel_size = 0.008
-billboard = 1
-no_depth_test = true
-texture_filter = 0
-modulate = Color(1, 0.92, 0.8, 1)
-outline_modulate = Color(0, 0, 0, 1)
-font_size = 28
-outline_size = 8

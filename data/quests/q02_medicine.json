@@ -2,7 +2,7 @@
 	"id": "q02_medicine",
 	"title": "Лекарства",
 	"category": "side",
-	"description": "Elias из дома №7 оставил сообщение: у него кончились таблетки для сердца.",
+	"description": "Элиас из дома №7 оставил сообщение: у него кончились таблетки для сердца.",
 	"stages": [
 		{
 			"id": "find",
@@ -11,8 +11,8 @@
 		},
 		{
 			"id": "deliver",
-			"description": "Elias живёт в доме №7, через улицу от убежища.",
-			"objectives": [{"id": "deliver", "text": "Отнести лекарство Elias (дом №7)", "condition": {"flag": "elias_got_medicine"}}]
+			"description": "Элиас живёт в доме №7, через улицу от убежища.",
+			"objectives": [{"id": "deliver", "text": "Отнести лекарство Элиасу (дом №7)", "condition": {"flag": "elias_got_medicine"}}]
 		}
 	],
 	"rewards": [{"stat": {"stress": -5}}],

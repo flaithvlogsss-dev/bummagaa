@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_s")
 id = "grey"
-display_name = "Sorel"
+display_name = "Сорель"
 unknown_name = "Человек в сером"
 age = 45
 occupation = "?"
@@ -26,3 +26,4 @@ pants_color = Color(0.3, 0.31, 0.33, 1.0)
 hair_color = Color(0.2, 0.2, 0.2, 1.0)
 skin_color = Color(0.8, 0.78, 0.76, 1.0)
 accent_color = Color(0.7, 0.85, 0.9, 1.0)
+look = {"hair_style": "long", "coat_style": "long", "backpack": "military", "bag_color": Color(0.26, 0.28, 0.22, 1), "outdoor_mask": "pano"}

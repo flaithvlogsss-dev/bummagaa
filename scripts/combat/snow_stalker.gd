@@ -56,8 +56,8 @@ func _ready() -> void:
 	collision_mask = 1
 	health = max_health
 	home = global_position
-	sprite.setup_sheet(PixelArt.stalker_sheet(), PixelArt.STALKER_W, PixelArt.STALKER_H, 4, 4)
-	sprite.pixel_size = 0.066
+	sprite.setup_sheet(EnemyArt.sheet("stalker"), EnemyArt.W, EnemyArt.H, EnemyArt.COLS, EnemyArt.ROWS, PixelCharacter.LAYOUT_COMPACT)
+	sprite.pixel_size = 0.062
 	sprite.anim_fps = 5.0
 	_set_state(State.PATROL if not patrol_points.is_empty() else State.IDLE)
 

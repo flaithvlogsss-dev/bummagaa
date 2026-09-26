@@ -83,7 +83,7 @@ func _draw() -> void:
 		var k := maxf(1.0, floorf((minf(size.x, size.y) - 6.0) / 16.0))
 		var isz := Vector2(16, 16) * k
 		draw_texture_rect(tex, Rect2(((size - isz) * 0.5 - Vector2(0, 1)).floor(), isz), false)
-	var font := get_theme_default_font()
+	var font := UIKit.small_font()
 	var count := int(stack.get("count", 1))
 	if count > 1:
 		var txt := str(count)
@@ -111,7 +111,7 @@ func _draw() -> void:
 func _draw_quick_key() -> void:
 	if quick_key <= 0:
 		return
-	var font := get_theme_default_font()
+	var font := UIKit.small_font()
 	draw_rect(Rect2(2, 2, 12, 13), Color(0, 0, 0, 0.75))
 	draw_string(font, Vector2(4, 13), str(quick_key), HORIZONTAL_ALIGNMENT_LEFT, -1, 11, UIKit.ACCENT)
 

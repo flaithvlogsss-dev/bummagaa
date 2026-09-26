@@ -38,3 +38,7 @@ extends Resource
 @export var hair_color: Color = Color(0.25, 0.18, 0.12)
 @export var skin_color: Color = Color(0.93, 0.78, 0.66)
 @export var accent_color: Color = Color(0.8, 0.2, 0.2)
+## Extra CharacterArt appearance keys: hair_style (short, long, ponytail, bun, bald),
+## coat_style (jacket, puffer, parka, long), hat, backpack, bag_color, outdoor_mask
+## (gas, pano, half, scarf; "" = never masked).
+@export var look: Dictionary = {}

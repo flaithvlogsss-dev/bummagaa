@@ -63,7 +63,7 @@ func _on_open(data: Dictionary) -> void:
 	_recipes = CraftingSystem.get_recipes(_station)
 	_list.clear()
 	for r in _recipes:
-		var idx := _list.add_item(r.name, PixelArt.item_icon(Data.get_item(r.result_item)))
+		var idx := _list.add_item(r.name, IconArt.item_icon(Data.get_item(r.result_item)))
 		if not CraftingSystem.is_unlocked(r):
 			_list.set_item_custom_fg_color(idx, UIKit.TEXT_DIM)
 	if _list.item_count > 0:

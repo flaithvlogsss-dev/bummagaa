@@ -50,7 +50,11 @@ func _ready() -> void:
 	add_to_group("player")
 	collision_layer = 2
 	collision_mask = 1 | 4 | 8
-	sprite.setup_character(Data.get_character("player"))
+	sprite.setup_appearance(CharacterArt.player_appearance())
+	GameState.inventory.changed.connect(_refresh_look)
+	GameState.stats.changed.connect(func(stat, _v):
+		if stat == "status":
+			_refresh_look())
 	breath.survival = survival
 	sensor.focus_changed.connect(func(t): interaction_focus_changed.emit(t))
 	thrower = PlayerThrow.new()
@@ -61,6 +65,17 @@ func _ready() -> void:
 	exposure.survival = survival
 	add_child(exposure)
 	survival.exposure = exposure
+	exposure.mask_toggled.connect(func(_on): _refresh_look())
+	exposure.coughed.connect(func(): sprite.play_action("cough", 0.7))
+	combat.fired.connect(func():
+		var w := combat.get_weapon()
+		if w and w.melee:
+			sprite.play_action("swing", 0.25))
+
+
+## Rebuilds the sprite when worn gear changes (hat, mask up/down, backpack, coat).
+func _refresh_look() -> void:
+	sprite.setup_appearance(CharacterArt.player_appearance())
 
 
 func set_input_enabled(value: bool) -> void:

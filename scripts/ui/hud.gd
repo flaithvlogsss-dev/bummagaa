@@ -96,6 +96,7 @@ func _soft_panel() -> PanelContainer:
 
 
 func _build() -> void:
+	add_child(WorldLabels.new())
 	# Top-left: health + statuses + quest tracker
 	var tl := _layer(Control.SIZE_SHRINK_BEGIN, Control.SIZE_SHRINK_BEGIN)
 	var hp_panel := _soft_panel()

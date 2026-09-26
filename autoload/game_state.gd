@@ -32,7 +32,7 @@ const MAX_SHELTER_LEVEL := 3
 ## Worn at the start of a new game: slot -> item id.
 const START_EQUIPMENT := {"backpack": "small_backpack", "head": "knit_hat"}
 
-var player_name: String = "Alex"
+var player_name: String = "Алекс"
 var flags: Dictionary = {}
 var decisions: Dictionary = {}
 var discovered_locations: Array = []
@@ -80,7 +80,7 @@ func _process(delta: float) -> void:
 
 ## Clears the playthrough to fresh defaults (does not touch other managers).
 func reset_state() -> void:
-	player_name = "Alex"
+	player_name = "Алекс"
 	var player_data := Data.get_character("player") if Data.characters.has("player") else null
 	if player_data:
 		player_name = player_data.display_name

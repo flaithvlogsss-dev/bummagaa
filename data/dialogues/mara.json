@@ -13,14 +13,14 @@
 			"text": "Стой… не подходи так быстро. Я фельдшер — была на смене, когда начался снег. Нога — рваная рана. А снег… он будто выпивает меня изнутри.",
 			"choices": [
 				{"text": "Кто ты? Что случилось?", "once": true, "next": "story"},
-				{"text": "Помочь Mara — дать лекарство.", "requires": {"item": "medicine"}, "requires_text": "нет лекарства", "next": "give_medicine"},
-				{"text": "Помочь Mara — перевязать бинтом.", "requires": {"item": "bandage"}, "requires_text": "нет бинта", "next": "give_bandage"},
-				{"text": "Оставить Mara.", "next": "refuse"}
+				{"text": "Помочь Маре — дать лекарство.", "requires": {"item": "medicine"}, "requires_text": "нет лекарства", "next": "give_medicine"},
+				{"text": "Помочь Маре — перевязать бинтом.", "requires": {"item": "bandage"}, "requires_text": "нет бинта", "next": "give_bandage"},
+				{"text": "Оставить Мару.", "next": "refuse"}
 			]
 		},
 		"story": {
 			"speaker": "self",
-			"text": "Mara. Скорая. Машину занесло у подстанции, напарник ушёл за помощью и не вернулся. Я ползла сюда полчаса. Там, у подстанции, стояли люди в сером — и просто смотрели.",
+			"text": "Мара. Скорая. Машину занесло у подстанции, напарник ушёл за помощью и не вернулся. Я ползла сюда полчаса. Там, у подстанции, стояли люди в сером — и просто смотрели.",
 			"consequences": [{"npc_met": "self"}, {"relationship": {"npc": "self", "trust": 3}}],
 			"next": "first"
 		},
@@ -64,8 +64,8 @@
 			"speaker": "self",
 			"text": "Ты вернулся. Зачем?",
 			"choices": [
-				{"text": "Помочь Mara — дать лекарство.", "requires": {"item": "medicine"}, "requires_text": "нет лекарства", "next": "give_medicine_late"},
-				{"text": "Помочь Mara — перевязать бинтом.", "requires": {"item": "bandage"}, "requires_text": "нет бинта", "next": "give_bandage"},
+				{"text": "Помочь Маре — дать лекарство.", "requires": {"item": "medicine"}, "requires_text": "нет лекарства", "next": "give_medicine_late"},
+				{"text": "Помочь Маре — перевязать бинтом.", "requires": {"item": "bandage"}, "requires_text": "нет бинта", "next": "give_bandage"},
 				{"text": "Прости.", "next": "end"}
 			]
 		},

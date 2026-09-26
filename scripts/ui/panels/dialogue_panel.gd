@@ -89,10 +89,10 @@ func _portrait_for(npc_id: String) -> Texture2D:
 	var data := Data.get_character(npc_id) if not npc_id.is_empty() else null
 	if data == null:
 		return null
-	var sheet := PixelArt.character_sheet(data)
+	var sheet := CharacterArt.sheet(CharacterArt.appearance_for(data, false))
 	var at := AtlasTexture.new()
 	at.atlas = sheet
-	at.region = Rect2(0, 0, PixelArt.FRAME_W, 16)
+	at.region = Rect2(8, 1, 16, 16)
 	return at
 
 

@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_s")
 id = "anton_map"
-title = "Карта Anton"
+title = "Карта Антона"
 info_type = "document"
 content = "Карта северной дороги от руки: «Виадук держится. От КПП — 6 км до депо. Идти только днём, только после метели, только вместе»."
 tags = PackedStringArray("route")
