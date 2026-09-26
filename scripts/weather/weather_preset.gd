@@ -1,6 +1,6 @@
 class_name WeatherPreset
 extends Resource
-## Parameters for one weather state (LIGHT / HEAVY / BLIZZARD).
+## Parameters for one weather state (CLEAR / LIGHT / HEAVY / BLIZZARD / WHITEOUT).
 ## WeatherManager blends between presets over time.
 
 @export var id: String = "LIGHT"
@@ -23,5 +23,11 @@ extends Resource
 @export var noise_mask: float = 0.0
 ## Stress per minute outdoors.
 @export var stress_rate: float = 0.0
+## Multiplier for how fast outside air contaminates an unprotected player.
+@export var contamination: float = 1.0
+## Game minutes of filter used per game minute outdoors.
+@export var filter_drain: float = 0.4
+## 0..1 extra fog / white-out of the screen (WHITEOUT).
+@export var whiteout: float = 0.0
 ## True when outdoor NPCs seek cover and exposed routes close.
 @export var severe: bool = false

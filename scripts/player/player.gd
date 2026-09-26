@@ -6,6 +6,7 @@ extends CharacterBody3D
 ##   deceleration), stamina use, interaction, flashlight, footprints and breath.
 ## Dependencies: SurvivalSystem, InteractionSensor, PlayerFlashlight, PlayerCombat,
 ##   Footprints, BreathEffect, PixelCharacter (child nodes), GameState.
+## Components created in code: PlayerThrow (throwing), ExposureSystem (air, gas mask, [G]).
 ## Public API: teleport(transform), on_level_changed(level), toggle_hide(spot),
 ##   take_damage(amount, dir), set_input_enabled(bool)
 ## Signals: interaction_focus_changed(target), hid(bool)
@@ -37,6 +38,7 @@ var god_mode: bool = false
 @onready var flashlight: PlayerFlashlight = $Flashlight
 @onready var combat: PlayerCombat = $Combat
 var thrower: PlayerThrow
+var exposure: ExposureSystem
 @onready var footprints: Footprints = $Footprints
 @onready var breath: BreathEffect = $Breath
 
@@ -54,6 +56,11 @@ func _ready() -> void:
 	thrower = PlayerThrow.new()
 	thrower.name = "Throw"
 	add_child(thrower)
+	exposure = ExposureSystem.new()
+	exposure.name = "Exposure"
+	exposure.survival = survival
+	add_child(exposure)
+	survival.exposure = exposure
 
 
 func set_input_enabled(value: bool) -> void:
@@ -134,6 +141,8 @@ func _physics_process(delta: float) -> void:
 			flashlight.toggle()
 		if Input.is_action_just_pressed("heal_quick"):
 			quick_heal()
+		if Input.is_action_just_pressed("mask_toggle"):
+			exposure.toggle_mask()
 		if Input.is_action_just_pressed("throw") and hiding_spot == null:
 			thrower.throw_item()
 		for i in Inventory.QUICK_SLOTS:
@@ -250,6 +259,13 @@ func toggle_hide(spot: Node3D) -> void:
 func take_damage(amount: float, _dir: Vector3 = Vector3.ZERO) -> void:
 	if god_mode:
 		return
+	var inv := GameState.inventory
+	amount *= 1.0 - inv.get_protection()
+	# Hits wear what you wear; a cracked mask leaks.
+	if GameState.stats.mask_on and inv.damage_equipped("mask", amount * 0.3):
+		GameState.notify("Стекло маски треснуло — она пропускает воздух!", "danger")
+	inv.damage_equipped("body", amount * 0.15)
+	inv.damage_equipped("head", amount * 0.2)
 	GameState.stats.modify("health", -amount)
 	GameState.stats.modify("stress", amount * 0.6)
 	if randf() < 0.45:

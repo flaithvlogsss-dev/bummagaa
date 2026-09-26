@@ -16,7 +16,7 @@ signal saved(slot: String)
 signal save_failed(slot: String, error: String)
 
 const SAVE_DIR := "user://saves"
-const VERSION := 2
+const VERSION := 3
 const SLOTS: Array[String] = ["1", "2", "3", "auto"]
 const AUTOSAVE_COOLDOWN_MS := 45000
 
@@ -180,4 +180,9 @@ func _migrate(data: Dictionary) -> Dictionary:
 					known.append(r)
 			gs["known_recipes"] = known
 		data["version"] = 2
+	if v < 3:
+		# v3: the clock runs at a quarter speed (filters and hunger are tuned for it).
+		var t: Dictionary = data.get("time", {})
+		t["speed"] = TimeManager.DEFAULT_SPEED
+		data["version"] = 3
 	return data

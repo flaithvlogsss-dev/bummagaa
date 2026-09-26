@@ -2943,6 +2943,24 @@ count = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("SphereShape3D_35")
 
+[node name="Wardrobe" type="StaticBody3D" parent="NavRegion/Props"]
+script = ExtResource("4_scrip")
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 8.6, 0, -38.8)
+kind = "wardrobe"
+color = Color(0.36, 0.42, 0.36, 1)
+
+[node name="SquareCDLocker" type="Area3D" parent="Interactables"]
+script = ExtResource("10_scrip")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -38.8)
+display_name = "Пункт выдачи ГО"
+interaction_text = "Вскрыть"
+loot_table = "civil_defense_locker"
+found_text = "Сорванная пломба. Кто-то был здесь раньше — но не взял всё."
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/SquareCDLocker"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_25")
+
 [node name="RadioPoint" type="Area3D" parent="Interactables"]
 script = ExtResource("14_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -51.2)

@@ -4,17 +4,18 @@
 
 [resource]
 script = ExtResource("1_wp")
-id = "LIGHT"
-display_name = "Слабый снег"
-intensity = 0.25
-wind = 0.15
-visibility = 70.0
-temperature = -9.0
-cold_rate = 1.0
+id = "CLEAR"
+display_name = "Ясно"
+intensity = 0.03
+wind = 0.05
+visibility = 95.0
+temperature = -14.0
+cold_rate = 1.15
 stamina_cost = 1.0
-footprint_fade = 1.0
+footprint_fade = 0.6
 noise_mask = 0.0
 stress_rate = 0.0
-contamination = 1.0
-filter_drain = 0.4
+contamination = 0.75
+filter_drain = 0.3
+whiteout = 0.0
 severe = false

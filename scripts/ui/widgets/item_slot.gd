@@ -11,7 +11,7 @@ signal clicked(slot: ItemSlot, button: int, double: bool)
 signal dropped_on(slot: ItemSlot, data: Dictionary)
 signal hovered(slot: ItemSlot)
 
-const SIZE := 52
+const SIZE := 56
 
 var inventory: Inventory
 ## Grid index, or -1 for an equipment slot.
@@ -79,8 +79,10 @@ func _draw() -> void:
 		return
 	var tex := IconArt.item_icon(item)
 	if tex:
-		var isz := Vector2(48, 48) if size.x >= 56 else Vector2(32, 32) * 1.25
-		draw_texture_rect(tex, Rect2((size - isz) * 0.5 - Vector2(0, 2), isz), false)
+		# Whole multiples of 16 keep the pixels square.
+		var k := maxf(1.0, floorf((minf(size.x, size.y) - 6.0) / 16.0))
+		var isz := Vector2(16, 16) * k
+		draw_texture_rect(tex, Rect2(((size - isz) * 0.5 - Vector2(0, 1)).floor(), isz), false)
 	var font := get_theme_default_font()
 	var count := int(stack.get("count", 1))
 	if count > 1:

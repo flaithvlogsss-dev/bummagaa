@@ -118,6 +118,10 @@ func new_game() -> void:
 	for slot in START_EQUIPMENT.keys():
 		if inventory.add(START_EQUIPMENT[slot], 1, true, {"cond": 80.0}) > 0:
 			inventory.equip(START_EQUIPMENT[slot])
+	# The gas mask everyone in the city got in the first week, with an old filter in it.
+	if inventory.add("gas_mask", 1, true, {"cond": 70.0, "data": {"filter": "filter_old", "filter_left": 30.0}}) > 0:
+		inventory.equip("gas_mask")
+	inventory.add("filter_homemade", 1, true)
 	new_game_started.emit()
 
 

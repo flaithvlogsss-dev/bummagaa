@@ -113,6 +113,7 @@ func test_give_or_drop_spills_to_the_ground() -> void:
 
 func test_mask_filter_install_and_eject() -> void:
 	var inv := GameState.inventory
+	inv.destroy_equipped("mask")
 	inv.add("filter_standard", 2)
 	var idx := inv.find_index("filter_standard")
 	assert_false(inv.use_at(idx), "no mask yet")
@@ -217,6 +218,128 @@ func _survival_with_level(level: Level) -> SurvivalSystem:
 	var s := SurvivalSystem.new()
 	s.set_level(level)
 	return s
+
+
+func _weather_now(state: String) -> void:
+	WeatherManager.force_weather(state, 60, 0.01)
+	WeatherManager._blend = 1.0
+	WeatherManager._apply_blend()
+
+
+func _exposure_outdoors() -> Array:
+	var outside := Level.new()
+	outside.is_interior = false
+	var s := _survival_with_level(outside)
+	var ex := ExposureSystem.new()
+	ex.survival = s
+	s.exposure = ex
+	GameState.set_location("district")
+	return [s, ex, outside]
+
+
+func test_exposure_rises_outside_falls_in_shelter() -> void:
+	var parts := _exposure_outdoors()
+	var s: SurvivalSystem = parts[0]
+	var ex: ExposureSystem = parts[1]
+	_weather_now("LIGHT")
+	GameState.stats.mask_on = false
+	GameState.stats.set_value("exposure", 0.0)
+	for i in 50:
+		s.tick(0.2)
+	var bare := GameState.stats.exposure
+	assert_gt(bare, 6.0, "10 s outside without a mask is a lot of exposure")
+	GameState.stats.set_value("exposure", 0.0)
+	assert_true(ex.set_mask_on(true), "the starting gas mask can be pulled on")
+	ex._mask_busy = 0.0
+	for i in 50:
+		s.tick(0.2)
+	var masked := GameState.stats.exposure
+	assert_lt(masked, bare * 0.25, "a mask with a filter keeps most of it out")
+	assert_gt(masked, 0.0, "but not all of it")
+	GameState.stats.set_value("exposure", 0.0)
+	_weather_now("WHITEOUT")
+	for i in 50:
+		s.tick(0.2)
+	assert_gt(GameState.stats.exposure, masked * 1.8, "white-out air is far worse")
+	GameState.stats.set_value("exposure", 50.0)
+	GameState.set_location("shelter")
+	for i in 50:
+		s.tick(0.2)
+	assert_lt(GameState.stats.exposure, 50.0, "clean shelter air lets exposure fall")
+	parts[2].free()
+
+
+func test_filter_drains_in_game_minutes() -> void:
+	var parts := _exposure_outdoors()
+	var s: SurvivalSystem = parts[0]
+	var ex: ExposureSystem = parts[1]
+	_weather_now("LIGHT")
+	ex.set_mask_on(true)
+	var before := GameState.inventory.get_mask_filter_left()
+	assert_eq(before, 30.0, "the start mask holds an old filter")
+	TimeManager.running = true
+	for i in 40:
+		s.tick(0.25)
+	TimeManager.running = false
+	var used := before - GameState.inventory.get_mask_filter_left()
+	var expected := 10.0 * TimeManager.time_speed * WeatherManager.filter_drain
+	assert_true(absf(used - expected) < 0.05, "10 s outside uses %.2f filter minutes (got %.2f)" % [expected, used])
+	GameState.inventory.get_equipped_stack("mask").data["filter_left"] = 0.0
+	GameState.stats.set_value("exposure", 0.0)
+	for i in 50:
+		s.tick(0.2)
+	assert_gt(GameState.stats.exposure, 3.0, "a spent filter barely protects")
+	parts[2].free()
+
+
+func test_exposure_states_hurt_and_tire() -> void:
+	var parts := _exposure_outdoors()
+	var s: SurvivalSystem = parts[0]
+	var ex: ExposureSystem = parts[1]
+	GameState.set_location("shelter")
+	assert_eq(ExposureSystem.state_for_value(5.0), ExposureSystem.State.SAFE)
+	assert_eq(ExposureSystem.state_for_value(40.0), ExposureSystem.State.MEDIUM)
+	assert_eq(ExposureSystem.state_for_value(95.0), ExposureSystem.State.CRITICAL)
+	GameState.stats.set_value("exposure", 95.0)
+	var hp := GameState.stats.health
+	for i in 25:
+		s.tick(0.2)
+	assert_lt(GameState.stats.health, hp - 1.0, "critical exposure hurts")
+	assert_lt(GameState.stats.max_stamina, 70.0, "and cuts stamina")
+	assert_eq(ex.get_state(), ExposureSystem.State.CRITICAL)
+	parts[2].free()
+
+
+func test_mask_toggle_and_weather_states() -> void:
+	var ex := ExposureSystem.new()
+	GameState.stats.mask_on = false
+	assert_true(ex.toggle_mask())
+	assert_true(GameState.stats.mask_on)
+	assert_true(ex.toggle_mask(), "G pulls it off again")
+	assert_false(GameState.stats.mask_on)
+	assert_true(GameState.inventory.is_equipped("gas_mask"), "lifting the mask keeps it worn")
+	for st in ["CLEAR", "LIGHT", "HEAVY", "BLIZZARD", "WHITEOUT"]:
+		assert_true(Data.get_weather_preset(st) != null, "weather preset %s" % st)
+	_weather_now("CLEAR")
+	var clear := WeatherManager.contamination
+	_weather_now("WHITEOUT")
+	assert_gt(WeatherManager.contamination, clear)
+	assert_gt(WeatherManager.get_whiteout(), 0.9, "white-out hides everything")
+	assert_true(WeatherManager.is_severe())
+	ex.free()
+
+
+func test_rest_passes_time_and_recovers() -> void:
+	var s := SurvivalSystem.new()
+	GameState.set_location("shelter")
+	GameState.stats.set_value("stamina", 10.0)
+	GameState.stats.set_value("exposure", 40.0)
+	var hunger := GameState.stats.hunger
+	s.apply_rest(3.0)
+	assert_gt(GameState.stats.stamina, 90.0)
+	assert_lt(GameState.stats.exposure, 40.0)
+	assert_lt(GameState.stats.hunger, hunger)
+	s.free()
 
 
 func test_survival_cold_outside_and_warm_inside() -> void:
@@ -385,8 +508,12 @@ func test_radio_probe_and_lock() -> void:
 
 func test_weather_force_and_schedule() -> void:
 	TimeManager.set_time(3, 14, 0)
+	assert_eq(WeatherManager.scheduled_state(), "WHITEOUT", "day 3 afternoon: the white-out")
+	TimeManager.set_time(3, 11, 30)
 	assert_eq(WeatherManager.scheduled_state(), "BLIZZARD")
 	TimeManager.set_time(2, 9, 0)
+	assert_eq(WeatherManager.scheduled_state(), "CLEAR")
+	TimeManager.set_time(2, 12, 0)
 	assert_eq(WeatherManager.scheduled_state(), "LIGHT")
 	WeatherManager.force_weather("HEAVY", 30)
 	assert_eq(WeatherManager.get_state(), "HEAVY")

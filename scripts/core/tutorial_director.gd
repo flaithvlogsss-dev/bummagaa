@@ -2,8 +2,10 @@ class_name TutorialDirector
 extends Node
 ## TutorialDirector — one-time contextual hints (cold, heat, inventory, flashlight, danger).
 ## Each hint is remembered as a "tut_*" flag, so it is shown once per playthrough.
+## Hints never overlap: after one is shown the next waits until it has faded.
 
 var _t: float = 0.0
+var _shown_now: bool = false
 
 
 func _ready() -> void:
@@ -13,10 +15,12 @@ func _ready() -> void:
 
 
 func _once(flag: String, text: String, duration: float = 8.0) -> void:
-	if GameState.has_flag(flag) or not GameState.has_flag("intro_done") and flag != "tut_intro":
+	if _shown_now or GameState.has_flag(flag) or not GameState.has_flag("intro_done") and flag != "tut_intro":
 		return
 	GameState.set_flag(flag, true)
 	GameState.hint(text, duration)
+	_shown_now = true
+	_t = duration + 1.0
 
 
 func _process(delta: float) -> void:
@@ -24,6 +28,7 @@ func _process(delta: float) -> void:
 	if _t > 0.0:
 		return
 	_t = 0.5
+	_shown_now = false
 	if Main.instance == null or Main.instance.mode != Main.Mode.PLAYING:
 		return
 	var player := Main.get_player()
@@ -31,6 +36,15 @@ func _process(delta: float) -> void:
 		return
 	var s := GameState.stats
 	var outdoors := not player.survival.is_indoors()
+	var ex := player.exposure
+	if ex and ex.zone() == "outdoor" and not ex.is_wearing():
+		_once("tut_mask", "Воздух снаружи отравлен — снег несёт заразу. [G] — надеть маску. Слева внизу видно, сколько осталось фильтра и сколько ты уже вдохнул.", 11.0)
+	elif ex and ex.zone() == "outdoor" and ex.is_wearing():
+		_once("tut_mask_worn", "Маска защищает лёгкие, но не греет. Фильтр тратится, пока ты снаружи; в метель — быстрее. В зданиях маску можно снять [G] и сберечь фильтр.", 11.0)
+	if ex and ex.is_wearing() and ex.has_filter() and ex.filter_fraction() < ExposureSystem.FILTER_LOW:
+		_once("tut_filter", "Фильтр садится. Запасной вставляется в рюкзаке [I] → «Вставить в маску». Пустые корпуса пригодятся для самодельных.")
+	if s.exposure >= 30.0:
+		_once("tut_exposure", "Заражение копится. В убежище оно медленно уходит, сон выводит больше. Йодные таблетки и активированный уголь помогают сразу.", 10.0)
 	if outdoors:
 		_once("tut_cold", "Снег вытягивает тепло. Следите за термометром внизу экрана. Греться можно в помещениях и у огня. Бег [Shift] немного согревает, но тратит силы.", 10.0)
 	if outdoors and s.temperature < 55.0:

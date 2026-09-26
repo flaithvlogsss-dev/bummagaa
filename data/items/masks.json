@@ -1,6 +1,6 @@
 [
-{"id": "gas_mask", "name": "Противогаз", "category": "Mask", "icon_shape": "gasmask", "weight": 0.9, "stack_size": 1, "rarity": "uncommon", "value": 22, "equip_slot": "mask", "mask_efficiency": 0.92, "mask_visibility": 0.35, "has_condition": true, "tags": ["mask"],
- "description": "Гражданская маска с двумя стёклами. Держит заражённый воздух, пока жив фильтр. Стёкла запотевают, дышать тяжело. [G] — снять или надеть.", "effect_text": "защита 92% с фильтром"},
+{"id": "gas_mask", "name": "Противогаз", "category": "Mask", "icon_shape": "gasmask", "weight": 0.9, "stack_size": 1, "rarity": "uncommon", "value": 22, "equip_slot": "mask", "mask_efficiency": 0.94, "mask_visibility": 0.35, "has_condition": true, "tags": ["mask"],
+ "description": "Гражданская маска с двумя стёклами. Держит заражённый воздух, пока жив фильтр. Стёкла запотевают, дышать тяжело. [G] — снять или надеть.", "effect_text": "защита 94% с фильтром"},
 {"id": "military_gas_mask", "name": "Армейский противогаз", "category": "Mask", "icon_shape": "panomask", "weight": 1.0, "stack_size": 1, "rarity": "rare", "value": 34, "equip_slot": "mask", "mask_efficiency": 0.98, "mask_visibility": 0.2, "has_condition": true, "tags": ["mask"],
  "description": "Панорамное стекло и плотная резина. Видно лучше, дышится легче, держит почти всё.", "effect_text": "защита 98% с фильтром"},
 {"id": "protective_mask", "name": "Респиратор", "category": "Mask", "icon_shape": "respirator", "weight": 0.3, "stack_size": 1, "value": 10, "equip_slot": "mask", "mask_efficiency": 0.6, "mask_visibility": 0.06, "has_condition": true, "tags": ["mask"],

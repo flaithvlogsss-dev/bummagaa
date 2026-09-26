@@ -1,13 +1,15 @@
 class_name ScreenEffects
 extends CanvasLayer
 ## ScreenEffects — full-screen overlay for cold frost, low-health pulse, stress tunnel,
-## snow on the lens during blizzards and short flashes. Kept subtle so it never hides gameplay.
+## snow on the lens during blizzards, contamination tint, white-out haze, short flashes and the
+## gas mask visor (VisorOverlay). Kept subtle so it never hides gameplay.
 
 var _rect: ColorRect
 var _mat: ShaderMaterial
 var _flash: float = 0.0
 var _hurt_flash: float = 0.0
-var _values: Dictionary = {"cold": 0.0, "hurt": 0.0, "stress": 0.0, "lens_snow": 0.0}
+var _values: Dictionary = {"cold": 0.0, "hurt": 0.0, "stress": 0.0, "lens_snow": 0.0, "toxic": 0.0, "whiteout": 0.0}
+var _visor: VisorOverlay
 
 
 func _ready() -> void:
@@ -20,6 +22,8 @@ func _ready() -> void:
 	_mat.shader = load("res://shaders/screen_effects.gdshader")
 	_rect.material = _mat
 	add_child(_rect)
+	_visor = VisorOverlay.new()
+	add_child(_visor)
 	GameState.presentation_requested.connect(_on_presentation)
 
 
@@ -34,6 +38,7 @@ func _process(delta: float) -> void:
 	var playing := Main.instance != null and Main.instance.mode == Main.Mode.PLAYING
 	_rect.visible = playing
 	if not playing:
+		_visor.visible = false
 		return
 	var s := GameState.stats
 	var player := Main.get_player()
@@ -43,6 +48,8 @@ func _process(delta: float) -> void:
 		"hurt": clampf((35.0 - s.health) / 35.0, 0.0, 1.0) * 0.8 + _hurt_flash * 0.5,
 		"stress": clampf((s.stress - 60.0) / 40.0, 0.0, 1.0),
 		"lens_snow": clampf((WeatherManager.intensity - 0.45) / 0.55, 0.0, 1.0) if outdoors else 0.0,
+		"toxic": clampf((s.exposure - 40.0) / 50.0, 0.0, 1.0),
+		"whiteout": WeatherManager.whiteout if outdoors else 0.0,
 	}
 	for k in target.keys():
 		_values[k] = move_toward(_values[k], target[k], delta * 1.5)
@@ -51,3 +58,4 @@ func _process(delta: float) -> void:
 	_flash = move_toward(_flash, 0.0, delta * 3.0)
 	_mat.set_shader_parameter("flash", _flash)
 	_mat.set_shader_parameter("time_offset", Time.get_ticks_msec() / 1000.0)
+	_visor.update_visor(delta, player)

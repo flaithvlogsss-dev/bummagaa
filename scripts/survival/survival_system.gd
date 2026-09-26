@@ -4,12 +4,13 @@ extends Node
 ##
 ## Purpose: temperature depends on outside temperature, wind, snow intensity (WeatherManager),
 ##   clothing insulation, being indoors, heat sources and the body state. Hunger and hydration
-##   drain with game time; stamina drains while sprinting; critical states hurt slowly so the
-##   player has time to understand what is happening.
+##   drain with game time; stamina drains while sprinting; contaminated air is handled by the
+##   ExposureSystem (ticked from here). Critical states hurt slowly so the player has time to
+##   understand what is happening.
 ## Dependencies: GameState.stats (PlayerStats), WeatherManager, TimeManager, current Level.
 ## Public API: enter_indoor/exit_indoor, enter_heat/exit_heat, reset_zones, set_level,
 ##   use_stamina, can_sprint, get_speed_multiplier, is_indoors, is_heated, apply_sleep,
-##   get_statuses, get_temperature_trend
+##   apply_rest, get_statuses, get_temperature_trend
 ## Signals: status_changed(statuses), went_outdoors, warmed_up
 ## Save Data: values live in GameState.stats.
 
@@ -20,8 +21,9 @@ signal warmed_up
 const TICK := 0.2
 ## Body heat lost per second outdoors in LIGHT snow before modifiers.
 const BASE_COLD_LOSS := 0.2
-const HUNGER_PER_GAME_MINUTE := 100.0 / (40.0 * 60.0)
-const HYDRATION_PER_GAME_MINUTE := 100.0 / (30.0 * 60.0)
+## Full to empty in 24 / 16 game hours (with time_speed 0.25: ~96 / ~64 real minutes).
+const HUNGER_PER_GAME_MINUTE := 100.0 / (24.0 * 60.0)
+const HYDRATION_PER_GAME_MINUTE := 100.0 / (16.0 * 60.0)
 const STAMINA_REGEN := 16.0
 const FLASHLIGHT_DRAIN := 100.0 / 600.0
 
@@ -29,6 +31,8 @@ var enabled: bool = true
 var sprinting: bool = false
 var moving: bool = false
 var temperature_trend: float = 0.0
+## Contaminated air + gas mask (set by the Player; optional in tests).
+var exposure: ExposureSystem
 
 var _level: Level
 var _indoor_zones: Array = []
@@ -123,9 +127,16 @@ func tick(dt: float) -> void:
 	s.modify("hunger", -HUNGER_PER_GAME_MINUTE * game_minutes)
 	s.modify("hydration", -HYDRATION_PER_GAME_MINUTE * game_minutes * (1.15 if sprinting else 1.0))
 
+	# Air
+	if exposure:
+		exposure.sprinting = sprinting
+		exposure.tick(dt)
+
 	# Stamina
 	var starving := s.hunger < 15.0 or s.hydration < 15.0
 	s.max_stamina = 100.0 * (0.7 if starving else 1.0) * (0.8 if s.illness else 1.0)
+	if exposure:
+		s.max_stamina *= exposure.stamina_factor()
 	if _since_stamina_use > 0.9:
 		var regen := STAMINA_REGEN
 		if s.temperature < 30.0:
@@ -134,6 +145,8 @@ func tick(dt: float) -> void:
 			regen *= 0.7
 		if s.illness:
 			regen *= 0.6
+		if exposure and exposure.is_wearing():
+			regen *= 0.8
 		s.modify("stamina", regen * dt)
 	if s.stamina > s.max_stamina:
 		s.set_value("stamina", s.max_stamina)
@@ -149,6 +162,8 @@ func tick(dt: float) -> void:
 	if s.bleeding > 0.0:
 		damage += 0.5
 		s.bleeding = maxf(0.0, s.bleeding - dt)
+	if exposure:
+		damage += exposure.damage_rate()
 	if damage > 0.0:
 		s.modify("health", -damage * dt)
 	elif s.temperature > 50.0 and s.hunger > 30.0 and s.hydration > 30.0 and s.health < 100.0:
@@ -166,6 +181,10 @@ func tick(dt: float) -> void:
 		stress_rate -= 0.05
 	if s.temperature < 30.0:
 		stress_rate += 0.1
+	if s.exposure >= 55.0:
+		stress_rate += 0.12
+	if s.vitamins > 0.0:
+		s.vitamins = maxf(0.0, s.vitamins - game_minutes)
 	s.modify("stress", stress_rate * dt)
 
 	# Timed statuses
@@ -220,6 +239,8 @@ func use_stamina(amount: float) -> void:
 
 func can_sprint() -> bool:
 	var s := GameState.stats
+	if exposure and exposure.is_putting_on():
+		return false
 	return s.stamina > 3.0 and not GameState.inventory.is_overweight()
 
 
@@ -242,15 +263,31 @@ func get_speed_multiplier() -> float:
 ## Sleeping through the night.
 func apply_sleep(hours: float) -> void:
 	var s := GameState.stats
+	var bag := GameState.inventory.has_item("sleeping_bag")
 	s.modify("hunger", -1.6 * hours)
 	s.modify("hydration", -2.0 * hours)
 	s.set_value("stamina", s.max_stamina)
-	s.modify("stress", -25.0)
+	s.modify("stress", -25.0 - (8.0 if bag else 0.0))
 	if s.hunger > 20.0 and s.hydration > 20.0:
-		s.modify("health", 15.0)
-	s.set_value("temperature", 100.0 if is_heated() else maxf(s.temperature, 55.0))
+		s.modify("health", 15.0 + (5.0 if bag else 0.0))
+	s.set_value("temperature", 100.0 if is_heated() else maxf(s.temperature, 70.0 if bag else 55.0))
+	s.modify("exposure", -(8.0 if GameState.current_location == "shelter" else 2.0) * hours)
 	s.bleeding = 0.0
 	s.flashlight_battery = 100.0
+
+
+## A short rest (1-3 hours) on a bed: some stamina, calm and healing, the clock moves on.
+func apply_rest(hours: float) -> void:
+	var s := GameState.stats
+	s.modify("hunger", -HUNGER_PER_GAME_MINUTE * 60.0 * hours * 0.7)
+	s.modify("hydration", -HYDRATION_PER_GAME_MINUTE * 60.0 * hours * 0.7)
+	s.modify("stamina", 35.0 * hours)
+	s.modify("stress", -6.0 * hours)
+	if s.hunger > 20.0 and s.hydration > 20.0:
+		s.modify("health", 3.0 * hours)
+	if is_heated():
+		s.modify("temperature", 20.0 * hours)
+	s.modify("exposure", -(6.0 if GameState.current_location == "shelter" else 1.5) * hours)
 
 
 func get_statuses() -> PackedStringArray:
@@ -280,6 +317,19 @@ func _update_statuses() -> void:
 		list.append("warm_pack")
 	if heat_strength() > 0.0 or (is_indoors() and is_heated()):
 		list.append("warming")
+	if s.exposure >= 80.0:
+		list.append("choking")
+	elif s.exposure >= 55.0:
+		list.append("poisoned")
+	elif s.exposure >= 30.0:
+		list.append("contaminated")
+	if exposure and exposure.zone() == "outdoor" and not exposure.is_wearing():
+		list.append("mask_off")
+	elif exposure and exposure.is_wearing() and exposure.zone() != "shelter":
+		if not exposure.has_filter():
+			list.append("no_filter")
+		elif exposure.filter_fraction() < ExposureSystem.FILTER_LOW:
+			list.append("filter_low")
 	if list != _statuses:
 		_statuses = list
 		status_changed.emit(list)

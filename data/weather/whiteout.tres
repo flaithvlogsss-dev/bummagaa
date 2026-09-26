@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="WeatherPreset" format=3]
+
+[ext_resource type="Script" path="res://scripts/weather/weather_preset.gd" id="1_wp"]
+
+[resource]
+script = ExtResource("1_wp")
+id = "WHITEOUT"
+display_name = "Белая мгла"
+intensity = 1.0
+wind = 0.85
+visibility = 6.0
+temperature = -31.0
+cold_rate = 3.8
+stamina_cost = 1.8
+footprint_fade = 8.0
+noise_mask = 0.7
+stress_rate = 0.12
+contamination = 2.2
+filter_drain = 1.2
+whiteout = 1.0
+severe = true

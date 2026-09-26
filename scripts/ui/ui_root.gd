@@ -115,8 +115,9 @@ static func fade_in(duration: float = 0.35) -> void:
 # --- Internals ----------------------------------------------------------------------------------
 
 func _fade_to(alpha: float, duration: float) -> void:
-	if _fade_tween:
-		_fade_tween.kill()
+	if _fade_tween and _fade_tween.is_valid() and _fade_tween.is_running():
+		# Finish (not kill) the previous fade so whoever awaits it is released.
+		_fade_tween.custom_step(1000.0)
 	_fade_tween = create_tween()
 	_fade_tween.tween_property(_fade, "color:a", alpha, maxf(duration, 0.01))
 	await _fade_tween.finished

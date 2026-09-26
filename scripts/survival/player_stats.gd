@@ -31,6 +31,8 @@ var warm_pack_time: float = 0.0
 ## Game minutes of vitamin protection (halves illness chances).
 var vitamins: float = 0.0
 var flashlight_on: bool = false
+## The worn mask is pulled down over the face (G lifts it without taking it off).
+var mask_on: bool = false
 var flashlight_battery: float = 100.0
 var dead: bool = false
 var god_mode: bool = false
@@ -76,6 +78,7 @@ func reset() -> void:
 	illness = false
 	warm_pack_time = 0.0
 	vitamins = 0.0
+	mask_on = false
 	flashlight_on = false
 	flashlight_battery = 100.0
 	dead = false
@@ -94,6 +97,7 @@ func serialize() -> Dictionary:
 	d["flashlight_on"] = flashlight_on
 	d["flashlight_battery"] = flashlight_battery
 	d["vitamins"] = vitamins
+	d["mask_on"] = mask_on
 	return d
 
 
@@ -109,6 +113,7 @@ func deserialize(d: Dictionary) -> void:
 	flashlight_on = bool(d.get("flashlight_on", false))
 	flashlight_battery = float(d.get("flashlight_battery", 100.0))
 	vitamins = float(d.get("vitamins", 0.0))
+	mask_on = bool(d.get("mask_on", false))
 	dead = health <= 0.0
 	if dead:
 		health = 25.0

@@ -36,6 +36,9 @@ var _weapon_label: Label
 var _battery: ProgressBar
 var _autosave: Label
 var _debug: Label
+var _mask_widget: MaskWidget
+var _quick_bar: QuickBar
+var _air_warning: Label
 
 var _player: Player
 var _stats_dirty: bool = true
@@ -146,7 +149,12 @@ func _build() -> void:
 	_notify_box.size_flags_horizontal = Control.SIZE_SHRINK_END
 	tr.add_child(_notify_box)
 
-	# Bottom-centre: temperature + needs
+	# Bottom-left: mask, filter, exposure
+	var bl := _layer(Control.SIZE_SHRINK_BEGIN, Control.SIZE_SHRINK_END)
+	_mask_widget = MaskWidget.new()
+	bl.add_child(_mask_widget)
+
+	# Bottom-centre: prompt, quick slots, temperature + needs
 	var bc := _layer(Control.SIZE_SHRINK_CENTER, Control.SIZE_SHRINK_END)
 	_prompt_panel = _soft_panel()
 	_prompt_panel.visible = false
@@ -155,6 +163,9 @@ func _build() -> void:
 	_prompt = UIKit.label("", 15, UIKit.TEXT)
 	_prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_prompt_panel.add_child(_prompt)
+	_quick_bar = QuickBar.new()
+	_quick_bar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	bc.add_child(_quick_bar)
 	var tp := _soft_panel()
 	bc.add_child(tp)
 	var tbox := UIKit.vbox(3)
@@ -193,7 +204,12 @@ func _build() -> void:
 	_autosave.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	br.add_child(_autosave)
 
-	# Top-centre: hint
+	# Top-centre: contamination warning, banner, hint
+	var warn_box := _layer(Control.SIZE_SHRINK_CENTER, Control.SIZE_SHRINK_BEGIN, [16, 18, 16, 14])
+	_air_warning = UIKit.label("", 20, UIKit.DANGER)
+	_air_warning.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_air_warning.visible = false
+	warn_box.add_child(_air_warning)
 	var top_box := _layer(Control.SIZE_SHRINK_CENTER, Control.SIZE_SHRINK_BEGIN, [16, 90, 16, 14])
 	_banner = UIKit.vbox(0)
 	_banner.visible = false
@@ -251,6 +267,7 @@ func _process(delta: float) -> void:
 		_battery.value = GameState.stats.flashlight_battery
 		if _player.hiding_spot:
 			_status_label.text = "Скрыт. " + _status_label.text.replace("Скрыт. ", "")
+		_update_air_warning()
 	if _debug_visible:
 		_debug.text = DebugMenu.debug_text()
 
@@ -281,8 +298,31 @@ func _refresh_stats() -> void:
 	var st: PackedStringArray = _player.survival.get_statuses() if _player else PackedStringArray()
 	var words: PackedStringArray = []
 	for key in st:
-		words.append({"freezing": "Замерзание", "cold": "Холод", "hungry": "Голод", "thirsty": "Жажда", "bleeding": "Кровотечение", "ill": "Болезнь", "overweight": "Перегруз", "stressed": "Паника", "warm_pack": "Грелка", "warming": "Греется"}.get(key, key))
+		words.append(STATUS_WORDS.get(key, key))
 	_status_label.text = ", ".join(words)
+
+
+const STATUS_WORDS := {
+	"freezing": "Замерзание", "cold": "Холод", "hungry": "Голод", "thirsty": "Жажда",
+	"bleeding": "Кровотечение", "ill": "Болезнь", "overweight": "Перегруз", "stressed": "Паника",
+	"warm_pack": "Грелка", "warming": "Греется", "contaminated": "Заражение", "poisoned": "Отравление",
+	"choking": "Удушье", "mask_off": "Без маски", "no_filter": "Нет фильтра", "filter_low": "Фильтр на исходе",
+}
+
+
+## Outdoors without a mask on: a blinking warning at the top of the screen.
+func _update_air_warning() -> void:
+	var ex := _player.exposure
+	var bare := ex != null and ex.zone() == "outdoor" and not ex.is_wearing()
+	var clogged := ex != null and ex.zone() == "outdoor" and ex.is_wearing() and not ex.has_filter()
+	_air_warning.visible = bare or clogged
+	if not _air_warning.visible:
+		return
+	if bare:
+		_air_warning.text = "⚠  ЗАРАЖЕНИЕ ВОЗДУХА  ⚠\n[G] — надеть маску" if not GameState.inventory.get_equipped("mask").is_empty() or GameState.inventory.count("gas_mask") > 0 else "⚠  ЗАРАЖЕНИЕ ВОЗДУХА  ⚠\nнужна маска"
+	else:
+		_air_warning.text = "⚠  ФИЛЬТР ЗАБИТ  ⚠\nвставь новый фильтр [I]"
+	_air_warning.modulate.a = 0.55 + 0.45 * sin(_pulse_t * 7.0)
 
 
 static func warmth_word(t: float) -> String:

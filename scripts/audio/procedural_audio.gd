@@ -61,6 +61,13 @@ static func make(id: String) -> AudioStreamWAV:
 		"stone_hit": return _one(_thud(0.16, 180.0, 0.55), RATE)
 		"flare_burn": return _loop(_seamless(_hiss(3.0), 2000), RATE)
 		"zipper": return _one(_zipper(), RATE)
+		"mask_breath": return _loop(_mask_breath(false), RATE)
+		"mask_breath_strained": return _loop(_mask_breath(true), RATE)
+		"mask_on": return _one(_mask_seal(true), RATE)
+		"mask_off": return _one(_mask_seal(false), RATE)
+		"filter_clog": return _one(_clog(), RATE)
+		"filter_swap": return _one(_filter_swap(), RATE)
+		"cough": return _one(_cough(), RATE)
 	return null
 
 
@@ -364,6 +371,89 @@ static func _zipper() -> PackedFloat32Array:
 		tick += (70.0 + t * 120.0) / RATE
 		var click := exp(-fmod(tick, 1.0) * 18.0)
 		b[i] = randf_range(-1.0, 1.0) * click * 0.25 * sin(PI * t / 0.32)
+	return b
+
+
+## One breath through a filter: a hollow, band-limited inhale with a valve click, then a
+## longer exhale. `strained` adds a wheeze (clogged filter) and shortens the cycle.
+static func _mask_breath(strained: bool) -> PackedFloat32Array:
+	var inhale := 1.05 if not strained else 0.9
+	var pause := 0.25
+	var exhale := 1.35 if not strained else 1.05
+	var gap := 0.9 if not strained else 0.45
+	var total := inhale + pause + exhale + gap
+	var b := _buf(total, RATE)
+	var lp := 0.0
+	var bp := 0.0
+	for i in b.size():
+		var t := float(i) / RATE
+		var n := randf_range(-1.0, 1.0)
+		var env := 0.0
+		var bright := 0.18
+		if t < inhale:
+			env = sin(PI * t / inhale) * 0.9
+			bright = 0.1 + 0.2 * (t / inhale)
+		elif t > inhale + pause and t < inhale + pause + exhale:
+			var e := (t - inhale - pause) / exhale
+			env = sin(PI * e) * (1.0 - e * 0.3) * 0.75
+			bright = 0.25 - 0.12 * e
+		lp += (n - lp) * bright
+		bp += (lp - bp) * 0.08
+		var v := (lp - bp) * env * 0.9
+		if strained and env > 0.0:
+			v += sin(TAU * (620.0 + 80.0 * sin(t * 9.0)) * t) * env * 0.06
+		b[i] = v
+	# Valve clicks at the turn of each breath.
+	for at in [inhale + 0.02, inhale + pause + exhale]:
+		var start := int(at * RATE)
+		for i in range(start, mini(b.size(), start + int(0.03 * RATE))):
+			var tt := float(i - start) / RATE
+			b[i] += sin(TAU * 1100.0 * tt) * exp(-tt * 140.0) * 0.18
+	return b
+
+
+## Rubber stretching and a seal: rising (on) or falling (off) muffled sweep with a snap.
+static func _mask_seal(on: bool) -> PackedFloat32Array:
+	var b := _noise_burst(0.5, 0.08, 0.35, true)
+	var start := int((0.42 if on else 0.05) * RATE)
+	for i in range(start, mini(b.size(), start + int(0.06 * RATE))):
+		var t := float(i - start) / RATE
+		b[i] += sin(TAU * 220.0 * t) * exp(-t * 50.0) * 0.5
+	return b
+
+
+static func _clog() -> PackedFloat32Array:
+	var b := _buf(0.9, RATE)
+	for i in b.size():
+		var t := float(i) / RATE
+		var env := sin(PI * t / 0.9)
+		b[i] = (sin(TAU * (480.0 - t * 200.0) * t) * 0.08 + randf_range(-1.0, 1.0) * 0.05) * env
+	return b
+
+
+static func _filter_swap() -> PackedFloat32Array:
+	var b := _buf(0.5, RATE)
+	for beat in [0.0, 0.12, 0.34]:
+		var start := int(beat * RATE)
+		for i in range(start, mini(b.size(), start + int(0.05 * RATE))):
+			var t := float(i - start) / RATE
+			b[i] += (randf_range(-1.0, 1.0) * 0.4 + sin(TAU * 900.0 * t) * 0.3) * exp(-t * 90.0)
+	return b
+
+
+## Two or three rough bursts with a voiced low component.
+static func _cough() -> PackedFloat32Array:
+	var b := _buf(1.1, RATE)
+	var bursts := [0.0, 0.3, 0.62] if randf() < 0.6 else [0.0, 0.34]
+	for k in bursts.size():
+		var start := int(float(bursts[k]) * RATE)
+		var lp := 0.0
+		var dur := 0.22 - k * 0.03
+		for i in range(start, mini(b.size(), start + int(dur * RATE))):
+			var t := float(i - start) / RATE
+			var env := minf(1.0, t * 60.0) * exp(-t * 11.0)
+			lp += (randf_range(-1.0, 1.0) - lp) * 0.35
+			b[i] += (lp * 0.8 + sin(TAU * (140.0 - t * 90.0) * t) * 0.35) * env * (1.0 - k * 0.2)
 	return b
 
 

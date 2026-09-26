@@ -79,7 +79,9 @@ func _build() -> void:
 	for entry in [
 		["Give Items", _give_items], ["Add Food", _add_food], ["Add Ammo", func(): GameState.inventory.add("pistol_ammo", 12)],
 		["Heal", _heal], ["Trigger Blizzard", func(): WeatherManager.force_weather("BLIZZARD", 90)], ["Clear Weather", func(): WeatherManager.clear_forced()],
-		["Heavy Snow", func(): WeatherManager.force_weather("HEAVY", 90)], ["Shelter +1", func(): GameState.set_shelter_level(GameState.shelter_level + 1)], ["Spawn Enemy", func(): GameState.request_world("spawn_stalker", {"near_player": true})],
+		["Heavy Snow", func(): WeatherManager.force_weather("HEAVY", 90)], ["Whiteout", func(): WeatherManager.force_weather("WHITEOUT", 90)],
+		["Clear Sky", func(): WeatherManager.force_weather("CLEAR", 90)], ["Exposure +30", func(): GameState.stats.modify("exposure", 30.0)],
+		["Exposure 0", func(): GameState.stats.set_value("exposure", 0.0)], ["Refill Filter", _refill_filter], ["Shelter +1", func(): GameState.set_shelter_level(GameState.shelter_level + 1)], ["Spawn Enemy", func(): GameState.request_world("spawn_stalker", {"near_player": true})],
 		["Sleep (skip night)", func():
 			close()
 			Main.request_sleep()], ["Ending check", func():
@@ -175,6 +177,20 @@ func _on_open(_data: Dictionary) -> void:
 func _process(_delta: float) -> void:
 	if is_open:
 		_info.text = debug_text()
+
+
+func _refill_filter() -> void:
+	var inv := GameState.inventory
+	if inv.get_equipped("mask").is_empty():
+		inv.add("gas_mask", 1, true)
+		inv.equip("gas_mask")
+	var mask := inv.get_equipped_stack("mask")
+	if not mask.has("data"):
+		mask["data"] = {}
+	mask.data["filter"] = "filter_military"
+	mask.data["filter_left"] = 120.0
+	GameState.stats.mask_on = true
+	inv.changed.emit()
 
 
 ## Military backpack first (room), then a survival kit; what does not fit lands at the feet.

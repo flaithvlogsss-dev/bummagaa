@@ -410,6 +410,9 @@ def district():
     b.area(I, "NoticeBoard", S_INFO, (-9, 0, -31.4), {"info_id": "note_evac", "interaction_text": "Прочитать"}, shape=("box", (2.2, 2, 1.2)))
     b.area(I, "WoodPile", S_LOOT, (-15, 0, -52.2), {"display_name": "Поддоны", "interaction_text": "Разобрать", "items": {}, "loot_table": "woodpile"})
     b.area(I, "SquareWater", S_PICK, (6, 0, -38.2), {"item_id": "water_bottle", "count": 1}, shape=("sphere", 0.7))
+    b.prop(P, "wardrobe", (8.6, 0, -38.8), yaw=90, color=(0.36, 0.42, 0.36))
+    b.area(I, "SquareCDLocker", S_LOOT, (8.0, 0, -38.8), {"display_name": "Пункт выдачи ГО", "interaction_text": "Вскрыть",
+        "loot_table": "civil_defense_locker", "found_text": "Сорванная пломба. Кто-то был здесь раньше — но не взял всё."}, shape=("box", (1.4, 2, 1.4)))
     b.area(I, "RadioPoint", S_STATION, (12, 0, -51.2), {"display_name": "Радиоточка", "interaction_text": "Настроить приёмник", "panel": "radio", "station_id": "radio_point",
         "consequences": [{"set_flag": "radio_point_used"}]}, shape=("box", (2.4, 2, 1.4)))
     b.area(I, "RadioLocker", S_LOOT, (14.3, 0, -51.1), {"display_name": "Шкафчик радиоточки", "interaction_text": "Открыть", "items": {"electronics": 2}, "loot_table": "radio_equipment",
@@ -520,6 +523,8 @@ def shelter():
     b.prop(P, "ceiling_lamp", (0, 0, 2.5), lit=True, light_color=(1.0, 0.85, 0.65), light_energy=1.1, light_range=7.0, groups=["power_light"])
     b.prop(P, "ceiling_lamp", (6, 0, -3), lit=True, light_color=(1.0, 0.9, 0.75), light_energy=1.0, light_range=6.0, groups=["power_light"])
     b.prop(P, "door_frame", (0, 0, 5.95), color=(0.28, 0.22, 0.16), has_collision=False)
+    b.prop(P, "wardrobe", (2.3, 0, 5.45), yaw=180, color=(0.36, 0.42, 0.36))
+    b.block(P, "CDSign", (2.3, 1.55, 5.14), (0.3, 0.3, 0.04), (0.85, 0.72, 0.2), snow_mask=0.0, has_collision=False)
     # Storage
     b.prop(P, "shelf", (8.4, 0, -3.2), yaw=-90)
     b.prop(P, "shelf", (4.4, 0, -5.4))
@@ -556,6 +561,10 @@ def shelter():
     b.area(I, "Kitchen", S_LOOT, (-7.8, 0, -1.4), {"display_name": "Кухонный шкаф", "items": {"canned_food": 1, "water_bottle": 1}})
     b.area(I, "FirstAid", S_LOOT, (-8.2, 0, 0.7), {"display_name": "Аптечка", "items": {"bandage": 1, "medicine": 1}}, shape=("box", (1.4, 2, 1.2)))
     b.area(I, "Flashlight", S_PICK, (7.7, 0.3, -3.5), {"item_id": "flashlight", "count": 1}, shape=("sphere", 0.8))
+    b.area(I, "CDLocker", S_LOOT, (2.3, 0, 4.7), {"display_name": "Шкафчик ГО", "interaction_text": "Открыть",
+        "items": {"filter_standard": 1, "filter_old": 1, "iodine_pills": 1},
+        "found_text": "Жёлтая наклейка «Средства защиты». Внутри — то, что раздавали в первую неделю.",
+        "container_hint": "Фильтры вставляются в маску из рюкзака: [I] → «Вставить в маску»."}, shape=("box", (1.4, 2, 1.2)))
     b.area(I, "StorageShelf", S_LOOT, (4.4, 0, -4.7), {"display_name": "Полки", "items": {"cloth": 1}}, shape=("box", (1.8, 2, 1.2)))
     b.area(I, "Storage", S_STATION, (6.4, 0, -4.4), {"display_name": "Склад", "interaction_text": "Открыть", "panel": "storage", "station_id": "storage"}, shape=("box", (2.2, 2, 1.2)))
     b.area(I, "Generator", S_GEN, (7.3, 0, -1.6), {}, shape=("box", (1.8, 2, 1.2)))

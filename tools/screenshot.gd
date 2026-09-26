@@ -4,7 +4,8 @@ extends Node
 ##      SHOT_FLASH (1 = flashlight on), SHOT_PANEL (ui panel), SHOT_DIALOGUE ("id" or "id:npc"),
 ##      SHOT_ENEMY (1 = spawn a Snow Stalker nearby), SHOT_TITLE (1 = title screen only),
 ##      SHOT_FRAMES, SHOT_ITEMS (1 = give sample items), SHOT_LEVELUP (shelter level),
-##      SHOT_LOOT (loot table shown by SHOT_PANEL=container)
+##      SHOT_LOOT (loot table shown by SHOT_PANEL=container), SHOT_MASK (0 = mask lifted),
+##      SHOT_EXPOSURE (0..100)
 ## Usage: xvfb-run godot --path . --rendering-method gl_compatibility res://tools/Screenshot.tscn
 
 func _ready() -> void:
@@ -44,6 +45,8 @@ func _ready() -> void:
 		pl.global_position = Vector3(float(p[0]), 0.1, float(p[1]))
 		Main.instance.camera_rig.snap()
 	GameState.stats.flashlight_on = _env("SHOT_FLASH", "0") == "1"
+	GameState.stats.mask_on = _env("SHOT_MASK", "1") == "1"
+	GameState.stats.set_value("exposure", float(_env("SHOT_EXPOSURE", "0")))
 	var face := _env("SHOT_FACE", "")
 	if not face.is_empty():
 		var fp := face.split(",")

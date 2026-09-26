@@ -56,6 +56,8 @@ func _ready() -> void:
 	GameState.stats.died.connect(_on_player_died)
 	GameState.ending_requested.connect(_on_ending_requested)
 	DialogueManager.dialogue_ended.connect(_on_dialogue_ended)
+	Consequences.register("rest", func(v, _c): rest.call_deferred(float(v)))
+	Consequences.register("sleep", func(_v, _c): sleep.call_deferred())
 	_set_world_active(false)
 	if OS.get_environment("LASTSNOW_AUTOSTART") == "1":
 		new_game.call_deferred()
@@ -230,7 +232,8 @@ func sleep() -> void:
 	TimeManager.skip_to_hour(TimeManager.DAY_START_HOUR)
 	var hours := (TimeManager.total_minutes - before) / 60.0
 	player.survival.apply_sleep(hours)
-	if not night_event.is_empty():
+	# An ending reached at dawn takes precedence over the night's event.
+	if not night_event.is_empty() and mode == Mode.PLAYING:
 		EventManager.trigger(night_event, true)
 	player.set_input_enabled(true)
 	transitioning = false
@@ -239,6 +242,21 @@ func sleep() -> void:
 	GameState.present("title_card", {"text": TimeManager.format_day()})
 	SaveManager.autosave("morning")
 	await UIRoot.fade_in(1.2)
+
+
+## A short rest on a bed: the clock moves `hours` forward, the body recovers a little.
+func rest(hours: float) -> void:
+	if transitioning or mode != Mode.PLAYING:
+		return
+	transitioning = true
+	player.set_input_enabled(false)
+	await UIRoot.fade_out(0.8)
+	TimeManager.advance_minutes(int(round(hours * 60.0)))
+	player.survival.apply_rest(hours)
+	player.set_input_enabled(true)
+	transitioning = false
+	GameState.present("title_card", {"text": "%s  •  %s" % [TimeManager.format_day(), TimeManager.format_clock()]})
+	await UIRoot.fade_in(0.8)
 
 
 func _on_player_died() -> void:
@@ -272,4 +290,6 @@ func _show_ending(ending_id: String) -> void:
 	player.set_input_enabled(false)
 	SaveManager.autosave("ending", true)
 	await UIRoot.fade_out(1.5)
+	while DialogueManager.is_active():
+		await DialogueManager.dialogue_ended
 	UIRoot.show_ending(ending_id)

@@ -15,4 +15,7 @@ stamina_cost = 1.6
 footprint_fade = 5.0
 noise_mask = 0.55
 stress_rate = 0.08
+contamination = 1.6
+filter_drain = 0.85
+whiteout = 0.25
 severe = true

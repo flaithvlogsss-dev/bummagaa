@@ -2,14 +2,17 @@ extends Node
 ## AudioManager — buses, pooled SFX players and looping ambient layers.
 ##
 ## Purpose: every sound goes through here. Categories are audio buses
-##   (Music, Ambient, SFX, Dialogue, Radio) with volumes from Settings.
+##   (Music, Ambient, SFX, Dialogue, Radio, Body) with volumes from Settings. "Body" carries the
+##   player's own breathing and coughing: it follows the SFX volume but is never muffled.
 ##   Sounds are procedural placeholders unless res://assets/audio/<id>.ogg/.wav exists.
 ## Dependencies: Settings, ProceduralAudio.
 ## Public API: play_sfx(id, pos, volume_db, pitch), play_ui(id), set_layer(layer, stream_id,
-##   volume, bus), stop_layer(layer), set_muffled(bool), get_stream(id)
+##   volume, bus), stop_layer(layer), set_muffled(bool), set_visor(bool), get_stream(id)
 ## Signals: none. Save Data: none (volumes live in Settings).
 
-const BUSES: Array[String] = ["Music", "Ambient", "SFX", "Dialogue", "Radio"]
+const BUSES: Array[String] = ["Music", "Ambient", "SFX", "Dialogue", "Radio", "Body"]
+## Buses heard "through the visor" when the gas mask is on.
+const VISOR_BUSES: Array[String] = ["Ambient", "SFX"]
 const SFX_POOL := 10
 const SFX3D_POOL := 8
 const ASSET_DIR := "res://assets/audio"
@@ -22,6 +25,8 @@ var _next_sfx3d: int = 0
 ## layer name -> {"player": AudioStreamPlayer, "target": float, "stream": String}
 var _layers: Dictionary = {}
 var _lowpass_index: int = -1
+## bus name -> effect index of the visor low-pass
+var _visor_fx: Dictionary = {}
 ## Headless runs (tests, CI) have no mixer thread: streams are still synthesised, never played.
 var _silent: bool = false
 
@@ -60,6 +65,14 @@ func _setup_buses() -> void:
 	AudioServer.add_bus_effect(amb, lowpass)
 	_lowpass_index = AudioServer.get_bus_effect_count(amb) - 1
 	AudioServer.set_bus_effect_enabled(amb, _lowpass_index, false)
+	for bus_name in VISOR_BUSES:
+		var idx := AudioServer.get_bus_index(bus_name)
+		var visor := AudioEffectLowPassFilter.new()
+		visor.cutoff_hz = 2300.0
+		visor.resonance = 0.8
+		AudioServer.add_bus_effect(idx, visor)
+		_visor_fx[bus_name] = AudioServer.get_bus_effect_count(idx) - 1
+		AudioServer.set_bus_effect_enabled(idx, _visor_fx[bus_name], false)
 
 
 func _apply_volumes() -> void:
@@ -69,6 +82,11 @@ func _apply_volumes() -> void:
 			var lin: float = Settings.volumes[bus_name]
 			AudioServer.set_bus_volume_db(idx, linear_to_db(maxf(lin, 0.0001)))
 			AudioServer.set_bus_mute(idx, lin <= 0.001)
+	var body := AudioServer.get_bus_index("Body")
+	if body >= 0:
+		var sfx: float = Settings.volumes.get("SFX", 0.8)
+		AudioServer.set_bus_volume_db(body, linear_to_db(maxf(sfx, 0.0001)))
+		AudioServer.set_bus_mute(body, sfx <= 0.001)
 
 
 ## Indoors the wind is heard through walls.
@@ -76,6 +94,14 @@ func set_muffled(value: bool) -> void:
 	var amb := AudioServer.get_bus_index("Ambient")
 	if amb >= 0 and _lowpass_index >= 0:
 		AudioServer.set_bus_effect_enabled(amb, _lowpass_index, value)
+
+
+## Through a gas mask the world sounds dull and far away.
+func set_visor(value: bool) -> void:
+	for bus_name in _visor_fx.keys():
+		var idx := AudioServer.get_bus_index(bus_name)
+		if idx >= 0:
+			AudioServer.set_bus_effect_enabled(idx, _visor_fx[bus_name], value)
 
 
 func is_silent() -> bool:

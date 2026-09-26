@@ -1,7 +1,8 @@
 extends Node
 ## WeatherManager — current weather, transitions and derived modifiers.
 ##
-## Purpose: owns weather state (LIGHT / HEAVY / BLIZZARD), blends every parameter smoothly,
+## Purpose: owns weather state (CLEAR / LIGHT / HEAVY / BLIZZARD / WHITEOUT), blends every
+##   parameter smoothly,
 ##   follows the per-day schedule in data/world/days.json and supports forced weather from
 ##   events (the first squall). Visuals (particles, fog, audio) only *read* from here;
 ##   no weather logic lives in the player.
@@ -14,8 +15,8 @@ extends Node
 signal weather_changed(state: String)
 signal weather_updated
 
-const STATES: Array[String] = ["LIGHT", "HEAVY", "BLIZZARD"]
-const FIELDS: Array[String] = ["intensity", "wind", "visibility", "temperature", "cold_rate", "stamina_cost", "footprint_fade", "noise_mask", "stress_rate"]
+const STATES: Array[String] = ["CLEAR", "LIGHT", "HEAVY", "BLIZZARD", "WHITEOUT"]
+const FIELDS: Array[String] = ["intensity", "wind", "visibility", "temperature", "cold_rate", "stamina_cost", "footprint_fade", "noise_mask", "stress_rate", "contamination", "filter_drain", "whiteout"]
 
 var state: String = "LIGHT"
 var intensity: float = 0.2
@@ -27,6 +28,12 @@ var stamina_cost: float = 1.0
 var footprint_fade: float = 1.0
 var noise_mask: float = 0.0
 var stress_rate: float = 0.0
+## Air contamination multiplier (ExposureSystem).
+var contamination: float = 1.0
+## Filter minutes used per game minute outdoors.
+var filter_drain: float = 0.4
+## 0..1 white-out (blinding snow, WHITEOUT state).
+var whiteout: float = 0.0
 ## Direction the wind blows towards (XZ).
 var wind_direction: Vector2 = Vector2(0.8, 0.35).normalized()
 
@@ -91,13 +98,14 @@ func is_severe() -> bool:
 	return p != null and p.severe
 
 
+## Blizzard or worse.
 func is_blizzard() -> bool:
-	return state == "BLIZZARD"
+	return state in ["BLIZZARD", "WHITEOUT"]
 
 
 ## 0..1: how much the storm hides things (used by fog, stealth and visuals).
 func get_whiteout() -> float:
-	return clampf(1.0 - (visibility - 12.0) / 60.0, 0.0, 1.0)
+	return clampf(maxf(1.0 - (visibility - 12.0) / 60.0, whiteout), 0.0, 1.0)
 
 
 # --- Control --------------------------------------------------------------------------------

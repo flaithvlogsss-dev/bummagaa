@@ -307,6 +307,20 @@ kind = "door_frame"
 color = Color(0.28, 0.22, 0.16, 1)
 has_collision = false
 
+[node name="Wardrobe" type="StaticBody3D" parent="Props"]
+script = ExtResource("5_scrip")
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 2.3, 0, 5.45)
+kind = "wardrobe"
+color = Color(0.36, 0.42, 0.36, 1)
+
+[node name="CDSign" type="StaticBody3D" parent="Props"]
+script = ExtResource("4_scrip")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 1.55, 5.14)
+size = Vector3(0.3, 0.3, 0.04)
+color = Color(0.85, 0.72, 0.2, 1)
+snow_mask = 0
+has_collision = false
+
 [node name="Shelf" type="StaticBody3D" parent="Props"]
 script = ExtResource("5_scrip")
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 8.4, 0, -3.2)
@@ -501,6 +515,19 @@ count = 1
 [node name="Shape" type="CollisionShape3D" parent="Interactables/Flashlight"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("SphereShape3D_8")
+
+[node name="CDLocker" type="Area3D" parent="Interactables"]
+script = ExtResource("10_scrip")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 0, 4.7)
+display_name = "Шкафчик ГО"
+interaction_text = "Открыть"
+items = {"filter_standard": 1, "filter_old": 1, "iodine_pills": 1}
+found_text = "Жёлтая наклейка «Средства защиты». Внутри — то, что раздавали в первую неделю."
+container_hint = "Фильтры вставляются в маску из рюкзака: [I] → «Вставить в маску»."
+
+[node name="Shape" type="CollisionShape3D" parent="Interactables/CDLocker"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_7")
 
 [node name="StorageShelf" type="Area3D" parent="Interactables"]
 script = ExtResource("10_scrip")

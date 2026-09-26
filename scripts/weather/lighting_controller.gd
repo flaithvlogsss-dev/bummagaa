@@ -70,5 +70,16 @@ func _apply() -> void:
 	_env.ambient_light_color = amb
 	_env.ambient_light_energy = 1.0
 	_env.fog_light_color = fog_col
-	_env.fog_density = clampf(1.25 / maxf(WeatherManager.visibility, 5.0), 0.004, 0.2)
-	_env.volumetric_fog_density = 0.004 + white * 0.03
+	# Depth fog measured from the player's distance to the camera, so the player and the
+	# few metres around stay readable even in a white-out while the distance vanishes.
+	var cam := get_viewport().get_camera_3d()
+	var player := Main.get_player() if Main.instance else null
+	var cam_dist := 18.0
+	if cam and player:
+		cam_dist = cam.global_position.distance_to(player.global_position)
+	_env.fog_mode = Environment.FOG_MODE_DEPTH
+	_env.fog_depth_begin = maxf(cam_dist - 6.0 - WeatherManager.visibility * 0.1, 1.0)
+	_env.fog_depth_end = cam_dist + maxf(WeatherManager.visibility, 4.0) * 1.1
+	_env.fog_depth_curve = 1.4
+	_env.fog_density = clampf(0.45 + white * 0.5, 0.0, 0.95)
+	_env.volumetric_fog_density = 0.004 + white * 0.02

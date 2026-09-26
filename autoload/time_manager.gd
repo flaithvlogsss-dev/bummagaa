@@ -29,8 +29,9 @@ var current_day: int = START_DAY
 var minute_of_day: int = START_MINUTE
 ## Monotonic minutes since the start of the game (used for scheduling).
 var total_minutes: int = 0
-## Game minutes per real second.
-var time_speed: float = 1.0
+## Game minutes per real second (0.25: an hour takes four real minutes).
+const DEFAULT_SPEED := 0.25
+var time_speed: float = DEFAULT_SPEED
 var running: bool = false
 var is_skipping: bool = false
 
@@ -74,7 +75,7 @@ func reset() -> void:
 	current_day = START_DAY
 	minute_of_day = START_MINUTE
 	total_minutes = 0
-	time_speed = 1.0
+	time_speed = DEFAULT_SPEED
 	running = false
 	_accum = 0.0
 	time_set.emit()
@@ -186,6 +187,6 @@ func deserialize(d: Dictionary) -> void:
 	current_day = maxi(1, int(d.get("day", START_DAY)))
 	minute_of_day = clampi(int(d.get("minute", START_MINUTE)), 0, MINUTES_PER_DAY - 1)
 	total_minutes = maxi(0, int(d.get("total", 0)))
-	time_speed = float(d.get("speed", 1.0))
+	time_speed = float(d.get("speed", DEFAULT_SPEED))
 	_accum = 0.0
 	time_set.emit()

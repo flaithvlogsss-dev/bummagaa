@@ -46,6 +46,14 @@ func _wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds, true, false, true).timeout
 
 
+## Waits until `cond` returns true or `timeout` seconds pass.
+func _wait_until(cond: Callable, timeout: float) -> void:
+	var t := 0.0
+	while t < timeout and not cond.call():
+		await _wait(0.1)
+		t += 0.1
+
+
 func _node(path: String) -> Node:
 	return main.current_level.get_node_or_null(path) if main.current_level else null
 
@@ -261,6 +269,8 @@ func _run() -> void:
 	# 24. Sleep → new day.
 	TimeManager.set_time(TimeManager.current_day, 23, 0)
 	await _use("Interactables/Bed")
+	check(DialogueManager.is_active(), "the bed asks how long to rest")
+	await _finish_dialogue(["Спать до утра"])
 	await _wait(3.0)
 	for i in 3:
 		if DialogueManager.is_active():
@@ -272,11 +282,13 @@ func _run() -> void:
 	# 25. Reach an ending on the morning of day 4.
 	TimeManager.set_time(3, 23, 30)
 	await _use("Interactables/Bed")
+	check(DialogueManager.is_active(), "the bed asks how long to rest")
+	await _finish_dialogue(["Спать до утра"])
 	await _wait(3.0)
 	for i in 3:
 		if DialogueManager.is_active():
 			await _finish_dialogue()
-	await _wait(2.5)
+	await _wait_until(func(): return UIRoot.instance.current is EndingScreen, 8.0)
 	check(main.mode == Main.Mode.ENDING, "prototype ending reached (%s)" % GameState.ending_id)
 	check(UIRoot.instance.current is EndingScreen, "ending screen shown")
 	# Death → THE NIGHT CONTINUES → load last save.
