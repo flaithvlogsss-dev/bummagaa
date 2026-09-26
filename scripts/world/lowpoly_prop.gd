@@ -123,7 +123,7 @@ func _c(default: Color) -> Color:
 func _part(mesh: PrimitiveMesh, pos: Vector3, col: Color, rot_deg: Vector3 = Vector3.ZERO, snow: float = 1.0, emission: float = 0.0, scale_v: Vector3 = Vector3.ONE) -> void:
 	if _mb == null:
 		return
-	var basis := Basis.from_euler(rot_deg * (PI / 180.0)).scaled_local(scale_v)
+	var basis := Basis.from_euler(rot_deg * (PI / 180.0)) * Basis.from_scale(scale_v)
 	_mb.add(mesh, Transform3D(basis, pos), col, snow, emission)
 
 

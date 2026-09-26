@@ -54,7 +54,19 @@ func _ready() -> void:
 			await get_tree().process_frame
 	var panel := _env("SHOT_PANEL", "")
 	if not panel.is_empty():
-		UIRoot.open_panel(panel, {"station": _env("SHOT_STATION", "radio_point")})
+		while DialogueManager.is_active():
+			DialogueManager._end()
+		await get_tree().process_frame
+		if panel == "journal" or panel == "map":
+			for id in ["note_evac", "radio_evac", "voicemail_elias"]:
+				GameState.add_information(id)
+			for id in ["square", "radio_point", "narrow_street", "shelter_street", "alley", "pharmacy", "house", "shop", "main_street", "car"]:
+				GameState.discover_location(id)
+			GameState.npcs.set_value("mara", "met", true)
+			GameState.npcs.set_value("vera", "met", true)
+			GameState.add_marker("danger", Vector2(-38, 30), "")
+			GameState.add_marker("resource", Vector2(-10, 2), "")
+		UIRoot.open_panel(panel, {"station": _env("SHOT_STATION", "radio_point"), "ending": "home"})
 		for i in 20:
 			await get_tree().process_frame
 		if panel == "radio":

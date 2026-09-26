@@ -51,5 +51,6 @@ func assert_lt(a: float, b: float, msg: String = "") -> void:
 
 ## Resets every global system to a fresh new game.
 func fresh_game() -> void:
+	DialogueManager.reset()
 	GameState.new_game()
 	TimeManager.reset()

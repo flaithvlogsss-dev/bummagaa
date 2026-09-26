@@ -22,10 +22,13 @@ var _next_sfx3d: int = 0
 ## layer name -> {"player": AudioStreamPlayer, "target": float, "stream": String}
 var _layers: Dictionary = {}
 var _lowpass_index: int = -1
+## Headless runs (tests, CI) have no mixer thread: streams are still synthesised, never played.
+var _silent: bool = false
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_silent = DisplayServer.get_name() == "headless"
 	_setup_buses()
 	for i in SFX_POOL:
 		var p := AudioStreamPlayer.new()
@@ -97,7 +100,7 @@ func get_stream(id: String) -> AudioStream:
 ## position = null plays a 2D sound, a Vector3 plays positionally.
 func play_sfx(id: String, position: Variant = null, volume_db: float = 0.0, pitch: float = 1.0, bus: String = "SFX") -> void:
 	var stream := get_stream(id)
-	if stream == null:
+	if stream == null or _silent:
 		return
 	if position is Vector3:
 		var p3 := _sfx3d[_next_sfx3d]
@@ -133,6 +136,10 @@ func set_layer(layer: String, stream_id: String, volume: float, bus: String = "A
 		entry = {"player": p, "target": 0.0, "stream": ""}
 		_layers[layer] = entry
 	var player: AudioStreamPlayer = entry.player
+	if _silent:
+		get_stream(stream_id)
+		entry.target = clampf(volume, 0.0, 1.5)
+		return
 	if entry.stream != stream_id:
 		entry.stream = stream_id
 		player.stream = get_stream(stream_id)

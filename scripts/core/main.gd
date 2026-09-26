@@ -108,6 +108,7 @@ static func get_mouse_world_point(height: float = 0.0) -> Variant:
 # --- Game flow ---------------------------------------------------------------------------------
 
 func _reset_systems() -> void:
+	DialogueManager.reset()
 	GameState.new_game()
 	TimeManager.reset()
 	WeatherManager.reset()

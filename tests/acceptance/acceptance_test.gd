@@ -24,8 +24,7 @@ func _ready() -> void:
 	for f in failures:
 		print("  FAIL ", f)
 	AudioManager.shutdown()
-	for i in 3:
-		await get_tree().process_frame
+	await get_tree().create_timer(0.2, true, false, true).timeout
 	get_tree().quit(failures.size())
 
 

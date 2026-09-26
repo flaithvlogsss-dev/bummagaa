@@ -38,6 +38,17 @@ func _ready() -> void:
 	Conditions.register("dialogue_seen", func(v, _c): return GameState.has_flag("seen:" + str(v)))
 
 
+## Drops the current dialogue and the queue without emitting signals (tests, new game).
+func reset() -> void:
+	active = false
+	current_id = ""
+	_dialogue = {}
+	_ctx = {}
+	_node = {}
+	_choices.clear()
+	_queue.clear()
+
+
 func is_active() -> bool:
 	return active
 

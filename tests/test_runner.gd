@@ -37,6 +37,5 @@ func _ready() -> void:
 					failed.append(msg)
 	print("\n==== TESTS: %d run, %d failed ====" % [total, failed.size()])
 	AudioManager.shutdown()
-	for i in 3:
-		await get_tree().process_frame
+	await get_tree().create_timer(0.2, true, false, true).timeout
 	get_tree().quit(failed.size())
