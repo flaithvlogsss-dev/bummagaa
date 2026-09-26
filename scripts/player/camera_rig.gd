@@ -120,7 +120,11 @@ func _update_occlusion() -> void:
 	var from := camera.global_position
 	var hit_now := {}
 	var right := camera.global_basis.x
-	for offset in [Vector3(0, 0.4, 0), Vector3(0, 1.5, 0), right * 1.2 + Vector3(0, 1.0, 0), -right * 1.2 + Vector3(0, 1.0, 0)]:
+	# Centre rays fade anything in the way; the side rays only catch big structures (walls,
+	# buildings) — a car or a wardrobe right beside the player should stay visible.
+	for k in 4:
+		var offset: Vector3 = [Vector3(0, 0.4, 0), Vector3(0, 1.5, 0), right * 1.2 + Vector3(0, 1.0, 0), -right * 1.2 + Vector3(0, 1.0, 0)][k]
+		var side := k >= 2
 		var to: Vector3 = target.global_position + offset
 		var exclude: Array[RID] = []
 		if target is CollisionObject3D:
@@ -132,7 +136,7 @@ func _update_occlusion() -> void:
 			if hit.is_empty():
 				break
 			var col: Object = hit.collider
-			if col and col.has_method("set_occluding"):
+			if col and col.has_method("set_occluding") and not (side and col is LowPolyProp):
 				var group: String = str(col.get("fade_group"))
 				if group.is_empty():
 					hit_now[col] = true

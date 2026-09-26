@@ -44,6 +44,13 @@ func _process(delta: float) -> void:
 		_icon.position.y = 0.5 + sin(_t * 2.2) * 0.06
 
 
+## Pickups on a cut-away roof (group "cutaway:<building>") hide while the player is inside.
+func set_cutaway(value: bool) -> void:
+	for c in get_children():
+		if c is Sprite3D or c is OmniLight3D:
+			c.visible = not value
+
+
 func remaining() -> int:
 	return int(get_state("left", count))
 

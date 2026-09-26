@@ -12,14 +12,26 @@ const KINDS := [
 	"pallet", "barricade", "bus", "tracks", "device", "symbol", "kiosk", "notice_board", "hydrant",
 	"window", "bed", "shelf", "table", "stove", "generator", "workbench", "radio_set", "phone",
 	"counter", "wardrobe", "chair", "transmitter", "board", "candle", "ceiling_lamp", "rubble",
-	"door_frame", "body_bag",
+	"door_frame", "body_bag", "sedan", "police_car", "van", "ambulance", "truck", "power_pole", "wires", "street_sign", "traffic_light",
+	"billboard", "bus_stop", "phone_booth", "ac_unit", "vent", "drainpipe", "pipe", "bike", "trash_bags",
+	"cart", "cone", "snowman", "tent", "sled", "swing", "slide", "fountain", "planter", "loudspeaker",
+	"kennel", "laundry_line", "garage_door", "tires", "barrel", "boxes", "suitcase", "corpse",
+	"window_boarded", "balcony", "canopy", "fire_escape", "radio_tower", "stairs", "fridge", "sofa", "tv",
+	"bookshelf", "rack", "tape_recorder", "desk", "lockers", "radiator", "mailboxes", "bunk_bed", "heater",
+	"string_lights", "plant", "tool_wall", "manhole", "stain", "crosswalk", "road_line", "paper",
 ]
 
 @export_enum("car", "lamp", "barrel_fire", "bench", "pine", "drift", "bin", "antenna", "fence", "crate",
 	"pallet", "barricade", "bus", "tracks", "device", "symbol", "kiosk", "notice_board", "hydrant",
 	"window", "bed", "shelf", "table", "stove", "generator", "workbench", "radio_set", "phone",
 	"counter", "wardrobe", "chair", "transmitter", "board", "candle", "ceiling_lamp", "rubble",
-	"door_frame", "body_bag") var kind: String = "crate":
+	"door_frame", "body_bag", "sedan", "police_car", "van", "ambulance", "truck", "power_pole", "wires", "street_sign", "traffic_light",
+	"billboard", "bus_stop", "phone_booth", "ac_unit", "vent", "drainpipe", "pipe", "bike", "trash_bags",
+	"cart", "cone", "snowman", "tent", "sled", "swing", "slide", "fountain", "planter", "loudspeaker",
+	"kennel", "laundry_line", "garage_door", "tires", "barrel", "boxes", "suitcase", "corpse",
+	"window_boarded", "balcony", "canopy", "fire_escape", "radio_tower", "stairs", "fridge", "sofa", "tv",
+	"bookshelf", "rack", "tape_recorder", "desk", "lockers", "radiator", "mailboxes", "bunk_bed", "heater",
+	"string_lights", "plant", "tool_wall", "manhole", "stain", "crosswalk", "road_line", "paper") var kind: String = "crate":
 	set(v):
 		kind = v
 		_rebuild()
@@ -46,6 +58,11 @@ const KINDS := [
 	set(v):
 		has_collision = v
 		_rebuild()
+## Multiplies the snow on every part (0 for furniture indoors).
+@export_range(0.0, 1.0) var snow_scale: float = 1.0:
+	set(v):
+		snow_scale = v
+		_rebuild()
 @export var fadeable: bool = true
 ## Blocks/props sharing a fade group (e.g. body, roof and windows of one building) fade together.
 @export var fade_group: String = ""
@@ -55,6 +72,8 @@ var _parts: Array[MeshInstance3D] = []
 var _mb: MeshBuilder
 ## Material id used by the next parts (see _use()).
 var _mat: int = 0
+var _kit: PropBuilders
+const NO_SHADOW := ["tracks", "symbol", "window", "door_frame", "manhole", "stain", "crosswalk", "road_line", "paper", "wires", "string_lights", "window_boarded"]
 var _casts_shadow: bool = true
 var _light: OmniLight3D
 var _flicker_t: float = 0.0
@@ -93,9 +112,9 @@ func _rebuild() -> void:
 			remove_child(c)
 	_parts.clear()
 	_light = null
-	_casts_shadow = kind not in ["tracks", "symbol", "window", "door_frame"]
+	_casts_shadow = kind not in NO_SHADOW
 	set_process(flicker and not Engine.is_editor_hint())
-	var key := "prop:%s:%s:%s:%s:%s" % [kind, color.to_html(), size, lit, light_color.to_html()]
+	var key := "prop:%s:%s:%s:%s:%s:%.2f" % [kind, color.to_html(), size, lit, light_color.to_html(), snow_scale]
 	var mesh := MeshBuilder.cached(key)
 	_mb = null if mesh else MeshBuilder.new()
 	_mat = 0
@@ -103,7 +122,12 @@ func _rebuild() -> void:
 	if builder.is_valid():
 		builder.call()
 	else:
-		_build_crate()
+		if _kit == null:
+			_kit = PropBuilders.new(self)
+		if _kit.has_method("build_" + kind):
+			_kit.call("build_" + kind)
+		else:
+			_build_crate()
 	if mesh == null:
 		mesh = _mb.commit()
 		MeshBuilder.store(key, mesh)
@@ -127,7 +151,7 @@ func _part(mesh: PrimitiveMesh, pos: Vector3, col: Color, rot_deg: Vector3 = Vec
 	if _mb == null:
 		return
 	var basis := Basis.from_euler(rot_deg * (PI / 180.0)) * Basis.from_scale(scale_v)
-	_mb.add(mesh, Transform3D(basis, pos), col, snow, emission, _mat)
+	_mb.add(mesh, Transform3D(basis, pos), col, snow * snow_scale, emission, _mat)
 
 
 ## Sets the surface material (WorldTextures name) for the following parts.
@@ -188,29 +212,8 @@ func _omni(pos: Vector3, col: Color, energy: float, light_range_m: float, shadow
 
 # --- Street props ------------------------------------------------------------------------
 
-func _build_car() -> void:
-	_use("paint")
-	var body := _c(Color(0.42, 0.18, 0.16))
-	_box(Vector3(4.2, 0.75, 1.9), Vector3(0, 0.62, 0), body)
-	_box(Vector3(2.3, 0.7, 1.75), Vector3(-0.25, 1.33, 0), body.darkened(0.15))
-	_use("glass")
-	_box(Vector3(2.35, 0.45, 1.8), Vector3(-0.25, 1.35, 0), Color(0.1, 0.12, 0.16), Vector3.ZERO, 0.0)
-	_use("plastic")
-	for x in [-1.35, 1.35]:
-		for z in [-0.9, 0.9]:
-			_cyl(0.36, 0.28, Vector3(x, 0.36, z), Color(0.08, 0.08, 0.09), Vector3(90, 0, 0))
-	_box(Vector3(0.1, 0.18, 0.4), Vector3(2.1, 0.75, 0.6), Color(0.9, 0.85, 0.6), Vector3.ZERO, 0.0, 0.0)
-	_col(Vector3(4.2, 1.7, 1.9), Vector3(0, 0.85, 0))
 
 
-func _build_bus() -> void:
-	_use("paint")
-	var c := _c(Color(0.62, 0.52, 0.22))
-	_box(Vector3(10.0, 2.6, 2.6), Vector3(0, 1.3, 0), c)
-	_use("glass")
-	for i in 5:
-		_box(Vector3(1.4, 0.8, 0.05), Vector3(-3.6 + i * 1.8, 1.8, 1.31), Color(0.1, 0.12, 0.15), Vector3.ZERO, 0.0)
-	_col(Vector3(10.0, 2.6, 2.6), Vector3(0, 1.3, 0))
 
 
 func _build_lamp() -> void:

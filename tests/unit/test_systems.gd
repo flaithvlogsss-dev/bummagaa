@@ -586,3 +586,66 @@ func test_load_tolerates_old_and_broken_saves() -> void:
 	assert_eq(GameState.get_flag("unknown_old_flag"), 1)
 	assert_false(GameState.npcs.has_npc("ghost_npc"))
 	assert_eq(QuestManager.get_active_quests().size(), 0)
+
+
+# --- Doors -----------------------------------------------------------------------------------------
+
+func _make_door(id: String) -> Door:
+	var d := Door.new()
+	d.persistent_id = id
+	var body := StaticBody3D.new()
+	body.name = "Blocker"
+	var cs := CollisionShape3D.new()
+	cs.name = "Shape"
+	cs.shape = BoxShape3D.new()
+	body.add_child(cs)
+	d.add_child(body)
+	var vis := Node3D.new()
+	vis.name = "Visual"
+	d.add_child(vis)
+	return d
+
+
+func test_door_key_and_saved_state() -> void:
+	GameState.new_game()
+	var d := _make_door("test:door_key")
+	d.locked = true
+	d.key_item = "garage_key"
+	d.allow_crowbar = false
+	d.allow_lockpick = false
+	tree.root.add_child(d)
+	assert_false(d._on_interact(null), "a locked door without the key stays shut")
+	assert_false(d.is_open())
+	assert_eq(d.get_interaction_text(), "Заперто")
+	GameState.inventory.add("garage_key", 1, true)
+	assert_eq(d.get_interaction_text(), "Открыть ключом")
+	assert_true(d._on_interact(null), "the key opens it")
+	assert_true(d.is_open() and not d.is_available(), "an open door is saved and no longer interactable")
+	d.free()
+	var again := _make_door("test:door_key")
+	again.locked = true
+	tree.root.add_child(again)
+	assert_true(again.is_open(), "the open state is restored for the same id")
+	again.free()
+
+
+func test_door_crowbar_and_story_flag() -> void:
+	GameState.new_game()
+	var d := _make_door("test:door_crowbar")
+	d.locked = true
+	d.allow_lockpick = false
+	tree.root.add_child(d)
+	GameState.inventory.add("crowbar", 1, true)
+	assert_eq(d.get_interaction_text(), "Выломать монтировкой")
+	assert_true(d._on_interact(null), "a crowbar forces the door")
+	d.free()
+	var f := _make_door("test:door_flag")
+	f.locked = true
+	f.open_flag = "radio_station_open"
+	f.allow_crowbar = false
+	f.allow_lockpick = false
+	tree.root.add_child(f)
+	assert_false(f.is_open())
+	GameState.set_flag("radio_station_open", true)
+	assert_true(f.is_open(), "the story flag opens the door")
+	f.free()

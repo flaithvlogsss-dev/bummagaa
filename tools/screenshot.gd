@@ -1,6 +1,6 @@
 extends Node
 ## Developer tool: boots Main, jumps to a location / time / weather and saves a PNG.
-## Env: SHOT_OUT, SHOT_LEVEL, SHOT_SPAWN, SHOT_POS ("x,z"), SHOT_HOUR, SHOT_DAY, SHOT_WEATHER,
+## Env: SHOT_OUT, SHOT_LEVEL, SHOT_SPAWN, SHOT_POS ("x,z" or "x,y,z"), SHOT_OPEN (door paths), SHOT_HOUR, SHOT_DAY, SHOT_WEATHER,
 ##      SHOT_FLASH (1 = flashlight on), SHOT_PANEL (ui panel), SHOT_DIALOGUE ("id" or "id:npc"),
 ##      SHOT_ENEMY (1 = spawn a Snow Stalker nearby), SHOT_TITLE (1 = title screen only),
 ##      SHOT_FRAMES, SHOT_ITEMS (1 = give sample items), SHOT_LEVELUP (shelter level),
@@ -42,8 +42,15 @@ func _ready() -> void:
 	var pl := Main.get_player()
 	if not pos.is_empty():
 		var p := pos.split(",")
-		pl.global_position = Vector3(float(p[0]), 0.1, float(p[1]))
+		if p.size() >= 3:
+			pl.global_position = Vector3(float(p[0]), float(p[1]) + 0.1, float(p[2]))
+		else:
+			pl.global_position = Vector3(float(p[0]), 0.1, float(p[1]))
 		Main.instance.camera_rig.snap()
+	for path in _env("SHOT_OPEN", "").split(",", false):
+		var door := Main.instance.current_level.get_node_or_null(path)
+		if door and door.has_method("_open"):
+			door._open()
 	GameState.stats.flashlight_on = _env("SHOT_FLASH", "0") == "1"
 	GameState.stats.mask_on = _env("SHOT_MASK", "1") == "1"
 	GameState.stats.set_value("exposure", float(_env("SHOT_EXPOSURE", "0")))

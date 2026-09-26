@@ -172,6 +172,45 @@ func test_level_interactables_reference_valid_data() -> void:
 		root.free()
 
 
+## The world is dense enough: interactables, stories, interiors, secrets, every unique item placed.
+func test_world_content() -> void:
+	var total := 0
+	var stories := 0
+	var interiors := 0
+	var placed := {}
+	for path in ["res://scenes/world/District.tscn", "res://scenes/shelter/Shelter.tscn"]:
+		var root: Node = load(path).instantiate()
+		var stack: Array = [root]
+		while not stack.is_empty():
+			var n: Node = stack.pop_back()
+			stack.append_array(n.get_children())
+			if n is Interactable:
+				total += 1
+			if n is Examine and not n.text.is_empty():
+				stories += 1
+			if n is IndoorZone:
+				interiors += 1
+			if n is LootContainer:
+				for id in n.items.keys():
+					placed[str(id)] = true
+			if n is ItemPickup:
+				placed[n.item_id] = true
+			if n is Door:
+				assert_true(n.has_node("Blocker") and n.has_node("Visual"), "%s: door has Blocker and Visual" % n.name)
+				if not n.key_item.is_empty():
+					assert_true(Data.has_item(n.key_item), "%s: key item %s" % [n.name, n.key_item])
+		if path.contains("District"):
+			for secret in ["Interactables/SecretWardrobe", "Interactables/GaragePit", "Interactables/CellarDrift", "Interactables/AntennaModule"]:
+				assert_true(root.has_node(secret), "secret %s exists" % secret)
+		root.free()
+	assert_true(total >= 100, "at least 100 interactables (%d)" % total)
+	assert_true(stories >= 20, "at least 20 environmental stories (%d)" % stories)
+	assert_true(interiors >= 5, "at least 5 enterable district interiors besides the shelter (%d)" % interiors)
+	for it in Data.items.values():
+		if it.rarity == "unique":
+			assert_true(placed.has(it.id), "unique item %s is placed in the world" % it.id)
+
+
 func test_validator_detects_errors() -> void:
 	var before := failures.size()
 	_check_lists({"conditions": [{"bogus_key": 1}], "consequences": [{"give_item": ["no_such_item", 1]}]}, "selftest")

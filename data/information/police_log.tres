@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="InformationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/information_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "police_log"
+title = "Журнал патрульной машины"
+info_type = "document"
+content = "«03.11, 06:40 — приказ: КПП не открывать, граждан с детьми направлять в пункт обогрева.\n03.11, 09:15 — пункт обогрева не отвечает.\n03.11, 11:02 — у подстанции люди в сером. Запросили инструкции. Ответ: «не вмешиваться».\n03.11, 11:40 — …» Дальше страница пустая."
+tags = PackedStringArray("meridian", "route")
+sets_flags = PackedStringArray()

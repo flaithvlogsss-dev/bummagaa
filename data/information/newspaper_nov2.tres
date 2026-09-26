@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="InformationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/information_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "newspaper_nov2"
+title = "«Северный вестник», 2 ноября"
+info_type = "document"
+content = "Передовица: «Аномальные холода — явление временное», — заверил представитель проекта «Меридиан». На последней полосе — мелкое объявление: «Требуются добровольцы для полевых испытаний. Оплата сразу. Обращаться: метеостанция, лаборатория 4»."
+tags = PackedStringArray("meridian")
+sets_flags = PackedStringArray()

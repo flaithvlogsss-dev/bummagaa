@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="InformationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/information_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "note_courier"
+title = "Записка в погребе"
+info_type = "note"
+content = "«Посылки, которые я не успел отдать. Когда всё кончится — отдам каждому лично. Не трогать. Т.» Ниже приписано другим карандашом: «Кроме еды. Еду — можно. Простите»."
+tags = PackedStringArray("tomas")
+sets_flags = PackedStringArray()

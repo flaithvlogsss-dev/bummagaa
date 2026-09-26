@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="InformationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/information_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "note_garage"
+title = "Записка на лобовом стекле"
+info_type = "note"
+content = "«Лида. Если вернёшься раньше меня — бензин в канистре, аккумулятор унёс домой. Одна не уезжай. Жду до четверга, потом иду искать сам. А.» Бумага пожелтела от мороза. Четверг был давно."
+tags = PackedStringArray("anton")
+sets_flags = PackedStringArray()
