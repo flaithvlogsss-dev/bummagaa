@@ -126,7 +126,7 @@ static func panel(min_size: Vector2 = Vector2.ZERO) -> PanelContainer:
 ## Centred panel filling a full-screen parent.
 static func centered(parent: Control, min_size: Vector2) -> PanelContainer:
 	var c := CenterContainer.new()
-	c.set_anchors_preset(Control.PRESET_FULL_RECT)
+	c.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	c.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	parent.add_child(c)
 	var p := panel(min_size)

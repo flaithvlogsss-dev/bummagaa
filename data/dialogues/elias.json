@@ -1,0 +1,87 @@
+{
+	"id": "elias",
+	"start": "route",
+	"nodes": {
+		"route": {"branch": [
+			{"if": {"npc_at": ["self", "shelter"]}, "next": "shelter"},
+			{"if": {"flag": "elias_got_medicine"}, "next": "after"},
+			{"if": {"npc_met": "self"}, "next": "waiting"},
+			{"next": "first"}
+		]},
+		"first": {
+			"speaker": "self",
+			"text": "А, сосед из двенадцатого! Проходи, только дверь прикрой — тепло уходит. Слышал моё сообщение? Сердце. Таблетки кончились вчера.",
+			"next": "menu"
+		},
+		"waiting": {"speaker": "self", "text": "Ну как, {player}? Нашлось что-нибудь в аптеке?", "next": "menu"},
+		"menu": {
+			"speaker": "self",
+			"text": "Я никуда не денусь. Разве что к праотцам.",
+			"choices": [
+				{"text": "Держите — лекарство.", "requires": {"item": "medicine"}, "requires_text": "нет лекарства", "next": "grateful"},
+				{"text": "Я поищу в аптеке.", "if": {"not": {"memory": ["self", "promised_medicine", true]}}, "consequences": [{"memory": ["self", "promised_medicine", true]}, {"relationship": {"npc": "self", "trust": 5}}], "next": "promise"},
+				{"text": "Что вы знаете о снеге?", "once": true, "next": "science"},
+				{"text": "Что за детали у вас на столе?", "once": true, "next": "schematic_hint"},
+				{"text": "Мне пора.", "next": "end"}
+			]
+		},
+		"promise": {"speaker": "self", "text": "Аптека на площади, за узкой улицей. В подсобке должны быть запасы — дверь там вечно заедала.", "next": "end"},
+		"science": {
+			"speaker": "self",
+			"text": "Тридцать лет чинил ретрансляторы. Ни один циклон не держит ровно минус двадцать семь по всему городу. И гул с холма — слышал? Там метеостанция «Меридиан». Это… рукотворное.",
+			"consequences": [{"memory": ["self", "told_meridian", true]}, {"set_flag": "heard_meridian"}],
+			"next": "menu"
+		},
+		"schematic_hint": {
+			"speaker": "self",
+			"text": "Передатчик. Почти собран. Не хватает питания — нужен генератор — и трёх плат. С ним можно выйти в эфир и позвать на помощь.",
+			"next": "menu"
+		},
+		"grateful": {
+			"speaker": "self",
+			"text": "Ты не представляешь… Вот, возьми мою схему. Если у тебя заработает генератор и найдутся три платы — из обычного приёмника выйдет станция. Мы сможем позвать на помощь.",
+			"consequences": [
+				{"take_item": ["medicine", 1]},
+				{"set_flag": "elias_got_medicine"},
+				{"relationship": {"npc": "self", "trust": 25, "affinity": 10}},
+				{"memory": ["self", "player_brought_medicine", true]},
+				{"add_info": "note_elias"}
+			],
+			"choices": [
+				{"text": "Пойдёмте ко мне в убежище. Вместе теплее.", "next": "joins"},
+				{"text": "Оставайтесь здесь, я загляну.", "next": "end"}
+			]
+		},
+		"after": {
+			"speaker": "self",
+			"text": "Таблетки помогают. Спасибо ещё раз, {player}.",
+			"choices": [
+				{"text": "Пойдёмте ко мне в убежище.", "next": "joins"},
+				{"text": "Держитесь.", "next": "end"}
+			]
+		},
+		"joins": {
+			"speaker": "self",
+			"text": "Возьму паяльник и лупу. Тяжело идти, но я дойду.",
+			"consequences": [{"npc_location": ["self", "shelter", "shelter_elias"]}, {"relationship": {"npc": "self", "trust": 10}}, {"decision": ["elias_joined", true]}]
+		},
+		"shelter": {
+			"speaker": "self",
+			"text": "Хорошее убежище. Сухое.",
+			"choices": [
+				{"text": "Что нужно для радиостанции?", "if": {"not": {"shelter_level_min": 3}}, "next": "station_needs"},
+				{"text": "Станция готова. Как выйти на связь?", "if": {"shelter_level_min": 3}, "next": "station_ready"},
+				{"text": "Как сердце?", "next": "heart"},
+				{"text": "Отдыхайте.", "next": "end"}
+			]
+		},
+		"station_needs": {"speaker": "self", "text": "Запусти генератор — ремкомплект собирается в мастерской из металлолома и электроники. Потом три платы и немного металла на антенну. Схема у тебя.", "next": "shelter"},
+		"station_ready": {
+			"speaker": "self",
+			"text": "Сканируй эфир, записывай всё. Когда найдёшь тех, кто слушает, — я помогу с позывными и протоколом. Главное — знать, кого звать.",
+			"consequences": [{"set_flag": "elias_protocol"}],
+			"next": "shelter"
+		},
+		"heart": {"speaker": "self", "text": "Стучит. Упрямое.", "next": "shelter"}
+	}
+}

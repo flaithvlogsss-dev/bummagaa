@@ -14,7 +14,7 @@ func _ready() -> void:
 	layer = 5
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_rect = ColorRect.new()
-	_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_mat = ShaderMaterial.new()
 	_mat.shader = load("res://shaders/screen_effects.gdshader")

@@ -1,0 +1,19 @@
+{
+	"id": "q05_stranger",
+	"title": "Незнакомец",
+	"category": "side",
+	"description": "В переулке кто-то есть. Выживший — или кто-то другой.",
+	"stages": [
+		{
+			"id": "meet",
+			"description": "Сквозь снег из переулка слышен тихий кашель.",
+			"objectives": [{"id": "meet", "text": "Найти выжившего в переулке", "condition": {"npc_met": "grey"}}]
+		},
+		{
+			"id": "decide",
+			"description": "Он просит тепла. Чем вы готовы поделиться?",
+			"objectives": [{"id": "decide", "text": "Решить, помогать ли незнакомцу", "condition": {"decision": "stranger"}}]
+		}
+	],
+	"completion_flags": ["q05_done"]
+}

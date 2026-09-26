@@ -45,7 +45,7 @@ var _debug_visible: bool = false
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_build()
 	GameState.stats.changed.connect(func(_s, _v): _stats_dirty = true)
@@ -67,16 +67,21 @@ func set_debug_overlay(on: bool) -> void:
 
 # --- Layout ---------------------------------------------------------------------------------
 
-func _corner(preset: int, offset: Vector2, grow_left: bool = false, grow_up: bool = false) -> VBoxContainer:
+## Full-screen margin layer whose single child is aligned by size flags.
+func _layer(h_flag: int, v_flag: int, margins: Array = [16, 14, 16, 14]) -> VBoxContainer:
+	var m := MarginContainer.new()
+	m.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	m.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	m.add_theme_constant_override("margin_left", margins[0])
+	m.add_theme_constant_override("margin_top", margins[1])
+	m.add_theme_constant_override("margin_right", margins[2])
+	m.add_theme_constant_override("margin_bottom", margins[3])
+	add_child(m)
 	var v := UIKit.vbox(4)
-	v.set_anchors_preset(preset)
-	v.position = offset
-	if grow_left:
-		v.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	if grow_up:
-		v.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	v.size_flags_horizontal = h_flag
+	v.size_flags_vertical = v_flag
 	v.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(v)
+	m.add_child(v)
 	return v
 
 
@@ -89,11 +94,7 @@ func _soft_panel() -> PanelContainer:
 
 func _build() -> void:
 	# Top-left: health + statuses + quest tracker
-	var tl := VBoxContainer.new()
-	tl.position = Vector2(16, 14)
-	tl.add_theme_constant_override("separation", 6)
-	tl.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(tl)
+	var tl := _layer(Control.SIZE_SHRINK_BEGIN, Control.SIZE_SHRINK_BEGIN)
 	var hp_panel := _soft_panel()
 	tl.add_child(hp_panel)
 	var hp_box := UIKit.vbox(3)
@@ -123,7 +124,7 @@ func _build() -> void:
 	tl.add_child(_debug)
 
 	# Top-right: day / time / weather / area
-	var tr := _corner(Control.PRESET_TOP_RIGHT, Vector2(-16, 14), true)
+	var tr := _layer(Control.SIZE_SHRINK_END, Control.SIZE_SHRINK_BEGIN)
 	var tr_panel := _soft_panel()
 	tr.add_child(tr_panel)
 	var tr_box := UIKit.vbox(2)
@@ -142,19 +143,14 @@ func _build() -> void:
 	tr_box.add_child(_area)
 	_notify_box = UIKit.vbox(4)
 	_notify_box.alignment = BoxContainer.ALIGNMENT_BEGIN
+	_notify_box.size_flags_horizontal = Control.SIZE_SHRINK_END
 	tr.add_child(_notify_box)
 
 	# Bottom-centre: temperature + needs
-	var bottom := CenterContainer.new()
-	bottom.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	bottom.offset_top = -118
-	bottom.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(bottom)
-	var bc := UIKit.vbox(6)
-	bc.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	bottom.add_child(bc)
+	var bc := _layer(Control.SIZE_SHRINK_CENTER, Control.SIZE_SHRINK_END)
 	_prompt_panel = _soft_panel()
 	_prompt_panel.visible = false
+	_prompt_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	bc.add_child(_prompt_panel)
 	_prompt = UIKit.label("", 15, UIKit.TEXT)
 	_prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -181,7 +177,7 @@ func _build() -> void:
 		_needs[n[0]] = b
 
 	# Bottom-right: weapon + flashlight
-	var br := _corner(Control.PRESET_BOTTOM_RIGHT, Vector2(-16, -16), true, true)
+	var br := _layer(Control.SIZE_SHRINK_END, Control.SIZE_SHRINK_END)
 	var br_panel := _soft_panel()
 	br.add_child(br_panel)
 	var br_box := UIKit.vbox(3)
@@ -198,16 +194,10 @@ func _build() -> void:
 	br.add_child(_autosave)
 
 	# Top-centre: hint
-	var top := CenterContainer.new()
-	top.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	top.offset_top = 70
-	top.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(top)
-	var top_box := UIKit.vbox(10)
-	top_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	top.add_child(top_box)
+	var top_box := _layer(Control.SIZE_SHRINK_CENTER, Control.SIZE_SHRINK_BEGIN, [16, 90, 16, 14])
 	_banner = UIKit.vbox(0)
 	_banner.visible = false
+	_banner.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	top_box.add_child(_banner)
 	_banner_title = UIKit.label("", 13, UIKit.ACCENT)
 	_banner_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -217,6 +207,7 @@ func _build() -> void:
 	_banner.add_child(_banner_text)
 	_hint_panel = _soft_panel()
 	_hint_panel.visible = false
+	_hint_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	top_box.add_child(_hint_panel)
 	_hint_label = UIKit.label("", 14)
 	_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -225,13 +216,11 @@ func _build() -> void:
 	_hint_panel.add_child(_hint_label)
 
 	# Centre: title card
+	var center := _layer(Control.SIZE_SHRINK_CENTER, Control.SIZE_SHRINK_CENTER)
 	_card = UIKit.label("", 34, UIKit.TEXT)
-	_card.set_anchors_preset(Control.PRESET_CENTER)
 	_card.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_card.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	_card.grow_vertical = Control.GROW_DIRECTION_BOTH
 	_card.modulate.a = 0.0
-	add_child(_card)
+	center.add_child(_card)
 
 
 # --- Updates -----------------------------------------------------------------------------------

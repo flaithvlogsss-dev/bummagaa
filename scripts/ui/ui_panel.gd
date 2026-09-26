@@ -16,7 +16,7 @@ var open_data: Dictionary = {}
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
@@ -60,7 +60,7 @@ func _panel_input(_event: InputEvent) -> bool:
 func add_backdrop(alpha: float = 0.55) -> ColorRect:
 	var bg := ColorRect.new()
 	bg.color = Color(0.0, 0.01, 0.02, alpha)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(bg)
 	return bg

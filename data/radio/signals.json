@@ -1,0 +1,64 @@
+[
+	{
+		"id": "rs_warning",
+		"frequency": 94.2,
+		"title": "Предупреждение",
+		"stations": ["shelter_basic", "radio_point", "shelter_station"],
+		"text": "«…если кто-нибудь слышит… не выходите после усиления снега… он забирает тепло прямо из тела… повторяю: не выходите… радиоточка на площади ещё работает…»",
+		"info": "radio_warning",
+		"voice_pitch": 1.0,
+		"consequences": [{"set_flag": "shelter_radio_on"}]
+	},
+	{
+		"id": "rs_evac",
+		"frequency": 102.5,
+		"title": "Служба ЧС",
+		"stations": ["radio_point", "shelter_station"],
+		"text": "«Эвакуационный пункт «Северный» закрыт. Жители квартала 9, оставайтесь в помещениях. Пункты обогрева не работают. Повторяем…»",
+		"info": "radio_evac",
+		"voice_pitch": 0.85,
+		"consequences": [{"if": {"not_flag": "radio_point_signal_found"}, "schedule_event": ["first_squall", 3]}, {"set_flag": "radio_point_signal_found"}]
+	},
+	{
+		"id": "rs_depot",
+		"frequency": 88.9,
+		"title": "Депо «Искра»",
+		"stations": ["radio_point", "shelter_station"],
+		"text": "«Это депо на Трамвайной. У нас есть тепло и двадцать человек. Если у вас есть передатчик — выходите на восемь-восемь-девять, мы слушаем каждый вечер. Позывной — «Искра»».",
+		"info": "radio_depot",
+		"voice_pitch": 1.15,
+		"consequences": [{"if": {"not_flag": "radio_point_signal_found"}, "schedule_event": ["first_squall", 3]}, {"set_flag": "radio_point_signal_found"}]
+	},
+	{
+		"id": "rs_numbers",
+		"frequency": 91.7,
+		"title": "Числа",
+		"stations": ["radio_point", "shelter_station"],
+		"conditions": [{"is_dark": true}],
+		"text": "Ровный голос: «…четыре. девять. девять. четыре…» Пауза. «Кольцо смыкается. Держите фонари зажжёнными». Снова числа.",
+		"info": "radio_numbers",
+		"voice_pitch": 0.7,
+		"consequences": [{"if": {"not_flag": "radio_point_signal_found"}, "schedule_event": ["first_squall", 3]}, {"set_flag": "radio_point_signal_found"}, {"faction": {"unknown": 5}}]
+	},
+	{
+		"id": "rs_meridian",
+		"frequency": 106.1,
+		"title": "Телеметрия «Меридиана»",
+		"stations": ["shelter_station"],
+		"text": "Писк, затем синтезированный голос: «Массив засева 4 — выход в норме. Отклонение локализации: критическое. Автоматическое отключение: отклонено».",
+		"info": "radio_meridian",
+		"voice_pitch": 1.4,
+		"consequences": [{"set_flag": "knows_meridian"}]
+	},
+	{
+		"id": "rs_route",
+		"frequency": 97.3,
+		"title": "Канал спасателей",
+		"stations": ["radio_point", "shelter_station"],
+		"conditions": [{"day_min": 2}],
+		"text": "Хрип, обрывки: «…колонна прошла по северной дороге через виадук… пешком проходимо после метели… держитесь вместе, идите днём…»",
+		"info": "radio_route",
+		"voice_pitch": 0.95,
+		"consequences": [{"if": {"not_flag": "radio_point_signal_found"}, "schedule_event": ["first_squall", 3]}, {"set_flag": "radio_point_signal_found"}]
+	}
+]

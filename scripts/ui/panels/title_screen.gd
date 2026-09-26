@@ -14,7 +14,7 @@ func _init() -> void:
 func _build() -> void:
 	var bg := ColorRect.new()
 	bg.color = Color(0.02, 0.025, 0.04, 1.0)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	var snow := CPUParticles2D.new()
 	snow.amount = 220
@@ -33,7 +33,7 @@ func _build() -> void:
 	snow.color = Color(0.85, 0.9, 1.0, 0.7)
 	add_child(snow)
 	var center := CenterContainer.new()
-	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(center)
 	var col := UIKit.vbox(10)
 	col.custom_minimum_size.x = 520
@@ -75,7 +75,7 @@ func _build() -> void:
 	col.add_child(settings_panel)
 	_pages["settings"] = settings_panel
 	var foot := UIKit.label("Прототип (vertical slice) • Godot 4 • весь арт и звук — процедурные заглушки", 11, UIKit.TEXT_DIM)
-	foot.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	foot.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	foot.offset_top = -28
 	foot.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	add_child(foot)

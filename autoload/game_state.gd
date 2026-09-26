@@ -206,6 +206,31 @@ func food_total() -> int:
 	return n
 
 
+## Morning routine: every survivor in the shelter eats one food item from storage.
+func _feed_survivors() -> void:
+	var ids := survivors_in_shelter()
+	if ids.is_empty():
+		return
+	var hungry: PackedStringArray = []
+	for id in ids:
+		var ate := false
+		for f in FOOD_ITEMS:
+			if storage.remove(f, 1):
+				ate = true
+				break
+		if ate:
+			npcs.modify_stat(id, "hope", 5.0)
+		else:
+			hungry.append(Data.get_character_name(id))
+			npcs.modify_stat(id, "hope", -15.0)
+			relationships.change(id, "trust", -5.0)
+	if hungry.is_empty():
+		notify("Утро. Все в убежище поели (%d еды со склада)." % ids.size(), "event")
+	else:
+		notify("Утро. Еды на складе не хватило: %s остались голодными." % ", ".join(hungry), "warning")
+		stats.modify("stress", 8.0)
+
+
 # --- Presentation helpers -------------------------------------------------------------
 
 func notify(text: String, kind: String = "info") -> void:
@@ -469,6 +494,7 @@ func _register_consequences() -> void:
 	K.register("ending", func(v, _ctx):
 		ending_id = str(v)
 		ending_requested.emit(ending_id))
+	K.register("feed_survivors", func(_v, _ctx): _feed_survivors())
 	K.register("evaluate_ending", func(_v, _ctx):
 		ending_id = EndingDirector.evaluate()
 		ending_requested.emit(ending_id))

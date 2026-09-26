@@ -1,0 +1,131 @@
+{
+	"id": "mara",
+	"start": "route",
+	"nodes": {
+		"route": {"branch": [
+			{"if": {"npc_at": ["self", "shelter"]}, "next": "shelter"},
+			{"if": [{"npc_injured": "self"}, {"memory": ["self", "player_refused_help", true]}], "next": "again"},
+			{"if": {"npc_injured": "self"}, "next": "first"},
+			{"next": "pharmacy"}
+		]},
+		"first": {
+			"speaker": "self",
+			"text": "Стой… не подходи так быстро. Я фельдшер — была на смене, когда начался снег. Нога — рваная рана. А снег… он будто выпивает меня изнутри.",
+			"choices": [
+				{"text": "Кто ты? Что случилось?", "once": true, "next": "story"},
+				{"text": "Помочь Mara — дать лекарство.", "requires": {"item": "medicine"}, "requires_text": "нет лекарства", "next": "give_medicine"},
+				{"text": "Помочь Mara — перевязать бинтом.", "requires": {"item": "bandage"}, "requires_text": "нет бинта", "next": "give_bandage"},
+				{"text": "Оставить Mara.", "next": "refuse"}
+			]
+		},
+		"story": {
+			"speaker": "self",
+			"text": "Mara. Скорая. Машину занесло у подстанции, напарник ушёл за помощью и не вернулся. Я ползла сюда полчаса. Там, у подстанции, стояли люди в сером — и просто смотрели.",
+			"consequences": [{"npc_met": "self"}, {"relationship": {"npc": "self", "trust": 3}}],
+			"next": "first"
+		},
+		"give_medicine": {
+			"speaker": "self",
+			"text": "…Антибиотик. Настоящий. Боль уходит. Я доберусь до твоего дома — дверь напротив фонаря? Обработаю рану сама. Не задерживайся на улице.",
+			"consequences": [
+				{"take_item": ["medicine", 1]},
+				{"relationship": {"npc": "self", "trust": 25, "affinity": 15, "respect": 5}},
+				{"memory": ["self", "player_saved_me", true]},
+				{"memory": ["self", "player_gave_medicine", true]},
+				{"npc_value": ["self", "injured", false]},
+				{"npc_location": ["self", "shelter", "shelter_mara"]},
+				{"decision": ["mara_help", "medicine"]},
+				{"set_flag": "mara_helped"}
+			]
+		},
+		"give_bandage": {
+			"speaker": "self",
+			"text": "Туго, правильно. Этого хватит, чтобы дойти до аптеки на площади — там можно запереться и отлежаться. Я… запомню это.",
+			"consequences": [
+				{"take_item": ["bandage", 1]},
+				{"relationship": {"npc": "self", "trust": 12, "respect": 8}},
+				{"memory": ["self", "player_saved_me", true]},
+				{"npc_value": ["self", "injured", false]},
+				{"npc_location": ["self", "district", "mara_pharmacy"]},
+				{"decision": ["mara_help", "bandage"]},
+				{"set_flag": "mara_helped"}
+			]
+		},
+		"refuse": {
+			"speaker": "self",
+			"text": "Понимаю. Всем страшно. Иди. …Только не оглядывайся.",
+			"consequences": [
+				{"memory": ["self", "player_refused_help", true]},
+				{"relationship": {"npc": "self", "trust": -30, "fear": 10}},
+				{"decision": ["mara_help", "refused"]}
+			]
+		},
+		"again": {
+			"speaker": "self",
+			"text": "Ты вернулся. Зачем?",
+			"choices": [
+				{"text": "Помочь Mara — дать лекарство.", "requires": {"item": "medicine"}, "requires_text": "нет лекарства", "next": "give_medicine_late"},
+				{"text": "Помочь Mara — перевязать бинтом.", "requires": {"item": "bandage"}, "requires_text": "нет бинта", "next": "give_bandage"},
+				{"text": "Прости.", "next": "end"}
+			]
+		},
+		"give_medicine_late": {
+			"speaker": "self",
+			"text": "…Ты всё-таки вернулся. Ладно. Я дойду до твоего дома.",
+			"consequences": [
+				{"take_item": ["medicine", 1]},
+				{"relationship": {"npc": "self", "trust": 35, "affinity": 5}},
+				{"memory": ["self", "player_came_back", true]},
+				{"memory": ["self", "player_saved_me", true]},
+				{"memory": ["self", "player_gave_medicine", true]},
+				{"npc_value": ["self", "injured", false]},
+				{"npc_location": ["self", "shelter", "shelter_mara"]},
+				{"decision": ["mara_help", "medicine"]},
+				{"set_flag": "mara_helped"}
+			]
+		},
+		"pharmacy": {
+			"speaker": "self",
+			"text": "Смотри-ка, живой. Я заперлась в аптеке — полки пустые, но в подсобке остались лекарства. Дверь заклинило, нужна монтировка.",
+			"choices": [
+				{"text": "Пойдём в моё убежище. Там теплее.", "requires": {"tier_min": ["self", "cooperative"]}, "requires_text": "она пока не доверяет вам", "next": "join"},
+				{"text": "Что ты знаешь о снеге?", "once": true, "next": "science"},
+				{"text": "Береги себя.", "next": "end"}
+			]
+		},
+		"join": {
+			"speaker": "self",
+			"text": "…Хорошо. Одной здесь страшнее, чем я думала.",
+			"consequences": [{"npc_location": ["self", "shelter", "shelter_mara"]}, {"relationship": {"npc": "self", "trust": 5}}]
+		},
+		"science": {
+			"speaker": "self",
+			"text": "За неделю до снега к нам на станцию пришла накладная: средства от обморожения — для «Меридиана». Сорок упаковок. Кто-то знал заранее.",
+			"consequences": [{"memory": ["self", "told_meridian", true]}, {"set_flag": "heard_meridian_supplies"}],
+			"next": "pharmacy"
+		},
+		"shelter": {
+			"speaker": "self",
+			"text": "Тепло. Почти забыла, как это. {player}, если поранишься — приходи ко мне, пока у меня есть руки.",
+			"choices": [
+				{"text": "Осмотри меня, пожалуйста.", "once": true, "next": "heal"},
+				{"text": "Как нога?", "next": "leg"},
+				{"text": "Ты отдала бы то лекарство кому-то другому?", "if": {"memory": ["self", "player_gave_medicine", true]}, "once": true, "next": "medicine_talk"},
+				{"text": "Отдыхай.", "next": "end"}
+			]
+		},
+		"heal": {
+			"speaker": "self",
+			"text": "Садись. Обморожение пальцев, пара ссадин… Живой. Вот, держи ещё бинт — на потом.",
+			"consequences": [{"stat": {"health": 25, "stress": -10}}, {"status": {"bleeding": 0, "illness": false}}, {"give_item": ["bandage", 1]}, {"relationship": {"npc": "self", "affinity": 5}}],
+			"next": "shelter"
+		},
+		"leg": {"speaker": "self", "text": "Заживёт, если не придётся бегать. Здесь хотя бы можно не бегать.", "next": "shelter"},
+		"medicine_talk": {
+			"speaker": "self",
+			"text": "Не знаю. Может, старику из седьмого дома — у него сердце. Ты выбрал меня. Я постараюсь, чтобы это не было ошибкой.",
+			"consequences": [{"relationship": {"npc": "self", "respect": 5}}],
+			"next": "shelter"
+		}
+	}
+}

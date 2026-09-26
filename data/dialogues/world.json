@@ -1,0 +1,50 @@
+[
+	{
+		"id": "north_road",
+		"start": "route",
+		"nodes": {
+			"route": {"branch": [
+				{"if": {"weather": "BLIZZARD"}, "next": "storm"},
+				{"if": [{"flag": "north_route_known"}, {"item_total": ["warm_jacket", 1]}, {"food_total_min": 3}, {"npc_at": ["anton", "shelter"]}, {"hour_between": [8, 17]}], "next": "ready"},
+				{"if": [{"flag": "north_route_known"}, {"not": {"hour_between": [8, 17]}}], "next": "dark"},
+				{"if": {"flag": "north_route_known"}, "next": "not_ready"},
+				{"next": "unknown"}
+			]},
+			"storm": {"speaker": "narrator", "text": "Ветер валит с ног. Дорога исчезла в белой стене — баррикаду не видно уже в двух шагах. Сегодня отсюда не уйти."},
+			"unknown": {"speaker": "narrator", "text": "Бетонные блоки, полосатая лента, за ними — сугробы в человеческий рост. Куда ведёт дорога дальше и можно ли там пройти, вы не знаете."},
+			"dark": {"speaker": "narrator", "text": "В темноте за баррикадой ничего не разобрать. Идти туда ночью — значит заблудиться в первые же сто метров."},
+			"not_ready": {"speaker": "narrator", "text": "Виадук где-то там, за снегом. Anton говорил: идти только вместе, днём, в тёплой одежде и с едой на всех. Сейчас это был бы побег, а не путь."},
+			"ready": {
+				"speaker": "narrator",
+				"text": "Северная дорога. Шесть километров до депо. Небо на севере светлее. Anton проверяет лямки рюкзака и молча кивает: сейчас — или никогда.",
+				"choices": [
+					{"text": "Уходим. Все вместе.", "consequences": [{"decision": ["final_choice", "departure"]}, {"ending": "departure"}]},
+					{"text": "Не сейчас.", "next": "end"}
+				]
+			}
+		}
+	},
+	{
+		"id": "transmitter",
+		"start": "route",
+		"nodes": {
+			"route": {"branch": [
+				{"if": {"any": [{"not_flag": "generator_repaired"}, {"flag": "generator_failed"}]}, "next": "no_power"},
+				{"if": [{"info": "radio_depot"}, {"any": [{"flag": "vera_protocol"}, {"flag": "elias_protocol"}]}], "next": "ready"},
+				{"if": {"info": "radio_depot"}, "next": "no_protocol"},
+				{"next": "no_target"}
+			]},
+			"no_power": {"speaker": "narrator", "text": "Передатчик молчит. Без генератора ему нечем кричать."},
+			"no_target": {"speaker": "narrator", "text": "Лампы прогреваются, эфир шипит. Но кого звать? Сначала нужно найти тех, кто слушает."},
+			"no_protocol": {"speaker": "narrator", "text": "Вы знаете частоту депо, но боитесь сорвать единственный шанс: неверный позывной — и вас примут за очередной бред в эфире. Кто-то из выживших должен знать, как говорить."},
+			"ready": {
+				"speaker": "narrator",
+				"text": "Передатчик прогрет. 88.9. Позывной «Искра». Все в убежище замолкают.",
+				"choices": [
+					{"text": "Выйти в эфир и позвать на помощь.", "consequences": [{"decision": ["final_choice", "signal"]}, {"ending": "signal"}]},
+					{"text": "Позже.", "next": "end"}
+				]
+			}
+		}
+	}
+]

@@ -70,5 +70,5 @@ func _apply() -> void:
 	_env.ambient_light_color = amb
 	_env.ambient_light_energy = 1.0
 	_env.fog_light_color = fog_col
-	_env.fog_density = clampf(1.8 / maxf(WeatherManager.visibility, 5.0), 0.004, 0.2)
+	_env.fog_density = clampf(1.25 / maxf(WeatherManager.visibility, 5.0), 0.004, 0.2)
 	_env.volumetric_fog_density = 0.004 + white * 0.03

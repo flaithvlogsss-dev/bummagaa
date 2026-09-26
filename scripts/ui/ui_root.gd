@@ -35,7 +35,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	root = Control.new()
 	root.name = "Root"
-	root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.theme = UIKit.theme()
 	add_child(root)
@@ -58,7 +58,7 @@ func _ready() -> void:
 	_fade = ColorRect.new()
 	_fade.name = "Fade"
 	_fade.color = Color(0, 0, 0, 0)
-	_fade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_fade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(_fade)
 	DialogueManager.dialogue_started.connect(func(_id): _open("dialogue", {}))

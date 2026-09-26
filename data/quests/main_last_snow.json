@@ -1,0 +1,20 @@
+{
+	"id": "main_last_snow",
+	"title": "Последний снег",
+	"category": "main",
+	"description": "Город отрезан. Нужно продержаться, пока не кончится снег, — или найти выход.",
+	"stages": [
+		{
+			"id": "hold",
+			"description": "Город отрезан. Продержитесь до конца метели. Решите, что важнее: стены, эфир или дорога.",
+			"objectives": [
+				{"id": "survive", "text": "Дожить до утра четвёртого дня", "condition": {"day_min": 4}},
+				{"id": "people", "text": "Собрать людей в убежище", "optional": true, "condition": {"survivors_min": 2}},
+				{"id": "workshop", "text": "Обустроить мастерскую", "optional": true, "condition": {"shelter_level_min": 2}},
+				{"id": "station", "text": "Построить радиостанцию", "optional": true, "condition": {"shelter_level_min": 3}},
+				{"id": "route", "text": "Узнать дорогу из города", "optional": true, "condition": {"flag": "north_route_known"}}
+			]
+		}
+	],
+	"completion_flags": ["main_done"]
+}

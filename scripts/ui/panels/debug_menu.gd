@@ -56,7 +56,7 @@ static func debug_text() -> String:
 func _build() -> void:
 	add_backdrop(0.4)
 	var p := UIKit.panel(Vector2(900, 560))
-	p.set_anchors_preset(Control.PRESET_CENTER)
+	p.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	p.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	p.grow_vertical = Control.GROW_DIRECTION_BOTH
 	add_child(p)

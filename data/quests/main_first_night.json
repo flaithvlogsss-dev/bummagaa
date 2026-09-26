@@ -1,0 +1,24 @@
+{
+	"id": "main_first_night",
+	"title": "THE FIRST NIGHT",
+	"category": "main",
+	"description": "Электричество пропало. За окном идёт странный снег. Нужно подготовиться к ночи.",
+	"stages": [
+		{
+			"id": "prepare",
+			"description": "Электричество пропало. Нужно подготовиться к ночи.",
+			"objectives": [
+				{"id": "flashlight", "text": "Найти фонарь", "condition": {"item": "flashlight"}},
+				{"id": "food", "text": "Найти еду", "condition": {"any": [{"item": "canned_food"}, {"item": "dry_food"}]}},
+				{"id": "generator", "text": "Проверить генератор", "condition": {"flag": "generator_checked"}},
+				{"id": "radio", "text": "Включить радио", "condition": {"flag": "shelter_radio_on"}}
+			]
+		}
+	],
+	"consequences": [
+		{"start_quest": "q03_signal"},
+		{"start_quest": "q01_warmth"},
+		{"hint": "Радио советует не выходить — но без тепла и информации не продержаться. Радиоточка на площади, на севере. Одевайтесь теплее."}
+	],
+	"completion_flags": ["first_night_prepared"]
+}

@@ -1,0 +1,67 @@
+{
+	"id": "anton",
+	"start": "route",
+	"nodes": {
+		"route": {"branch": [
+			{"if": {"npc_at": ["self", "shelter"]}, "next": "shelter"},
+			{"if": {"npc_met": "self"}, "next": "again"},
+			{"next": "first"}
+		]},
+		"first": {"speaker": "self", "text": "Не трогай машину. …Хотя там уже нечего брать, наверное. Anton. Спасатель. Бывший.", "next": "menu"},
+		"again": {"speaker": "self", "text": "Снова ты. Держишься?", "next": "menu"},
+		"menu": {
+			"speaker": "self",
+			"text": "Говори.",
+			"choices": [
+				{"text": "Ты знаешь, как выбраться из города?", "next": "route_talk"},
+				{"text": "Держи, поешь.", "requires": {"item": "canned_food"}, "requires_text": "нет консервов", "once": true, "next": "food"},
+				{"text": "Что ты видел в метели?", "once": true, "next": "stalker"},
+				{"text": "Пойдём в моё убежище.", "requires": {"tier_min": ["self", "cooperative"]}, "requires_text": "он вам пока не доверяет", "next": "joins"},
+				{"text": "Мне пора.", "next": "end"}
+			]
+		},
+		"route_talk": {
+			"speaker": "self",
+			"text": "Северная дорога. Через виадук, шесть километров до трамвайного депо. Но в одиночку и в снег — это не выход, это самоубийство. Нужны тёплая одежда, еда на всех и кто-то, кто знает дорогу.",
+			"consequences": [{"memory": ["self", "asked_route", true]}],
+			"next": "menu"
+		},
+		"food": {
+			"speaker": "self",
+			"text": "Спасибо. Давно никто ничего не отдавал просто так. Держи — нашёл в бардачке патрульной машины.",
+			"consequences": [{"take_item": ["canned_food", 1]}, {"relationship": {"npc": "self", "trust": 20, "affinity": 10}}, {"memory": ["self", "player_shared_food", true]}, {"give_item": ["pistol_ammo", 2]}],
+			"next": "menu"
+		},
+		"stalker": {
+			"speaker": "self",
+			"text": "Что-то высокое. Идёт на свет и на шум. Когда фонарь выключен и ты стоишь тихо — проходит мимо. Я так пережил первую ночь. За мусорным баком.",
+			"consequences": [{"relationship": {"npc": "self", "respect": 5}}],
+			"next": "menu"
+		},
+		"joins": {
+			"speaker": "self",
+			"text": "Ладно. Посмотрим, как ты держишь людей вместе.",
+			"consequences": [{"npc_location": ["self", "shelter", "shelter_anton"]}, {"relationship": {"npc": "self", "trust": 5}}, {"decision": ["anton_joined", true]}]
+		},
+		"shelter": {
+			"speaker": "self",
+			"text": "Неплохо устроились. Двери крепкие.",
+			"choices": [
+				{"text": "Нарисуешь дорогу на север?", "if": {"not_info": "anton_map"}, "requires": {"tier_min": ["self", "trusted"]}, "requires_text": "он ещё не готов довериться", "next": "map"},
+				{"text": "Что случилось на той эвакуации?", "requires": {"tier_min": ["self", "trusted"]}, "requires_text": "он не хочет говорить", "once": true, "next": "past"},
+				{"text": "Отдыхай.", "next": "end"}
+			]
+		},
+		"map": {
+			"speaker": "self",
+			"text": "Держи. Виадук держится, я проверял до снега. Идти только днём, только после метели, только вместе. И каждому — тёплая куртка.",
+			"consequences": [{"add_info": "anton_map"}, {"relationship": {"npc": "self", "trust": 5}}]
+		},
+		"past": {
+			"speaker": "self",
+			"text": "Лавина, девять лет назад. Я выводил группу и решил, что двое отставших догонят. Не догнали. Сначала выводят тех, кто может идти. Я так и не научился с этим жить.",
+			"consequences": [{"relationship": {"npc": "self", "affinity": 15}}, {"memory": ["self", "told_past", true]}],
+			"next": "shelter"
+		}
+	}
+}

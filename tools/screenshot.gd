@@ -30,6 +30,10 @@ func _ready() -> void:
 		UIRoot.open_panel(panel, {"station": "radio_point"})
 		for i in 10:
 			await get_tree().process_frame
+	var pl := Main.get_player()
+	var vc := Main.instance.world_viewport.get_camera_3d()
+	print("vp cam ", vc, " ", vc.global_position if vc else null, " rootcam ", get_viewport().get_camera_3d(), " vp size ", Main.instance.world_viewport.size, " sprite vis ", pl.sprite.is_visible_in_tree(), " tex ", pl.sprite.texture)
+	print("player ", pl.global_position, " cam ", Main.instance.camera_rig.camera.global_position, " level ", Main.instance.current_level_id)
 	var img := get_viewport().get_texture().get_image()
 	img.save_png(_env("SHOT_OUT", "user://shot.png"))
 	print("saved ", _env("SHOT_OUT", "user://shot.png"))

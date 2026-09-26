@@ -1,0 +1,71 @@
+{
+	"id": "tomas",
+	"start": "route",
+	"nodes": {
+		"route": {"branch": [
+			{"if": {"flag": "tomas_missing"}, "next": "found"},
+			{"if": {"npc_at": ["self", "shelter"]}, "next": "shelter"},
+			{"if": {"npc_met": "self"}, "next": "again"},
+			{"next": "north"}
+		]},
+		"north": {
+			"speaker": "self",
+			"text": "Ты видел, что происходит на северной улице?",
+			"choices": [
+				{"text": "Нет. Что случилось?", "consequences": [{"relationship": {"npc": "self", "trust": 3}}], "next": "north_short"},
+				{"text": "Я не хочу об этом говорить.", "consequences": [{"memory": ["self", "player_dismissive", true]}, {"relationship": {"npc": "self", "affinity": -3}}], "next": "north_dismissed"},
+				{"text": "Расскажи всё.", "consequences": [{"relationship": {"npc": "self", "affinity": 6, "trust": 2}}, {"stat": {"stress": 5}}, {"memory": ["self", "player_listened", true]}, {"set_flag": "heard_stalker_story"}], "next": "north_long"}
+			]
+		},
+		"north_short": {"speaker": "self", "text": "Там кто-то ходит. Высокий. Я сначала думал — человек в шубе… а потом он повернул голову. Не так, как люди поворачивают.", "next": "intro"},
+		"north_dismissed": {"speaker": "self", "text": "Ладно… Просто не ходи туда в темноте, ага?", "next": "intro"},
+		"north_long": {
+			"speaker": "self",
+			"text": "Вчера я вёз посылку на подстанцию. Там стоят люди в серых пальто, и снег на них не ложится, представляешь? А у северной дороги я увидел его. Длинный. Руки до колен. Он стоял в метели и… слушал. Я бросил велик и бежал до самого магазина. Он идёт на шум. Я уверен.",
+			"next": "intro"
+		},
+		"intro": {"speaker": "self", "text": "Я Tomas. Курьер. Был курьером. Тут в магазине кое-что осталось, но я… не хочу сидеть один.", "next": "menu"},
+		"again": {"speaker": "self", "text": "О, это ты. Живой.", "next": "menu"},
+		"menu": {
+			"speaker": "self",
+			"text": "Что скажешь?",
+			"choices": [
+				{"text": "Пойдём со мной в убежище.", "next": "joins"},
+				{"text": "Что за посылка?", "once": true, "next": "parcel"},
+				{"text": "Держи, поешь.", "requires": {"item": "canned_food"}, "requires_text": "нет консервов", "once": true, "next": "food"},
+				{"text": "Береги себя.", "next": "end"}
+			]
+		},
+		"parcel": {
+			"speaker": "self",
+			"text": "Последний заказ — на «Меридиан», лаборатория 4. Я так и не довёз. Держи, может, ты поймёшь, что это.",
+			"consequences": [{"add_info": "doc_parcel"}, {"relationship": {"npc": "self", "trust": 5}}],
+			"next": "menu"
+		},
+		"food": {
+			"speaker": "self",
+			"text": "…Спасибо. Серьёзно. Мама всегда говорила: кто делится едой — тому можно верить.",
+			"consequences": [{"take_item": ["canned_food", 1]}, {"relationship": {"npc": "self", "affinity": 10, "trust": 8}}, {"memory": ["self", "player_shared_food", true]}],
+			"next": "menu"
+		},
+		"joins": {
+			"speaker": "self",
+			"text": "Правда? Я быстро! Возьму, что осталось на полках.",
+			"consequences": [{"npc_location": ["self", "shelter", "shelter_tomas"]}, {"relationship": {"npc": "self", "trust": 10}}, {"decision": ["tomas_joined", true]}]
+		},
+		"shelter": {
+			"speaker": "self",
+			"text": "Хочешь, я сбегаю за чем-нибудь? Я знаю все дворы.",
+			"choices": [
+				{"text": "Принеси, что найдёшь. Только осторожно.", "if": {"not_flag": "tomas_out"}, "consequences": [{"set_flag": "tomas_out"}, {"schedule_event": ["tomas_scavenge", 180]}], "next": "go"},
+				{"text": "Отдыхай.", "next": "end"}
+			]
+		},
+		"go": {"speaker": "self", "text": "Часа через три вернусь. Если не вернусь — не ищи. Шучу. Ищи.", "next": "end"},
+		"found": {
+			"speaker": "self",
+			"text": "Ты нашёл меня… Я хотел принести еды для всех. Началась метель, я спрятался за баком. Оно ходило совсем рядом. Дышало.",
+			"consequences": [{"clear_flag": "tomas_missing"}, {"npc_location": ["self", "shelter", "shelter_tomas"]}, {"relationship": {"npc": "self", "trust": 15, "affinity": 10}}, {"memory": ["self", "player_saved_me", true]}]
+		}
+	}
+}

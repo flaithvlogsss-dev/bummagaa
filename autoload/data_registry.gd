@@ -47,6 +47,9 @@ func _exit_tree() -> void:
 	# Handlers are lambdas bound to autoloads; release them before those are freed.
 	Conditions.clear_handlers()
 	Consequences.clear_handlers()
+	MeshBuilder.clear_cache()
+	LowPolyBlock.clear_materials()
+	PixelArt.clear_cache()
 
 
 func reload() -> void:

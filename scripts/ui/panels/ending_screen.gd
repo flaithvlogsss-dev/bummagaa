@@ -16,10 +16,10 @@ func _init() -> void:
 func _build() -> void:
 	var bg := ColorRect.new()
 	bg.color = Color(0.01, 0.015, 0.03, 1.0)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	var center := CenterContainer.new()
-	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(center)
 	var col := UIKit.vbox(10)
 	col.custom_minimum_size.x = 720

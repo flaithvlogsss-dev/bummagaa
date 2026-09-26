@@ -18,7 +18,7 @@ const MATERIAL_PATH := "res://shaders/lowpoly_snow.gdshader"
 @export var color: Color = Color(0.45, 0.46, 0.5):
 	set(v):
 		color = v
-		_apply_params()
+		_rebuild()
 @export_enum("box", "gable", "cylinder") var shape: String = "box":
 	set(v):
 		shape = v
@@ -26,17 +26,19 @@ const MATERIAL_PATH := "res://shaders/lowpoly_snow.gdshader"
 @export_range(0.0, 1.0) var snow_mask: float = 1.0:
 	set(v):
 		snow_mask = v
-		_apply_params()
+		_rebuild()
 @export var emission: float = 0.0:
 	set(v):
 		emission = v
-		_apply_params()
+		_rebuild()
 @export var has_collision: bool = true:
 	set(v):
 		has_collision = v
 		_rebuild()
 ## Can be dithered away when it hides the player from the camera.
 @export var fadeable: bool = true
+## Blocks/props sharing a fade group (e.g. body, roof and windows of one building) fade together.
+@export var fade_group: String = ""
 @export var cast_shadows: bool = true:
 	set(v):
 		cast_shadows = v
@@ -45,7 +47,9 @@ const MATERIAL_PATH := "res://shaders/lowpoly_snow.gdshader"
 @export var map_label: String = ""
 @export var show_on_map: bool = false
 
-static var _material: ShaderMaterial
+const FADE_STEPS: Array[float] = [0.0, 0.25, 0.5, 0.7, 0.92]
+
+static var _materials: Array[ShaderMaterial] = []
 
 var _mesh_instance: MeshInstance3D
 var _collision: CollisionShape3D
@@ -55,11 +59,23 @@ var _occluding: bool = false
 var _cutaway: bool = false
 
 
-static func shared_material() -> ShaderMaterial:
-	if _material == null:
-		_material = ShaderMaterial.new()
-		_material.shader = load(MATERIAL_PATH)
-	return _material
+static func shared_material(fade_amount: float = 0.0) -> ShaderMaterial:
+	if _materials.is_empty():
+		var shader: Shader = load(MATERIAL_PATH)
+		for f in FADE_STEPS:
+			var m := ShaderMaterial.new()
+			m.shader = shader
+			m.set_shader_parameter("fade", f)
+			_materials.append(m)
+	var best := 0
+	for i in FADE_STEPS.size():
+		if absf(FADE_STEPS[i] - fade_amount) < absf(FADE_STEPS[best] - fade_amount):
+			best = i
+	return _materials[best]
+
+
+static func clear_materials() -> void:
+	_materials.clear()
 
 
 func _ready() -> void:
@@ -79,8 +95,15 @@ func _rebuild() -> void:
 		_collision = CollisionShape3D.new()
 		_collision.name = "Shape"
 		add_child(_collision, false, Node.INTERNAL_MODE_FRONT)
-	_mesh_instance.mesh = _make_mesh()
-	_mesh_instance.material_override = shared_material()
+	var key := "block:%s:%s:%s:%.3f:%.3f" % [shape, size, color.to_html(), snow_mask, emission]
+	var mesh := MeshBuilder.cached(key)
+	if mesh == null:
+		var mb := MeshBuilder.new()
+		mb.add(_make_mesh(), Transform3D.IDENTITY, color, snow_mask, emission)
+		mesh = mb.commit()
+		MeshBuilder.store(key, mesh)
+	_mesh_instance.mesh = mesh
+	_mesh_instance.material_override = shared_material(_fade)
 	_mesh_instance.position = Vector3(0, size.y * 0.5, 0)
 	_mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if cast_shadows else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	var box := BoxShape3D.new()
@@ -88,10 +111,9 @@ func _rebuild() -> void:
 	_collision.shape = box
 	_collision.position = Vector3(0, size.y * 0.5, 0)
 	_collision.disabled = not has_collision
-	_apply_params()
 
 
-func _make_mesh() -> Mesh:
+func _make_mesh() -> PrimitiveMesh:
 	match shape:
 		"gable":
 			var p := PrismMesh.new()
@@ -110,15 +132,6 @@ func _make_mesh() -> Mesh:
 	return b
 
 
-func _apply_params() -> void:
-	if _mesh_instance == null:
-		return
-	_mesh_instance.set_instance_shader_parameter("albedo", color)
-	_mesh_instance.set_instance_shader_parameter("snow_mask", snow_mask)
-	_mesh_instance.set_instance_shader_parameter("emission_strength", emission)
-	_mesh_instance.set_instance_shader_parameter("fade", _fade)
-
-
 func set_fade(amount: float) -> void:
 	if _mesh_instance == null or Engine.is_editor_hint():
 		return
@@ -131,7 +144,9 @@ func set_fade(amount: float) -> void:
 func _set_fade_now(v: float) -> void:
 	_fade = v
 	if _mesh_instance:
-		_mesh_instance.set_instance_shader_parameter("fade", v)
+		var m := shared_material(v)
+		if _mesh_instance.material_override != m:
+			_mesh_instance.material_override = m
 
 
 ## Called by the camera occlusion fader.
@@ -154,7 +169,7 @@ func _update_fade() -> void:
 	if _cutaway:
 		set_fade(0.92)
 	elif _occluding:
-		set_fade(0.7)
+		set_fade(0.92 if size.y > 6.0 else 0.7)
 	else:
 		set_fade(0.0)
 

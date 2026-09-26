@@ -1,0 +1,74 @@
+{
+	"id": "vera",
+	"start": "route",
+	"nodes": {
+		"route": {"branch": [
+			{"if": {"npc_at": ["self", "shelter"]}, "next": "shelter"},
+			{"if": {"npc_met": "self"}, "next": "again"},
+			{"next": "first"}
+		]},
+		"first": {
+			"speaker": "self",
+			"text": "Стойте там. Кто вы? …Ладно. Vera Holm, «Северный вестник». Этот приёмник — единственное, что ещё ловит. Хотите слушать — слушайте. Только не трогайте мой шкафчик.",
+			"next": "menu"
+		},
+		"again": {"speaker": "self", "text": "Опять вы. Эфир сегодня шумный.", "next": "menu"},
+		"menu": {
+			"speaker": "self",
+			"text": "Что вам?",
+			"choices": [
+				{"text": "Как ловить сигналы?", "next": "howto"},
+				{"text": "Что вы здесь делаете?", "once": true, "next": "story"},
+				{"text": "Покажете, что вы сняли?", "requires": {"tier_min": ["self", "cooperative"]}, "requires_text": "она вам не доверяет", "if": {"not_info": "photo_grey"}, "next": "photo"},
+				{"text": "Я нашёл кое-что. Посмотрите.", "if": {"any": [{"info": "note_pharmacy"}, {"info": "doc_parcel"}, {"info": "device_warm"}]}, "once": true, "next": "evidence"},
+				{"text": "Пойдёмте в моё убежище. Там будет передатчик.", "if": {"any": [{"flag": "radio_schematic"}, {"shelter_level_min": 2}]}, "requires": {"tier_min": ["self", "cooperative"]}, "requires_text": "она вам пока не доверяет", "next": "joins"},
+				{"text": "До встречи.", "next": "end"}
+			]
+		},
+		"howto": {"speaker": "self", "text": "Крутите ползунок медленно. Где шум стихает — там кто-то есть. Держите чистый сигнал пару секунд, и приёмник запишет. Служба ЧС крутит петлю где-то около ста двух. Ещё что-то живое бывает внизу шкалы, возле восьмидесяти девяти.", "next": "menu"},
+		"story": {
+			"speaker": "self",
+			"text": "Делаю репортаж, которого никто не заказывал. Метеостанция «Меридиан» на холме. Снег начался именно там — я видела, как над вышкой закрутилось облако. Ровное, как по линейке.",
+			"consequences": [{"relationship": {"npc": "self", "respect": 5}}, {"set_flag": "heard_meridian"}],
+			"next": "menu"
+		},
+		"photo": {
+			"speaker": "self",
+			"text": "Вот. Смотрите на снег вокруг них. Он не ложится.",
+			"consequences": [{"add_info": "photo_grey"}, {"relationship": {"npc": "self", "trust": 5}}],
+			"next": "menu"
+		},
+		"evidence": {
+			"speaker": "self",
+			"text": "Это… это доказательство. Они знали заранее. Спасибо. Возьмите платы из шкафчика — вам они нужнее, чем моему архиву.",
+			"consequences": [{"relationship": {"npc": "self", "trust": 18, "respect": 10}}, {"memory": ["self", "shared_evidence", true]}, {"set_flag": "vera_locker_ok"}],
+			"next": "menu"
+		},
+		"joins": {
+			"speaker": "self",
+			"text": "Настоящий эфир… Хорошо. Мой материал должен кто-то услышать.",
+			"consequences": [{"npc_location": ["self", "shelter", "shelter_vera"]}, {"relationship": {"npc": "self", "trust": 5}}, {"decision": ["vera_joined", true]}]
+		},
+		"shelter": {
+			"speaker": "self",
+			"text": "Я расшифровываю записи. Кое-что складывается.",
+			"choices": [
+				{"text": "Кого нам звать, когда будет передатчик?", "next": "who"},
+				{"text": "Что вы узнали о «Меридиане»?", "if": {"info": "radio_meridian"}, "once": true, "next": "meridian"},
+				{"text": "Работайте.", "next": "end"}
+			]
+		},
+		"who": {
+			"speaker": "self",
+			"text": "Депо на Трамвайной, если они ещё живы. У меня есть позывные городских служб — я знаю, как говорить, чтобы нас не приняли за сумасшедших.",
+			"consequences": [{"set_flag": "vera_protocol"}],
+			"next": "shelter"
+		},
+		"meridian": {
+			"speaker": "self",
+			"text": "«Массив засева». Они засевали облака — и потеряли контроль. Станция до сих пор работает на автомате. Никто не выключил. Это материал на всю жизнь, если мы её переживём.",
+			"consequences": [{"set_flag": "truth_meridian"}],
+			"next": "shelter"
+		}
+	}
+}

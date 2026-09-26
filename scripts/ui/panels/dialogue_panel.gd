@@ -20,7 +20,7 @@ func _init() -> void:
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var anchor := MarginContainer.new()
-	anchor.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	anchor.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	anchor.offset_top = -250
 	anchor.add_theme_constant_override("margin_left", 180)
 	anchor.add_theme_constant_override("margin_right", 180)

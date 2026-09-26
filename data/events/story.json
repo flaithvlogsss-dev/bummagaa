@@ -1,0 +1,131 @@
+[
+	{
+		"id": "intro_start",
+		"trigger": "manual",
+		"once": true,
+		"consequences": [
+			{"give_storage": ["dry_food", 1]},
+			{"give_storage": ["wood", 1]},
+			{"give_storage": ["scrap_metal", 1]},
+			{"title_card": "LAST SNOW"},
+			{"hint": "Где-то звонит телефон. Подойдите к нему (WASD) и нажмите [E]."}
+		]
+	},
+	{
+		"id": "first_outside",
+		"trigger": "enter",
+		"location": "district",
+		"once": true,
+		"dialogue": "first_outside"
+	},
+	{
+		"id": "first_squall",
+		"trigger": "scheduled",
+		"once": true,
+		"consequences": [
+			{"weather": ["BLIZZARD", 55, 2]},
+			{"set_flag": "first_squall"},
+			{"schedule_event": ["stalker_apparition", 4]},
+			{"schedule_event": ["first_squall_end", 60]},
+			{"shake": 0.3},
+			{"hint": "Метель! Видимость падает, холод усиливается. Возвращайтесь в убежище — или спрячьтесь в любом здании."}
+		]
+	},
+	{
+		"id": "stalker_apparition",
+		"trigger": "scheduled",
+		"once": true,
+		"location": "district",
+		"consequences": [{"world_request": ["stalker_apparition", {}]}]
+	},
+	{
+		"id": "first_squall_end",
+		"trigger": "scheduled",
+		"once": true,
+		"consequences": [{"set_flag": "first_squall_done"}, {"trigger_event": "mara_fate"}]
+	},
+	{
+		"id": "mara_fate",
+		"trigger": "manual",
+		"once": true,
+		"conditions": [{"npc_at": ["mara", "district"]}, {"npc_injured": "mara"}],
+		"consequences": [{"kill_npc": ["mara", "cold"]}, {"set_flag": "mara_died"}]
+	},
+	{
+		"id": "night1_fate",
+		"trigger": "time",
+		"at": {"day": 2, "hour": 7, "minute": 0},
+		"once": true,
+		"consequences": [{"trigger_event": "mara_fate"}, {"set_flag": "first_squall_done"}]
+	},
+	{
+		"id": "day2_tracks",
+		"trigger": "time",
+		"at": {"day": 2, "hour": 7, "minute": 5},
+		"once": true,
+		"consequences": [{"start_quest": "q04_tracks"}, {"hint": "У двери убежища — следы. Трёхпалые. Кто-то стоял здесь ночью."}]
+	},
+	{
+		"id": "grey_arrives",
+		"trigger": "time",
+		"at": {"day": 2, "hour": 11, "minute": 0},
+		"once": true,
+		"conditions": [{"npc_alive": "grey"}],
+		"consequences": [{"npc_location": ["grey", "district", "grey_alley"]}, {"start_quest": "q05_stranger"}, {"notify": "Из переулка сквозь снег доносится тихий кашель."}]
+	},
+	{
+		"id": "blizzard_warning",
+		"trigger": "time",
+		"at": {"day": 3, "hour": 8, "minute": 0},
+		"once": true,
+		"dialogue": "blizzard_warning",
+		"consequences": [{"route": ["north_road", false]}]
+	},
+	{
+		"id": "day3_blizzard",
+		"trigger": "time",
+		"at": {"day": 3, "hour": 13, "minute": 0},
+		"once": true,
+		"consequences": [{"title_card": "МЕТЕЛЬ"}, {"set_flag": "great_blizzard"}, {"shake": 0.3}]
+	},
+	{
+		"id": "day3_after",
+		"trigger": "time",
+		"at": {"day": 3, "hour": 19, "minute": 0},
+		"once": true,
+		"consequences": [{"route": ["north_road", true]}, {"trigger_event": "tomas_lost"}]
+	},
+	{
+		"id": "tomas_lost",
+		"trigger": "manual",
+		"once": true,
+		"conditions": [{"flag": "tomas_missing"}, {"npc_at": ["tomas", "district"]}],
+		"consequences": [{"kill_npc": ["tomas", "cold"]}, {"clear_flag": "tomas_missing"}, {"set_flag": "tomas_died"}]
+	},
+	{
+		"id": "prototype_finale",
+		"trigger": "time",
+		"at": {"day": 4, "hour": 7, "minute": 1},
+		"once": true,
+		"consequences": [{"evaluate_ending": true}]
+	},
+	{
+		"id": "stove_burns_out",
+		"trigger": "scheduled",
+		"consequences": [{"clear_flag": "stove_lit"}, {"if": {"location": "shelter"}, "notify": "Печь прогорела. Нужны ещё дрова."}]
+	},
+	{
+		"id": "tomas_scavenge",
+		"trigger": "scheduled",
+		"conditions": [{"npc_alive": "tomas"}],
+		"dialogue": "tomas_scavenge_return",
+		"location": "shelter",
+		"wait_for_location": true
+	},
+	{
+		"id": "morning_report",
+		"trigger": "morning",
+		"priority": 10,
+		"consequences": [{"feed_survivors": true}]
+	}
+]

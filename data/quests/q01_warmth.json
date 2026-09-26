@@ -1,0 +1,20 @@
+{
+	"id": "q01_warmth",
+	"title": "Тепло",
+	"category": "side",
+	"description": "Снег вытягивает тепло из всего. Нужно найти, где согреться, и вернуть тепло в убежище.",
+	"stages": [
+		{
+			"id": "find",
+			"description": "Снаружи смертельный холод. Где-то должен быть огонь.",
+			"objectives": [{"id": "fire", "text": "Найти источник тепла на улице", "condition": {"flag": "found_heat_source"}}]
+		},
+		{
+			"id": "home",
+			"description": "Убежище промерзает. Печь ест дрова, генератор нужно починить.",
+			"objectives": [{"id": "heat", "text": "Растопить печь (дерево ×2) или запустить генератор", "condition": {"any": [{"flag": "stove_lit"}, {"flag": "generator_repaired"}]}}]
+		}
+	],
+	"rewards": [{"stat": {"stress": -10}}],
+	"completion_flags": ["q01_done"]
+}

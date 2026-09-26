@@ -117,27 +117,34 @@ func _process(delta: float) -> void:
 
 func _update_occlusion() -> void:
 	var space := get_world_3d().direct_space_state
-	var to := target.global_position + Vector3(0, 1.0, 0)
 	var from := camera.global_position
 	var hit_now := {}
-	var exclude: Array[RID] = []
-	if target is CollisionObject3D:
-		exclude.append(target.get_rid())
-	for i in 4:
-		var q := PhysicsRayQueryParameters3D.create(from, to, 1)
-		q.exclude = exclude
-		var hit := space.intersect_ray(q)
-		if hit.is_empty():
-			break
-		var col: Object = hit.collider
-		if col and col.has_method("set_occluding"):
-			hit_now[col] = true
-		exclude.append(hit.rid)
+	for h in [0.4, 1.4]:
+		var to := target.global_position + Vector3(0, h, 0)
+		var exclude: Array[RID] = []
+		if target is CollisionObject3D:
+			exclude.append(target.get_rid())
+		for i in 4:
+			var q := PhysicsRayQueryParameters3D.create(from, to, 1)
+			q.exclude = exclude
+			var hit := space.intersect_ray(q)
+			if hit.is_empty():
+				break
+			var col: Object = hit.collider
+			if col and col.has_method("set_occluding"):
+				var group: String = str(col.get("fade_group"))
+				if group.is_empty():
+					hit_now[col] = true
+				else:
+					for n in get_tree().get_nodes_in_group(group):
+						hit_now[n] = true
+			exclude.append(hit.rid)
 	for col in _occluders.keys():
 		if not hit_now.has(col) and is_instance_valid(col):
 			col.set_occluding(false)
 	for col in hit_now.keys():
-		col.set_occluding(true)
+		if is_instance_valid(col):
+			col.set_occluding(true)
 	_occluders = hit_now
 
 

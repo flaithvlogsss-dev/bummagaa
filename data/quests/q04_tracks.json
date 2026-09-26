@@ -1,0 +1,24 @@
+{
+	"id": "q04_tracks",
+	"title": "Следы",
+	"category": "side",
+	"description": "Ночью у двери убежища кто-то стоял. Следы не похожи на человеческие.",
+	"stages": [
+		{
+			"id": "follow",
+			"description": "Трёхпалые следы ведут через улицу.",
+			"objectives": [
+				{"id": "door", "text": "Осмотреть следы у двери", "condition": {"flag": "q04_door_tracks"}},
+				{"id": "alley", "text": "Пройти по следам в переулок", "condition": {"flag": "q04_alley_tracks"}}
+			]
+		},
+		{
+			"id": "source",
+			"description": "Следы обрываются в глубине переулка.",
+			"objectives": [{"id": "source", "text": "Найти, откуда они", "condition": {"info": "device_warm"}}]
+		}
+	],
+	"rewards": [{"stat": {"stress": 5}}],
+	"consequences": [{"world": {"threat_level": 1}}],
+	"completion_flags": ["q04_done"]
+}

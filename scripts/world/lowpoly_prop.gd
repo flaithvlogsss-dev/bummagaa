@@ -47,9 +47,13 @@ const KINDS := [
 		has_collision = v
 		_rebuild()
 @export var fadeable: bool = true
+## Blocks/props sharing a fade group (e.g. body, roof and windows of one building) fade together.
+@export var fade_group: String = ""
 @export var map_label: String = ""
 
 var _parts: Array[MeshInstance3D] = []
+var _mb: MeshBuilder
+var _casts_shadow: bool = true
 var _light: OmniLight3D
 var _flicker_t: float = 0.0
 var _fade_tween: Tween
@@ -87,14 +91,27 @@ func _rebuild() -> void:
 			remove_child(c)
 	_parts.clear()
 	_light = null
+	_casts_shadow = kind not in ["tracks", "symbol", "window", "door_frame"]
 	set_process(flicker and not Engine.is_editor_hint())
+	var key := "prop:%s:%s:%s:%s:%s" % [kind, color.to_html(), size, lit, light_color.to_html()]
+	var mesh := MeshBuilder.cached(key)
+	_mb = null if mesh else MeshBuilder.new()
 	var builder: Callable = Callable(self, "_build_" + kind)
 	if builder.is_valid():
 		builder.call()
 	else:
 		_build_crate()
-	for p in _parts:
-		p.set_instance_shader_parameter("fade", _fade)
+	if mesh == null:
+		mesh = _mb.commit()
+		MeshBuilder.store(key, mesh)
+	_mb = null
+	var mi := MeshInstance3D.new()
+	mi.mesh = mesh
+	mi.material_override = LowPolyBlock.shared_material(_fade)
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if _casts_shadow else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mi.set_meta("_prop_part", true)
+	add_child(mi, false, Node.INTERNAL_MODE_FRONT)
+	_parts.append(mi)
 
 
 # --- Helpers -----------------------------------------------------------------------
@@ -103,47 +120,36 @@ func _c(default: Color) -> Color:
 	return color if color.a > 0.0 else default
 
 
-func _part(mesh: Mesh, pos: Vector3, col: Color, rot_deg: Vector3 = Vector3.ZERO, snow: float = 1.0, emission: float = 0.0, shadow: bool = true) -> MeshInstance3D:
-	var mi := MeshInstance3D.new()
-	mi.mesh = mesh
-	mi.position = pos
-	mi.rotation_degrees = rot_deg
-	mi.material_override = LowPolyBlock.shared_material()
-	mi.set_instance_shader_parameter("albedo", col)
-	mi.set_instance_shader_parameter("snow_mask", snow)
-	mi.set_instance_shader_parameter("emission_strength", emission)
-	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if shadow else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	mi.set_meta("_prop_part", true)
-	add_child(mi, false, Node.INTERNAL_MODE_FRONT)
-	_parts.append(mi)
-	return mi
+func _part(mesh: PrimitiveMesh, pos: Vector3, col: Color, rot_deg: Vector3 = Vector3.ZERO, snow: float = 1.0, emission: float = 0.0, scale_v: Vector3 = Vector3.ONE) -> void:
+	if _mb == null:
+		return
+	var basis := Basis.from_euler(rot_deg * (PI / 180.0)).scaled_local(scale_v)
+	_mb.add(mesh, Transform3D(basis, pos), col, snow, emission)
 
 
-func _box(s: Vector3, pos: Vector3, col: Color, rot: Vector3 = Vector3.ZERO, snow: float = 1.0, emission: float = 0.0) -> MeshInstance3D:
+func _box(s: Vector3, pos: Vector3, col: Color, rot: Vector3 = Vector3.ZERO, snow: float = 1.0, emission: float = 0.0) -> void:
 	var m := BoxMesh.new()
 	m.size = s
-	return _part(m, pos, col, rot, snow, emission)
+	_part(m, pos, col, rot, snow, emission)
 
 
-func _cyl(radius: float, height: float, pos: Vector3, col: Color, rot: Vector3 = Vector3.ZERO, top_radius: float = -1.0, segments: int = 8, snow: float = 1.0, emission: float = 0.0) -> MeshInstance3D:
+func _cyl(radius: float, height: float, pos: Vector3, col: Color, rot: Vector3 = Vector3.ZERO, top_radius: float = -1.0, segments: int = 8, snow: float = 1.0, emission: float = 0.0) -> void:
 	var m := CylinderMesh.new()
 	m.bottom_radius = radius
 	m.top_radius = radius if top_radius < 0.0 else top_radius
 	m.height = height
 	m.radial_segments = segments
 	m.rings = 1
-	return _part(m, pos, col, rot, snow, emission)
+	_part(m, pos, col, rot, snow, emission)
 
 
-func _sphere(radius: float, height: float, pos: Vector3, col: Color, scale_v: Vector3 = Vector3.ONE) -> MeshInstance3D:
+func _sphere(radius: float, height: float, pos: Vector3, col: Color, scale_v: Vector3 = Vector3.ONE) -> void:
 	var m := SphereMesh.new()
 	m.radius = radius
 	m.height = height
 	m.radial_segments = 10
 	m.rings = 5
-	var mi := _part(m, pos, col)
-	mi.scale = scale_v
-	return mi
+	_part(m, pos, col, Vector3.ZERO, 1.0, 0.0, scale_v)
 
 
 func _col(s: Vector3, pos: Vector3) -> void:
@@ -520,7 +526,7 @@ func set_cutaway(value: bool) -> void:
 
 
 func _update_fade() -> void:
-	var target := 0.92 if _cutaway else (0.7 if _occluding else 0.0)
+	var target := 0.92 if _cutaway else (0.8 if _occluding else 0.0)
 	if _fade_tween:
 		_fade_tween.kill()
 	_fade_tween = create_tween()
@@ -529,6 +535,7 @@ func _update_fade() -> void:
 
 func _set_fade_now(v: float) -> void:
 	_fade = v
+	var m := LowPolyBlock.shared_material(v)
 	for p in _parts:
-		if is_instance_valid(p):
-			p.set_instance_shader_parameter("fade", v)
+		if is_instance_valid(p) and p.material_override != m:
+			p.material_override = m

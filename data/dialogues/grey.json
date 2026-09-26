@@ -1,0 +1,63 @@
+{
+	"id": "grey",
+	"start": "route",
+	"nodes": {
+		"route": {"branch": [
+			{"if": {"flag": "grey_helped"}, "next": "after"},
+			{"next": "first"}
+		]},
+		"first": {
+			"speaker": "self",
+			"text": "…Ты видишь меня. Хорошо. Не многие видят.",
+			"choices": [
+				{"text": "Кто вы?", "next": "who"},
+				{"text": "Вам нужна помощь?", "next": "ask"}
+			]
+		},
+		"who": {"speaker": "self", "text": "Имя не важно. Можешь звать меня Sorel. Я слушаю прилив.", "consequences": [{"npc_met": "self"}], "next": "ask"},
+		"ask": {
+			"speaker": "self",
+			"text": "Мне нужно тепло. Куртка или лекарство. Я не могу вернуться к своим с пустыми руками — не в эту ночь.",
+			"consequences": [{"npc_met": "self"}],
+			"choices": [
+				{"text": "Отдать тёплую куртку.", "requires": {"item": "warm_jacket"}, "requires_text": "нет куртки", "consequences": [{"take_item": ["warm_jacket", 1]}], "next": "helped"},
+				{"text": "Отдать лекарство.", "requires": {"item": "medicine"}, "requires_text": "нет лекарства", "consequences": [{"take_item": ["medicine", 1]}], "next": "helped"},
+				{"text": "Сначала ответь: что такое «Меридиан»?", "once": true, "next": "meridian"},
+				{"text": "У меня ничего для тебя нет.", "next": "refused"}
+			]
+		},
+		"meridian": {
+			"speaker": "self",
+			"text": "Станция поёт — снег идёт. Станция замолкает — снег уходит. Кто-то забыл, как её выключить. Мы только слушаем.",
+			"consequences": [{"add_info": "sorel_words"}],
+			"next": "ask"
+		},
+		"helped": {
+			"speaker": "self",
+			"text": "Прилив запомнит. Возьми. И слушай 91.7, когда стемнеет — поймёшь, что мы не враги. Цилиндр в переулке не трогай: он держит их на расстоянии.",
+			"consequences": [
+				{"give_item": ["electronics", 2]},
+				{"add_info": "sorel_words"},
+				{"decision": ["stranger", "helped"]},
+				{"set_flag": "grey_helped"},
+				{"faction": {"unknown": 20}},
+				{"relationship": {"npc": "self", "trust": 25}}
+			]
+		},
+		"refused": {
+			"speaker": "self",
+			"text": "Жаль. Прилив помнит всех.",
+			"consequences": [
+				{"decision": ["stranger", "refused"]},
+				{"set_flag": "grey_refused"},
+				{"faction": {"unknown": -15}},
+				{"npc_location": ["self", "nowhere"]}
+			]
+		},
+		"after": {
+			"speaker": "self",
+			"text": "Мне пора. Кольцо смыкается. Держите фонари зажжёнными.",
+			"consequences": [{"npc_location": ["self", "nowhere"]}]
+		}
+	}
+}

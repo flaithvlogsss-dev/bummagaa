@@ -1,0 +1,95 @@
+[
+	{
+		"id": "night_knock_tomas",
+		"trigger": "night",
+		"once": true,
+		"weight": 3,
+		"conditions": [{"npc_alive": "tomas"}, {"npc_at": ["tomas", "district"]}, {"not": {"npc_met": "tomas"}}],
+		"dialogue": "night_knock_tomas"
+	},
+	{
+		"id": "night_grey_symbol",
+		"trigger": "night",
+		"once": true,
+		"weight": 5,
+		"conditions": [{"flag": "grey_refused"}],
+		"dialogue": "night_grey_symbol"
+	},
+	{
+		"id": "night_mara",
+		"trigger": "night",
+		"once": true,
+		"weight": 4,
+		"conditions": [{"npc_at": ["mara", "shelter"]}],
+		"dialogue": "night_mara"
+	},
+	{
+		"id": "night_tomas_gone",
+		"trigger": "night",
+		"once": true,
+		"weight": 2,
+		"conditions": [{"day_min": 2}, {"day_max": 2}, {"npc_at": ["tomas", "shelter"]}, {"tier_max": ["tomas", "cooperative"]}],
+		"consequences": [{"npc_location": ["tomas", "district", "tomas_alley"]}, {"set_flag": "tomas_missing"}],
+		"dialogue": "morning_tomas_gone"
+	},
+	{
+		"id": "night_noises",
+		"trigger": "night",
+		"weight": 2,
+		"cooldown_hours": 30,
+		"conditions": [{"day_min": 2}],
+		"consequences": [{"stat": {"stress": 12}}],
+		"notify": "Ночью кто-то долго ходил вокруг дома. Скребло по двери. Потом стихло."
+	},
+	{
+		"id": "night_illness",
+		"trigger": "night",
+		"weight": 2,
+		"once": true,
+		"conditions": [{"any": [{"stat_below": ["temperature", 45]}, {"stat_below": ["hunger", 25]}]}],
+		"consequences": [{"status": {"illness": true}}],
+		"notify": "Вы просыпаетесь в жару. Похоже, простуда — нужно лекарство."
+	},
+	{
+		"id": "night_generator",
+		"trigger": "night",
+		"weight": 2,
+		"once": true,
+		"conditions": [{"flag": "generator_repaired"}, {"not_flag": "generator_failed"}, {"day_min": 3}],
+		"consequences": [{"set_flag": "generator_failed"}],
+		"dialogue": "generator_failure"
+	},
+	{
+		"id": "night_quiet",
+		"trigger": "night",
+		"weight": 1,
+		"notify": "Ночь прошла тихо. Только ветер."
+	},
+	{
+		"id": "generator_failure",
+		"trigger": "hourly",
+		"chance": 0.12,
+		"cooldown_hours": 30,
+		"conditions": [{"flag": "generator_repaired"}, {"not_flag": "generator_failed"}, {"weather": ["HEAVY", "BLIZZARD"]}],
+		"consequences": [{"set_flag": "generator_failed"}],
+		"notify": "Из убежища доносится стук — похоже, генератор заглох. Нужен металлолом, чтобы его залатать."
+	},
+	{
+		"id": "found_resource",
+		"trigger": "hourly",
+		"chance": 0.18,
+		"cooldown_hours": 3,
+		"location": "outdoors",
+		"conditions": [{"not_weather": "BLIZZARD"}],
+		"consequences": [{"give_item": ["scrap_metal", 1]}],
+		"notify": "Под снегом что-то блеснуло."
+	},
+	{
+		"id": "radio_hint",
+		"trigger": "hourly",
+		"chance": 0.3,
+		"once": true,
+		"conditions": [{"shelter_level_min": 3}, {"not_info": "radio_meridian"}],
+		"notify": "Станция в убежище пищит: где-то около 106 МГц — непонятная цифровая передача."
+	}
+]

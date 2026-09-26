@@ -1,0 +1,25 @@
+{
+	"id": "q03_signal",
+	"title": "Сигнал",
+	"category": "main",
+	"description": "Старый приёмник ловит только одну станцию. На площади есть городская радиоточка с настоящей антенной.",
+	"stages": [
+		{
+			"id": "reach",
+			"description": "Радиоточка — на малой площади, за узкой улицей.",
+			"objectives": [{"id": "reach", "text": "Дойти до радиоточки на площади", "condition": {"discovered": "radio_point"}}]
+		},
+		{
+			"id": "tune",
+			"description": "Нужно поймать хоть кого-то в эфире.",
+			"objectives": [{"id": "tune", "text": "Поймать сигнал на радиоточке", "condition": {"flag": "radio_point_signal_found"}}]
+		},
+		{
+			"id": "return",
+			"description": "Снег усиливается. Пора домой.",
+			"objectives": [{"id": "home", "text": "Вернуться в убежище", "condition": {"location": "shelter"}}]
+		}
+	],
+	"consequences": [{"set_flag": "q03_returned"}, {"start_quest": "main_last_snow"}],
+	"completion_flags": ["q03_done"]
+}
