@@ -124,3 +124,8 @@ func test_stalker_fsm_reacts_to_noise_and_damage() -> void:
 	assert_true(GameState.has_flag("stalker_killed"), "can be killed (not required)")
 	world.queue_free()
 	await tree.process_frame
+
+
+func test_mouse_projection_hits_ground_plane() -> void:
+	# Without a running Main this must fail gracefully (null), never crash.
+	assert_eq(Main.get_mouse_world_point(0.0), null)

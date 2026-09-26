@@ -128,6 +128,24 @@ func _physics_process(delta: float) -> void:
 			sensor.interact(self)
 		if Input.is_action_just_pressed("flashlight"):
 			flashlight.toggle()
+		if Input.is_action_just_pressed("heal_quick"):
+			quick_heal()
+
+
+## [H]: bandage when bleeding or hurt, otherwise medicine when ill.
+func quick_heal() -> void:
+	var s := GameState.stats
+	var id := ""
+	if (s.bleeding > 0.0 or s.health < 70.0) and GameState.inventory.has_item("bandage"):
+		id = "bandage"
+	elif s.illness and GameState.inventory.has_item("medicine"):
+		id = "medicine"
+	if id.is_empty():
+		GameState.notify("Нечем лечиться (или незачем).", "warning")
+		return
+	GameState.inventory.consume(id)
+	AudioManager.play_sfx("rustle")
+	GameState.notify("Использовано: %s" % Data.get_item_name(id), "item")
 
 
 func _footstep_sounds(delta: float, moving: bool, outdoors: bool) -> void:

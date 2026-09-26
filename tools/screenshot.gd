@@ -46,6 +46,11 @@ func _ready() -> void:
 		GameState.request_world("stalker_apparition", {})
 	for i in int(_env("SHOT_FRAMES", "90")):
 		await get_tree().process_frame
+	if _env("SHOT_CLOSE_DLG", "0") == "1":
+		while DialogueManager.is_active():
+			DialogueManager._end()
+		for i in 20:
+			await get_tree().process_frame
 	var dlg := _env("SHOT_DIALOGUE", "")
 	if not dlg.is_empty():
 		var parts := dlg.split(":")

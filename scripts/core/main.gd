@@ -98,7 +98,10 @@ static func get_mouse_world_point(height: float = 0.0) -> Variant:
 	var cam := instance.world_viewport.get_camera_3d()
 	if cam == null:
 		return null
-	var mouse := instance.world_viewport.get_mouse_position()
+	# Map the window mouse position into the low-resolution SubViewport explicitly.
+	var view := instance.world_view
+	var local := view.get_global_transform_with_canvas().affine_inverse() * view.get_viewport().get_mouse_position()
+	var mouse := local / float(maxi(view.stretch_shrink, 1))
 	var origin := cam.project_ray_origin(mouse)
 	var normal := cam.project_ray_normal(mouse)
 	var plane := Plane(Vector3.UP, height)

@@ -35,10 +35,11 @@ func _build() -> void:
 	var row := UIKit.hbox(14)
 	p.add_child(row)
 	_portrait = TextureRect.new()
-	_portrait.custom_minimum_size = Vector2(72, 84)
+	_portrait.custom_minimum_size = Vector2(96, 64)
+	_portrait.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	_portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_portrait.stretch_mode = TextureRect.STRETCH_SCALE
 	row.add_child(_portrait)
 	var col := UIKit.vbox(6)
 	col.size_flags_horizontal = Control.SIZE_EXPAND_FILL

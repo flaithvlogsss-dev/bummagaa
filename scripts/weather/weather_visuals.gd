@@ -38,7 +38,7 @@ func _ready() -> void:
 	_material.turbulence_noise_scale = 4.0
 	_particles.process_material = _material
 	var q := QuadMesh.new()
-	q.size = Vector2(0.07, 0.07)
+	q.size = Vector2(0.045, 0.045)
 	var m := StandardMaterial3D.new()
 	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	m.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
