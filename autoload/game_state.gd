@@ -24,6 +24,7 @@ signal ending_requested(ending_id: String)
 signal world_request(kind: String, data: Dictionary)
 ## Requests for UI / camera / screen (notify, hint, title_card, shake...).
 signal presentation_requested(kind: String, data: Dictionary)
+signal location_changed(level_id: String)
 signal new_game_started
 signal state_loaded
 
@@ -185,6 +186,13 @@ func set_shelter_level(level: int) -> void:
 		return
 	shelter_level = level
 	shelter_upgraded.emit(level)
+
+
+func set_location(level_id: String) -> void:
+	if current_location == level_id:
+		return
+	current_location = level_id
+	location_changed.emit(level_id)
 
 
 func survivors_in_shelter() -> Array[String]:

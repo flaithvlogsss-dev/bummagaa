@@ -20,13 +20,15 @@ func _init() -> void:
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var anchor := MarginContainer.new()
-	anchor.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-	anchor.offset_top = -250
+	anchor.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	anchor.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	anchor.add_theme_constant_override("margin_left", 180)
 	anchor.add_theme_constant_override("margin_right", 180)
-	anchor.add_theme_constant_override("margin_bottom", 24)
+	anchor.add_theme_constant_override("margin_bottom", 20)
+	anchor.add_theme_constant_override("margin_top", 20)
 	add_child(anchor)
 	var p := UIKit.panel()
+	p.size_flags_vertical = Control.SIZE_SHRINK_END
 	p.mouse_filter = Control.MOUSE_FILTER_STOP
 	p.gui_input.connect(_on_panel_click)
 	anchor.add_child(p)

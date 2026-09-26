@@ -119,13 +119,14 @@ func _update_occlusion() -> void:
 	var space := get_world_3d().direct_space_state
 	var from := camera.global_position
 	var hit_now := {}
-	for h in [0.4, 1.4]:
-		var to := target.global_position + Vector3(0, h, 0)
+	var right := camera.global_basis.x
+	for offset in [Vector3(0, 0.4, 0), Vector3(0, 1.5, 0), right * 1.2 + Vector3(0, 1.0, 0), -right * 1.2 + Vector3(0, 1.0, 0)]:
+		var to: Vector3 = target.global_position + offset
 		var exclude: Array[RID] = []
 		if target is CollisionObject3D:
 			exclude.append(target.get_rid())
 		for i in 4:
-			var q := PhysicsRayQueryParameters3D.create(from, to, 1)
+			var q := PhysicsRayQueryParameters3D.create(from, to, 1 | 128)
 			q.exclude = exclude
 			var hit := space.intersect_ray(q)
 			if hit.is_empty():

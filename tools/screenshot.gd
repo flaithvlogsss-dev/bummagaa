@@ -1,42 +1,80 @@
 extends Node
-## Developer tool: boots Main, jumps to a location/time/weather and saves a PNG.
-## Env: SHOT_OUT, SHOT_LEVEL, SHOT_SPAWN, SHOT_HOUR, SHOT_DAY, SHOT_WEATHER, SHOT_PANEL, SHOT_FRAMES, SHOT_POS ("x,z")
+## Developer tool: boots Main, jumps to a location / time / weather and saves a PNG.
+## Env: SHOT_OUT, SHOT_LEVEL, SHOT_SPAWN, SHOT_POS ("x,z"), SHOT_HOUR, SHOT_DAY, SHOT_WEATHER,
+##      SHOT_FLASH (1 = flashlight on), SHOT_PANEL (ui panel), SHOT_DIALOGUE ("id" or "id:npc"),
+##      SHOT_ENEMY (1 = spawn a Snow Stalker nearby), SHOT_TITLE (1 = title screen only),
+##      SHOT_FRAMES, SHOT_ITEMS (1 = give sample items), SHOT_LEVELUP (shelter level)
 ## Usage: xvfb-run godot --path . --rendering-method gl_compatibility res://tools/Screenshot.tscn
 
 func _ready() -> void:
 	var main: Node = load("res://scenes/main/Main.tscn").instantiate()
 	add_child(main)
 	await get_tree().process_frame
+	if _env("SHOT_TITLE", "0") == "1":
+		for i in 30:
+			await get_tree().process_frame
+		_save()
+		return
 	await Main.instance.new_game()
-	GameState.set_flag("intro_done", true)
-	GameState.set_flag("phone_answered", true)
-	GameState.set_flag("power_cut", true)
+	for f in ["intro_done", "phone_answered", "power_cut"]:
+		GameState.set_flag(f, true)
+	GameState.inventory.add("flashlight")
+	if _env("SHOT_ITEMS", "0") == "1":
+		for id in ["canned_food", "water_bottle", "bandage", "medicine", "scrap_metal", "wood", "cloth", "electronics", "warm_jacket", "pistol", "pistol_ammo"]:
+			GameState.inventory.add(id, 2)
+		GameState.inventory.equip("warm_jacket")
+		QuestManager.start_quest("main_first_night")
+		QuestManager.start_quest("q02_medicine")
+	GameState.set_shelter_level(int(_env("SHOT_LEVELUP", "1")))
 	TimeManager.set_time(int(_env("SHOT_DAY", "1")), int(_env("SHOT_HOUR", "21")), 0)
 	var w := _env("SHOT_WEATHER", "")
 	if not w.is_empty():
 		WeatherManager.force_weather(w, 120, 0.01)
 	await Main.instance.change_level(_env("SHOT_LEVEL", "district"), _env("SHOT_SPAWN", "shelter_door"), false)
 	var pos := _env("SHOT_POS", "")
+	var pl := Main.get_player()
 	if not pos.is_empty():
 		var p := pos.split(",")
-		Main.get_player().global_position = Vector3(float(p[0]), 0.1, float(p[1]))
+		pl.global_position = Vector3(float(p[0]), 0.1, float(p[1]))
 		Main.instance.camera_rig.snap()
 	GameState.stats.flashlight_on = _env("SHOT_FLASH", "0") == "1"
-	GameState.inventory.add("flashlight")
-	var panel := _env("SHOT_PANEL", "")
+	var face := _env("SHOT_FACE", "")
+	if not face.is_empty():
+		var fp := face.split(",")
+		pl.facing = Vector2(float(fp[0]), float(fp[1]))
+	if _env("SHOT_ENEMY", "0") == "1":
+		GameState.request_world("stalker_apparition", {})
 	for i in int(_env("SHOT_FRAMES", "90")):
 		await get_tree().process_frame
-	if not panel.is_empty():
-		UIRoot.open_panel(panel, {"station": "radio_point"})
-		for i in 10:
+	var dlg := _env("SHOT_DIALOGUE", "")
+	if not dlg.is_empty():
+		var parts := dlg.split(":")
+		DialogueManager.start(parts[0], {"npc": parts[1]} if parts.size() > 1 else {})
+		for i in 150:
 			await get_tree().process_frame
+	var panel := _env("SHOT_PANEL", "")
+	if not panel.is_empty():
+		UIRoot.open_panel(panel, {"station": _env("SHOT_STATION", "radio_point")})
+		for i in 20:
+			await get_tree().process_frame
+		if panel == "radio":
+			var r := UIRoot.instance.current as RadioPanel
+			if r:
+				r._slider.value = 102.3
+			for i in 60:
+				await get_tree().process_frame
+	_save()
+
+
+func _save() -> void:
 	var pl := Main.get_player()
-	var vc := Main.instance.world_viewport.get_camera_3d()
-	print("vp cam ", vc, " ", vc.global_position if vc else null, " rootcam ", get_viewport().get_camera_3d(), " vp size ", Main.instance.world_viewport.size, " sprite vis ", pl.sprite.is_visible_in_tree(), " tex ", pl.sprite.texture)
-	print("player ", pl.global_position, " cam ", Main.instance.camera_rig.camera.global_position, " level ", Main.instance.current_level_id)
+	if pl:
+		print("player at ", pl.global_position, " level ", Main.instance.current_level_id, " paused ", get_tree().paused)
 	var img := get_viewport().get_texture().get_image()
 	img.save_png(_env("SHOT_OUT", "user://shot.png"))
 	print("saved ", _env("SHOT_OUT", "user://shot.png"))
+	AudioManager.shutdown()
+	await get_tree().process_frame
 	get_tree().quit()
 
 

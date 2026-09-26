@@ -31,6 +31,7 @@ func _ready() -> void:
 	GameState.story_flag_changed.connect(func(_f, _v): mark_dirty())
 	GameState.information_discovered.connect(func(_i): mark_dirty())
 	GameState.location_discovered.connect(func(_l): mark_dirty())
+	GameState.location_changed.connect(func(_l): mark_dirty())
 	GameState.shelter_upgraded.connect(func(_l): mark_dirty())
 	GameState.decision_made.connect(func(_k, _v): mark_dirty())
 	GameState.inventory.item_added.connect(func(_i, _n): mark_dirty())

@@ -194,7 +194,7 @@ func change_level(level_id: String, spawn_id: String = "default", fade: bool = t
 	current_level = scene.instantiate()
 	level_container.add_child(current_level)
 	current_level_id = level_id
-	GameState.current_location = level_id
+	GameState.set_location(level_id)
 	var t := current_level.get_spawn_transform(spawn_id)
 	if position is Vector3 and position != Vector3.ZERO:
 		t.origin = position

@@ -147,6 +147,8 @@ func _show(node: Dictionary) -> void:
 		_choices.append({"data": c, "enabled": enabled, "once_key": once_key})
 		ui_choices.append({"text": text, "enabled": enabled})
 	var speaker_id := str(node.get("speaker", ""))
+	if speaker_id == "self" and _ctx.has("npc"):
+		speaker_id = str(_ctx.npc)
 	line_shown.emit({
 		"speaker_id": speaker_id,
 		"speaker_name": str(node.get("speaker_name", _speaker_name(speaker_id))),

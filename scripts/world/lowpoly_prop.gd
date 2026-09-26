@@ -215,7 +215,7 @@ func _build_barrel_fire() -> void:
 	if lit:
 		_box(Vector3(0.5, 0.25, 0.5), Vector3(0, 1.05, 0), Color(1.0, 0.45, 0.1), Vector3(0, 20, 0), 0.0, 4.0)
 		_box(Vector3(0.3, 0.35, 0.3), Vector3(0.05, 1.2, 0), Color(1.0, 0.7, 0.25), Vector3(0, 55, 0), 0.0, 5.0)
-		_omni(Vector3(0, 1.6, 0), Color(1.0, 0.55, 0.22), light_energy * 1.6, light_range, true)
+		_omni(Vector3(0, 1.8, 0), Color(1.0, 0.55, 0.22), light_energy * 1.6, light_range, false)
 		set_process(not Engine.is_editor_hint())
 		flicker = true
 	_col(Vector3(0.9, 1.0, 0.9), Vector3(0, 0.5, 0))

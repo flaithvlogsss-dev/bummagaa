@@ -48,6 +48,7 @@ theme/default_font_hinting=2
 3d_physics/layer_5="interactable"
 3d_physics/layer_6="zone"
 3d_physics/layer_7="camera_block"
+3d_physics/layer_8="occluder"
 
 [rendering]
 

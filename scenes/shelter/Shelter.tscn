@@ -20,7 +20,7 @@
 background_mode = 1
 background_color = Color(0, 0, 0, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.13, 0.14, 0.2, 1)
+ambient_light_color = Color(0.24, 0.25, 0.33, 1)
 ambient_light_energy = 1
 tonemap_mode = 2
 ssao_enabled = true
@@ -243,8 +243,8 @@ script = ExtResource("5_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.83, -1.6)
 kind = "candle"
 lit = true
-light_energy = 0.9
-light_range = 6
+light_energy = 1.6
+light_range = 8
 
 [node name="Stove" type="StaticBody3D" parent="Props" groups=["shelter_stove"]]
 script = ExtResource("5_scrip")

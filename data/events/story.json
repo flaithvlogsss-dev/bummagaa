@@ -61,7 +61,7 @@
 	{
 		"id": "day2_tracks",
 		"trigger": "time",
-		"at": {"day": 2, "hour": 7, "minute": 5},
+		"at": {"day": 2, "hour": 7, "minute": 0},
 		"once": true,
 		"consequences": [{"start_quest": "q04_tracks"}, {"hint": "У двери убежища — следы. Трёхпалые. Кто-то стоял здесь ночью."}]
 	},

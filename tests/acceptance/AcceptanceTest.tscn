@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tests/acceptance/acceptance_test.gd" id="1_acc"]
+
+[node name="AcceptanceTest" type="Node"]
+process_mode = 3
+script = ExtResource("1_acc")

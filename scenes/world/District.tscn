@@ -44,8 +44,8 @@ geometry_parsed_geometry_type = 1
 cell_size = 0.25
 cell_height = 0.25
 agent_height = 2
-agent_radius = 0.45
-agent_max_climb = 0.3
+agent_radius = 0.5
+agent_max_climb = 0.25
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3"]
 size = Vector3(2, 6, 130)
@@ -430,54 +430,6 @@ lit = true
 light_color = Color(1, 0.72, 0.4, 1)
 has_collision = false
 
-[node name="Window13" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:shelter12"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40.96, 2.6, -24)
-kind = "window"
-fade_group = "fade:shelter12"
-lit = false
-has_collision = false
-
-[node name="Window14" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:shelter12"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40.96, 5.6, -24)
-kind = "window"
-fade_group = "fade:shelter12"
-lit = false
-has_collision = false
-
-[node name="Window15" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:shelter12"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40.96, 2.6, -19)
-kind = "window"
-fade_group = "fade:shelter12"
-lit = false
-has_collision = false
-
-[node name="Window16" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:shelter12"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40.96, 5.6, -19)
-kind = "window"
-fade_group = "fade:shelter12"
-lit = false
-has_collision = false
-
-[node name="Window17" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:shelter12"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40.96, 2.6, -14)
-kind = "window"
-fade_group = "fade:shelter12"
-lit = false
-has_collision = false
-
-[node name="Window18" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:shelter12"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40.96, 5.6, -14)
-kind = "window"
-fade_group = "fade:shelter12"
-lit = false
-has_collision = false
-
 [node name="DoorFrame" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:shelter12"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.5, 0, -9.93)
@@ -686,7 +638,7 @@ fade_group = "fade:house14"
 shape = "gable"
 has_collision = false
 
-[node name="Window19" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window13" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 2.6, 9.94)
 kind = "window"
@@ -694,7 +646,7 @@ fade_group = "fade:house14"
 lit = false
 has_collision = false
 
-[node name="Window20" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window14" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53, 2.6, 9.94)
 kind = "window"
@@ -702,7 +654,7 @@ fade_group = "fade:house14"
 lit = false
 has_collision = false
 
-[node name="Window21" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window15" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58, 2.6, 9.94)
 kind = "window"
@@ -710,7 +662,7 @@ fade_group = "fade:house14"
 lit = false
 has_collision = false
 
-[node name="Window22" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window16" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 2.6, 9.94)
 kind = "window"
@@ -718,7 +670,7 @@ fade_group = "fade:house14"
 lit = true
 has_collision = false
 
-[node name="Window23" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window17" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68, 2.6, 9.94)
 kind = "window"
@@ -726,7 +678,7 @@ fade_group = "fade:house14"
 lit = false
 has_collision = false
 
-[node name="Window24" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window18" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 5.6, 9.94)
 kind = "window"
@@ -734,7 +686,7 @@ fade_group = "fade:house14"
 lit = false
 has_collision = false
 
-[node name="Window25" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window19" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53, 5.6, 9.94)
 kind = "window"
@@ -742,7 +694,7 @@ fade_group = "fade:house14"
 lit = false
 has_collision = false
 
-[node name="Window26" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window20" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58, 5.6, 9.94)
 kind = "window"
@@ -750,7 +702,7 @@ fade_group = "fade:house14"
 lit = false
 has_collision = false
 
-[node name="Window27" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window21" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 5.6, 9.94)
 kind = "window"
@@ -758,7 +710,7 @@ fade_group = "fade:house14"
 lit = false
 has_collision = false
 
-[node name="Window28" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window22" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68, 5.6, 9.94)
 kind = "window"
@@ -766,7 +718,7 @@ fade_group = "fade:house14"
 lit = false
 has_collision = false
 
-[node name="Window29" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window23" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 8.6, 9.94)
 kind = "window"
@@ -774,7 +726,7 @@ fade_group = "fade:house14"
 lit = false
 has_collision = false
 
-[node name="Window30" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window24" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53, 8.6, 9.94)
 kind = "window"
@@ -782,7 +734,7 @@ fade_group = "fade:house14"
 lit = true
 has_collision = false
 
-[node name="Window31" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window25" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58, 8.6, 9.94)
 kind = "window"
@@ -790,7 +742,7 @@ fade_group = "fade:house14"
 lit = false
 has_collision = false
 
-[node name="Window32" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window26" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 8.6, 9.94)
 kind = "window"
@@ -798,7 +750,7 @@ fade_group = "fade:house14"
 lit = false
 has_collision = false
 
-[node name="Window33" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
+[node name="Window27" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house14"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68, 8.6, 9.94)
 kind = "window"
@@ -1004,103 +956,7 @@ fade_group = "fade:bldB"
 shape = "gable"
 has_collision = false
 
-[node name="Window34" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldA"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.46, 2.6, -25)
-kind = "window"
-fade_group = "fade:bldA"
-lit = false
-has_collision = false
-
-[node name="Window35" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldB"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.46, 2.6, -25)
-kind = "window"
-fade_group = "fade:bldB"
-lit = false
-has_collision = false
-
-[node name="Window36" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldA"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.46, 5.6, -25)
-kind = "window"
-fade_group = "fade:bldA"
-lit = false
-has_collision = false
-
-[node name="Window37" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldB"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.46, 5.6, -25)
-kind = "window"
-fade_group = "fade:bldB"
-lit = false
-has_collision = false
-
-[node name="Window38" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldA"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.46, 2.6, -19)
-kind = "window"
-fade_group = "fade:bldA"
-lit = false
-has_collision = false
-
-[node name="Window39" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldB"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.46, 2.6, -19)
-kind = "window"
-fade_group = "fade:bldB"
-lit = false
-has_collision = false
-
-[node name="Window40" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldA"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.46, 5.6, -19)
-kind = "window"
-fade_group = "fade:bldA"
-lit = true
-has_collision = false
-
-[node name="Window41" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldB"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.46, 5.6, -19)
-kind = "window"
-fade_group = "fade:bldB"
-lit = false
-has_collision = false
-
-[node name="Window42" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldA"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.46, 2.6, -13)
-kind = "window"
-fade_group = "fade:bldA"
-lit = false
-has_collision = false
-
-[node name="Window43" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldB"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.46, 2.6, -13)
-kind = "window"
-fade_group = "fade:bldB"
-lit = false
-has_collision = false
-
-[node name="Window44" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldA"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.46, 5.6, -13)
-kind = "window"
-fade_group = "fade:bldA"
-lit = false
-has_collision = false
-
-[node name="Window45" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldB"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.46, 5.6, -13)
-kind = "window"
-fade_group = "fade:bldB"
-lit = false
-has_collision = false
-
-[node name="Window46" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldA"]]
+[node name="Window28" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldA"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 2.6, -8.96)
 kind = "window"
@@ -1108,7 +964,7 @@ fade_group = "fade:bldA"
 lit = false
 has_collision = false
 
-[node name="Window47" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldA"]]
+[node name="Window29" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldA"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2.6, -8.96)
 kind = "window"
@@ -1116,7 +972,7 @@ fade_group = "fade:bldA"
 lit = false
 has_collision = false
 
-[node name="Window48" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldA"]]
+[node name="Window30" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldA"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2.6, -8.96)
 kind = "window"
@@ -1124,7 +980,7 @@ fade_group = "fade:bldA"
 lit = false
 has_collision = false
 
-[node name="Window49" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldB"]]
+[node name="Window31" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldB"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2.6, -8.96)
 kind = "window"
@@ -1132,7 +988,7 @@ fade_group = "fade:bldB"
 lit = false
 has_collision = false
 
-[node name="Window50" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldB"]]
+[node name="Window32" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldB"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 2.6, -8.96)
 kind = "window"
@@ -1140,7 +996,7 @@ fade_group = "fade:bldB"
 lit = false
 has_collision = false
 
-[node name="Window51" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldB"]]
+[node name="Window33" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:bldB"]]
 script = ExtResource("4_scrip")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 2.6, -8.96)
 kind = "window"
@@ -1164,78 +1020,6 @@ size = Vector3(22, 2.2, 23)
 color = Color(0.24, 0.24, 0.22, 1)
 fade_group = "fade:house3"
 shape = "gable"
-has_collision = false
-
-[node name="Window52" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house3"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 2.6, -52)
-kind = "window"
-fade_group = "fade:house3"
-lit = false
-has_collision = false
-
-[node name="Window53" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house3"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 5.6, -52)
-kind = "window"
-fade_group = "fade:house3"
-lit = false
-has_collision = false
-
-[node name="Window54" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house3"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 8.6, -52)
-kind = "window"
-fade_group = "fade:house3"
-lit = false
-has_collision = false
-
-[node name="Window55" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house3"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 2.6, -46)
-kind = "window"
-fade_group = "fade:house3"
-lit = false
-has_collision = false
-
-[node name="Window56" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house3"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 5.6, -46)
-kind = "window"
-fade_group = "fade:house3"
-lit = false
-has_collision = false
-
-[node name="Window57" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house3"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 8.6, -46)
-kind = "window"
-fade_group = "fade:house3"
-lit = true
-has_collision = false
-
-[node name="Window58" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house3"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 2.6, -40)
-kind = "window"
-fade_group = "fade:house3"
-lit = false
-has_collision = false
-
-[node name="Window59" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house3"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 5.6, -40)
-kind = "window"
-fade_group = "fade:house3"
-lit = false
-has_collision = false
-
-[node name="Window60" type="StaticBody3D" parent="NavRegion/Props" groups=["fade:house3"]]
-script = ExtResource("4_scrip")
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -23.96, 8.6, -40)
-kind = "window"
-fade_group = "fade:house3"
-lit = false
 has_collision = false
 
 [node name="East1" type="StaticBody3D" parent="NavRegion/Buildings" groups=["fade:east1"]]

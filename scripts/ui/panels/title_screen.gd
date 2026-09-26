@@ -54,7 +54,7 @@ func _build() -> void:
 		_slots.refresh()
 		_show("slots")))
 	menu.add_child(UIKit.button("Настройки", func(): _show("settings")))
-	menu.add_child(UIKit.button("Выход", func(): get_tree().quit()))
+	menu.add_child(UIKit.button("Выход", _quit))
 	col.add_child(menu)
 	_pages["menu"] = menu
 	var slots_panel := UIKit.panel()
@@ -79,6 +79,14 @@ func _build() -> void:
 	foot.offset_top = -28
 	foot.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	add_child(foot)
+
+
+func _quit() -> void:
+	Settings.save_settings()
+	AudioManager.shutdown()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	get_tree().quit()
 
 
 func _on_open(_data: Dictionary) -> void:

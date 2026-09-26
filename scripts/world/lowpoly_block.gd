@@ -79,7 +79,6 @@ static func clear_materials() -> void:
 
 
 func _ready() -> void:
-	collision_layer = 1
 	collision_mask = 0
 	_rebuild()
 
@@ -110,7 +109,10 @@ func _rebuild() -> void:
 	box.size = size
 	_collision.shape = box
 	_collision.position = Vector3(0, size.y * 0.5, 0)
-	_collision.disabled = not has_collision
+	# Non-solid but fadeable geometry (roofs, upper floors) sits on the "occluder" layer (8)
+	# so the camera can detect and fade it; nothing physically collides with that layer.
+	_collision.disabled = not has_collision and not fadeable
+	collision_layer = 1 if has_collision else (128 if fadeable else 0)
 
 
 func _make_mesh() -> PrimitiveMesh:

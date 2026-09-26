@@ -169,3 +169,23 @@ func _process(delta: float) -> void:
 		if next <= 0.001 and target <= 0.0 and player.playing:
 			player.stop()
 			entry.stream = ""
+
+
+## Stops everything (call a couple of frames before quitting so the mixer releases playbacks).
+func shutdown() -> void:
+	_exit_tree()
+
+
+func _exit_tree() -> void:
+	# Stop playbacks so no stream outlives the audio server at shutdown.
+	for p in _sfx:
+		p.stop()
+		p.stream = null
+	for p3 in _sfx3d:
+		p3.stop()
+		p3.stream = null
+	for layer in _layers.keys():
+		var player: AudioStreamPlayer = _layers[layer].player
+		player.stop()
+		player.stream = null
+	_streams.clear()
